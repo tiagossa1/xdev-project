@@ -55,7 +55,15 @@ class SchoolClassController extends Controller
      */
     public function show(SchoolClass $schoolClass)
     {
-        //
+        try {
+            return response()->json([
+                'data' => $schoolClass->load('schools'),
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -67,7 +75,19 @@ class SchoolClassController extends Controller
      */
     public function update(Request $request, SchoolClass $schoolClass)
     {
-        //
+        try {
+            $schoolClass->update($request->all());
+
+            $schoolClass->schools()->sync($request->input('schools'));
+
+            return response()->json([
+                'data' => $schoolClass,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -78,6 +98,13 @@ class SchoolClassController extends Controller
      */
     public function destroy(SchoolClass $schoolClass)
     {
-        //
+        try{
+            $schoolClass->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }
