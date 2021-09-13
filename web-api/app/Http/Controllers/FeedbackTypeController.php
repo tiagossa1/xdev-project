@@ -14,17 +14,14 @@ class FeedbackTypeController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        try {
+            return response()->json([
+                'data' => FeedbackType::all(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -35,7 +32,17 @@ class FeedbackTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $feedbackType = FeedbackType::create($request->all());
+
+            return response()->json([
+                'data' => $feedbackType,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -46,18 +53,15 @@ class FeedbackTypeController extends Controller
      */
     public function show(FeedbackType $feedbackType)
     {
-        //
-    }
+        try {
+            return response()->json([
+                'data' => $feedbackType,
+                'message' => 'Success'
+            ], 201);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\FeedbackType  $feedbackType
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(FeedbackType $feedbackType)
-    {
-        //
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -69,7 +73,17 @@ class FeedbackTypeController extends Controller
      */
     public function update(Request $request, FeedbackType $feedbackType)
     {
-        //
+        try {
+            $feedbackType->update($request->all());
+
+            return response()->json([
+                'data' => $feedbackType,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -80,6 +94,13 @@ class FeedbackTypeController extends Controller
      */
     public function destroy(FeedbackType $feedbackType)
     {
-        //
+        try{
+            $feedbackType->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }

@@ -14,17 +14,14 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        try {
+            return response()->json([
+                'data' => Feedback::with('feedbackType','users')->get(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -35,7 +32,20 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $feedback = Feedback::create($request->all());
+
+            $feedback->users()->attach($request->input('users'));
+            $feedback->feedbackTypes()->attach($request->input('feedbackTypes'));
+
+            return response()->json([
+                'data' => $feedback,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -46,18 +56,15 @@ class FeedbackController extends Controller
      */
     public function show(Feedback $feedback)
     {
-        //
-    }
+        try {
+            return response()->json([
+                'data' => $feedback->load('feedbackTypes','users'),
+                'message' => 'Success'
+            ], 201);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Feedback  $feedback
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Feedback $feedback)
-    {
-        //
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -69,7 +76,20 @@ class FeedbackController extends Controller
      */
     public function update(Request $request, Feedback $feedback)
     {
-        //
+        try {
+            $feedback->update($request->all());
+
+            $feedback->users()->sync($request->input('users'));
+            $feedback->feedbackTypes()->sync($request->input('feedbackTypes'));
+
+            return response()->json([
+                'data' => $feedback,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -80,6 +100,13 @@ class FeedbackController extends Controller
      */
     public function destroy(Feedback $feedback)
     {
-        //
+        try{
+            $feedback->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }
