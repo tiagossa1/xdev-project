@@ -11,6 +11,17 @@ class SchoolSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\School::create([
+            'name' => 'ATEC Matosinhos',
+        ]);
+
+        App\School::create([
+            'name' => 'ATEC Palmela',
+        ]);
+
+        App\School::create([
+            'name' => 'ATEC Cascais',
+        ]);
+
     }
 }
