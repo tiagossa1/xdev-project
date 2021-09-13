@@ -14,17 +14,14 @@ class TagController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        try {
+            return response()->json([
+                'data' => Tag::all(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -35,7 +32,17 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $tag = Tag::create($request->all());
+
+            return response()->json([
+                'data' => $tag,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -46,18 +53,15 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        //
-    }
+        try {
+            return response()->json([
+                'data' => $tag,
+                'message' => 'Success'
+            ], 201);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Tag $tag)
-    {
-        //
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -69,7 +73,17 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        //
+        try {
+            $tag->update($request->all());
+
+            return response()->json([
+                'data' => $tag,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -80,6 +94,13 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        //
+        try{
+            $tag->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }
