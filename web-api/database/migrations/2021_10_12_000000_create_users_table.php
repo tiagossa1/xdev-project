@@ -14,6 +14,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
+            $table->id();
             $table->string('email')->unique();
             $table->string('name');
             $table->date('birth_date');
@@ -23,6 +24,9 @@ class CreateUsersTable extends Migration
             $table->string('linkedin_url');
             $table->string('facebook_url');
             $table->string('instagram_url');
+            $table->foreignId('district_id')->constrained();
+            //$table->foreignId('user_type_id')->constrained();
+            //$table->foreignId('school_class_id')->constrained();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
