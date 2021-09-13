@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('description');
-            $table->boolean('description');
+            $table->boolean('suspended');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('post_type_id')->constrained();
             $table->timestamps();
