@@ -3,7 +3,6 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class School extends Model
 {
@@ -11,13 +10,7 @@ class School extends Model
         'name'
     ];
 
-    protected $hidden = [
-        'deleted_at'
-    ];
-
     public $timestamps = false;
-
-    use softDeletes;
 
     public function school_classes()
     {

@@ -11,6 +11,20 @@ class DistrictSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\District::create([
+            'name' => 'Porto',
+        ]);
+
+        App\District::create([
+            'name' => 'Cascais',
+        ]);
+
+        App\District::create([
+            'name' => 'Lisboa',
+        ]);
+
+        App\District::create([
+            'name' => 'S.Joao da Madeira',
+        ]);
     }
 }
