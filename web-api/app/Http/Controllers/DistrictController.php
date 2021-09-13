@@ -25,61 +25,98 @@ class DistrictController extends Controller
     public function create()
     {
         //
+        try {
+            return response()->json([
+                'data' => District::all(),
+                'message' => 'Success'
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         //
+        try {
+            $district = District::create($request->all());
+
+            return response()->json([
+                'data' => $district,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\District  $district
+     * @param \App\District $district
      * @return \Illuminate\Http\Response
      */
     public function show(District $district)
     {
-        //
+        try {
+            return response()->json(['data' => $district,
+                'message' => 'Success'], 201);
+
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\District  $district
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(District $district)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\District  $district
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, District $district)
-    {
-        //
-    }
+/**
+ * Update the specified resource in storage.
+ *
+ * @param \Illuminate\Http\Request $request
+ * @param \App\District $district
+ * @return \Illuminate\Http\Response
+ */
+public
+function update(Request $request, District $district)
+{
+    //
+    try {
+        $district->update($request->all());
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\District  $district
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(District $district)
-    {
-        //
+        return response()->json([
+            'data' => $district,
+            'message' => 'Success'
+        ], 201);
+
+    } catch (Exception $exception) {
+        return response()->json(['error' => $exception], 500);
     }
+}
+
+/**
+ * Remove the specified resource from storage.
+ *
+ * @param \App\District $district
+ * @return \Illuminate\Http\Response
+ */
+public
+function destroy(District $district)
+{
+    //
+    try {
+        $district->delete();
+        return response()->json(['message' => 'Deleted'], 205);
+
+    } catch (Exception $exception) {
+
+        return response()->json(['error' => $exception], 500);
+    }
+}
 }
