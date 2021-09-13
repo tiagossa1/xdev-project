@@ -5,7 +5,4 @@ xDev Project
 
 Testadas e funcionais pelo postman
 
-Tabela : Schools
-Tabela : School_classes 
-Tabela : Districts
-Tabela : UserTypes
+Tabela : Schools, School_classes, Districts, UserTypes
