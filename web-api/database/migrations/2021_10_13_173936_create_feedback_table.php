@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserTypesTable extends Migration
+class CreateFeedbackTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateUserTypesTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_types', function (Blueprint $table) {
+        Schema::create('feedback', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('hexColorCode');
+            $table->string('description');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('feedback_type_id')->constrained();
+            $table->timestamps();
+            $table->dropColumn('updated_at');
         });
     }
 
@@ -27,6 +30,6 @@ class CreateUserTypesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_types');
+        Schema::dropIfExists('feedback');
     }
 }
