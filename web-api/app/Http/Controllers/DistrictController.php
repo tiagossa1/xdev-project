@@ -14,17 +14,14 @@ class DistrictController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        try {
+            return response()->json([
+                'data' => District::all(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -35,7 +32,17 @@ class DistrictController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $district = District::create($request->all());
+
+            return response()->json([
+                'data' => $district,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -46,18 +53,15 @@ class DistrictController extends Controller
      */
     public function show(District $district)
     {
-        //
-    }
+        try {
+            return response()->json([
+                'data' => $district,
+                'message' => 'Success'
+            ], 201);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\District  $district
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(District $district)
-    {
-        //
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -69,7 +73,17 @@ class DistrictController extends Controller
      */
     public function update(Request $request, District $district)
     {
-        //
+        try {
+            $district->update($request->all());
+
+            return response()->json([
+                'data' => $district,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -80,6 +94,13 @@ class DistrictController extends Controller
      */
     public function destroy(District $district)
     {
-        //
+        try{
+            $district->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }
