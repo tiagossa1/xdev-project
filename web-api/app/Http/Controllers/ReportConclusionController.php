@@ -14,17 +14,14 @@ class ReportConclusionController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        try {
+            return response()->json([
+                'data' => ReportConclusion::all(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -35,7 +32,17 @@ class ReportConclusionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $reportConclusion = ReportConclusion::create($request->all());
+
+            return response()->json([
+                'data' => $reportConclusion,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -46,18 +53,15 @@ class ReportConclusionController extends Controller
      */
     public function show(ReportConclusion $reportConclusion)
     {
-        //
-    }
+        try {
+            return response()->json([
+                'data' => $reportConclusion,
+                'message' => 'Success'
+            ], 201);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\ReportConclusion  $reportConclusion
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(ReportConclusion $reportConclusion)
-    {
-        //
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -69,7 +73,17 @@ class ReportConclusionController extends Controller
      */
     public function update(Request $request, ReportConclusion $reportConclusion)
     {
-        //
+        try {
+            $reportConclusion->update($request->all());
+
+            return response()->json([
+                'data' => $reportConclusion,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -80,6 +94,13 @@ class ReportConclusionController extends Controller
      */
     public function destroy(ReportConclusion $reportConclusion)
     {
-        //
+        try{
+            $reportConclusion->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }

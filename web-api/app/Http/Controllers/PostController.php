@@ -14,7 +14,14 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            return response()->json([
+                'data' => Post::with('tags','users')->get(),
+                'message' => 'Success'
+            ], 200);
+        } catch(Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -25,7 +32,20 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+            $post = Post::create($request->all());
+
+            $post->users()->attach($request->input('users'));
+            $post->tags()->attach($request->input('tags'));
+
+            return response()->json([
+                'data' => $post,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -36,7 +56,15 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        try {
+            return response()->json([
+                'data' => $post->load('users','tags'),
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -48,7 +76,20 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        try {
+            $post->update($request->all());
+
+            $post->users()->sync($request->input('users'));
+            $post->tags()->sync($request->input('tags'));
+
+            return response()->json([
+                'data' => $post,
+                'message' => 'Success'
+            ], 201);
+
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
 
     /**
@@ -59,6 +100,13 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        try{
+            $post->delete();
+            return response()->json(['message' => 'Deleted'],205);
+
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
+        }
     }
 }

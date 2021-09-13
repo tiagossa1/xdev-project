@@ -33,7 +33,9 @@ class SchoolController extends Controller
     public function store(Request $request)
     {
         try {
-            $school = School::create($request->all());
+            $school = new School();
+            $school->name       = $request->name;
+            $school->save();
 
             return response()->json([
                 'data' => $school,
