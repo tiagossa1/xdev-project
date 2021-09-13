@@ -14,17 +14,6 @@ class DistrictController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
         try {
             return response()->json([
                 'data' => District::all(),
@@ -75,48 +64,45 @@ class DistrictController extends Controller
         }
     }
 
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \App\District $district
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, District $district)
+    {
+        //
+        try {
+            $district->update($request->all());
 
-/**
- * Update the specified resource in storage.
- *
- * @param \Illuminate\Http\Request $request
- * @param \App\District $district
- * @return \Illuminate\Http\Response
- */
-public
-function update(Request $request, District $district)
-{
-    //
-    try {
-        $district->update($request->all());
+            return response()->json([
+                'data' => $district,
+                'message' => 'Success'
+            ], 201);
 
-        return response()->json([
-            'data' => $district,
-            'message' => 'Success'
-        ], 201);
-
-    } catch (Exception $exception) {
-        return response()->json(['error' => $exception], 500);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception], 500);
+        }
     }
-}
 
-/**
- * Remove the specified resource from storage.
- *
- * @param \App\District $district
- * @return \Illuminate\Http\Response
- */
-public
-function destroy(District $district)
-{
-    //
-    try {
-        $district->delete();
-        return response()->json(['message' => 'Deleted'], 205);
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\District $district
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(District $district)
+    {
+        //
+        try {
+            $district->delete();
+            return response()->json(['message' => 'Deleted'], 205);
 
-    } catch (Exception $exception) {
+        } catch (Exception $exception) {
 
-        return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception], 500);
+        }
     }
-}
 }
