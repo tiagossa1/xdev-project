@@ -2,7 +2,7 @@
 
 xDev is a community website created for both old and new students in ATEC to interact with each other.
 
-## Tecnologies in this project
+## Tecnologies
 
 ![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
@@ -11,13 +11,11 @@ xDev is a community website created for both old and new students in ATEC to int
 
 ## Installation
 
-## Environment Variables
-
 To run this project, you will need to add the following environment variables to your .env file
 
-`API_KEY` (on web site)
-`DB_USERNAME` (on web API)
-`DB_PASSWORD` (on web API)
+- `API_KEY` (on web site)
+- `DB_USERNAME` (on web API)
+- `DB_PASSWORD` (on web API)
 
 ## Web API
 ```bash
