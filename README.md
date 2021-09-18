@@ -2,17 +2,27 @@
 
 xDev is a community website created for both old and new students in ATEC to interact with each other.
 
+## Tecnologies in this project
+
+![MySQL](https://img.shields.io/badge/mysql-%2300f.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Laravel](https://img.shields.io/badge/laravel-%23FF2D20.svg?style=for-the-badge&logo=laravel&logoColor=white)
+![Vue.js](https://img.shields.io/badge/vuejs-%2335495e.svg?style=for-the-badge&logo=vuedotjs&logoColor=%234FC08D)
+![PHP](https://img.shields.io/badge/php-%23777BB4.svg?style=for-the-badge&logo=php&logoColor=white)
+
 ## Installation
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`API_KEY` (on web site)
+`DB_USERNAME` (on web API)
+`DB_PASSWORD` (on web API)
 
 ## Web API
 ```bash
 cp .env.example .env
 composer install
-```
-
-Get a MySQL service and create a database called "laravel". You may call it something else, just remember to change DB_DATABASE on .env file that you copied earlier. Also, check DB_USERNAME and DB_PASSWORD and see if it matches with yours.
-
-```bash
 php artisan migrate:fresh --seed
 php artisan serve
 ```
@@ -24,15 +34,15 @@ cp .env.example .env
 composer install
 npm install
 npm run dev
-```
-
-Copy the API URL and change API_URL on .env file.
-
-```bash
 php artisan serve
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+## Authors
 
-Please make sure to update tests as appropriate.
+- [@tiagossa1](https://github.com/tiagossa1)
+- [@pintarolas](https://github.com/pintarolas)
+- [@Scantraxzu](https://github.com/Scantraxzu)
+- [@peixecozid0](https://github.com/peixecozid0)
+
+## License
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
