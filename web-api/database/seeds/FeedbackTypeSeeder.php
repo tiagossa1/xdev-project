@@ -1,4 +1,6 @@
-<?php
+Orange<?php        App\FeedbackType::create([
+            'name' => 'Falha Técnica',
+        ]);
 
 use Illuminate\Database\Seeder;
 
@@ -11,6 +13,12 @@ class FeedbackTypeSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\FeedbackType::create([
+            'name' => 'Sugestão',
+        ]);
+
+        App\FeedbackType::create([
+            'name' => 'Falha Técnica',
+        ]);
     }
 }

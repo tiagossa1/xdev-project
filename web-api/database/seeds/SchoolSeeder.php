@@ -23,5 +23,12 @@ class SchoolSeeder extends Seeder
             'name' => 'ATEC Cascais',
         ]);
 
+        App\School::create([
+            'name' => 'ATEC S. João da Madeira',
+        ]);
+
+        App\School::create([
+            'name' => 'ATEC Carregado',
+        ]);
     }
 }

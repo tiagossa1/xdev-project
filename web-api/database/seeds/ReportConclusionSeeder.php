@@ -1,5 +1,6 @@
 <?php
 
+use App\ReportConclusion;
 use Illuminate\Database\Seeder;
 
 class ReportConclusionSeeder extends Seeder
@@ -11,6 +12,12 @@ class ReportConclusionSeeder extends Seeder
      */
     public function run()
     {
-        //
+        ReportConclusion::create([
+            'name' => 'Suspenso'
+        ]);
+
+        ReportConclusion::create([
+            'name' => 'Limpo'
+        ]);
     }
 }
