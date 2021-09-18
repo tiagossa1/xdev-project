@@ -11,8 +11,6 @@ xDev is a community website created for both old and new students in ATEC to int
 
 ## Installation
 
-## Environment Variables
-
 To run this project, you will need to add the following environment variables to your .env file
 
 `API_KEY` (on web site)
