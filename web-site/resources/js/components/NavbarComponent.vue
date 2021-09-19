@@ -27,10 +27,11 @@
             <b-navbar-nav class="ml-auto">
                 <b-nav-item-dropdown right>
                     <template #button-content>
-                        <span class="mr-2">UsernamePlaceholder</span> <b-avatar src="https://placekitten.com/300/300"></b-avatar>
+                        <span class="mr-2">UsernamePlaceholder</span>
+                        <b-avatar src="https://placekitten.com/300/300"></b-avatar>
                     </template>
                     <b-dropdown-item>O meu perfil</b-dropdown-item>
-                    <b-dropdown-item >Sair</b-dropdown-item>
+                    <b-dropdown-item>Sair</b-dropdown-item>
                 </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-collapse>
@@ -43,6 +44,10 @@ export default {
     mounted() {
         console.log('Navbar component mounted.')
     },
-    props: ['isLogged']
+    data() {
+        return {
+            value: []
+        }
+    }
 }
 </script>

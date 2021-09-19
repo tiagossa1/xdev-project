@@ -16,8 +16,8 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
-<body>
-<div id="app">
+<body class="d-flex flex-column min-vh-100">
+<div id="app" class="wrapper flex-grow-1">
     <navbar-component></navbar-component>
     <main class="container">
         @yield('content')
