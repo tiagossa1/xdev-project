@@ -37,4 +37,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tag::class);
     }
+
+    public function district()
+    {
+        return $this->belongsTo(District::class);
+    }
 }

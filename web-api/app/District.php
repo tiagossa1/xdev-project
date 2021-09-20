@@ -12,8 +12,9 @@ class District extends Model
 
     public $timestamps = false;
 
-    public function users()
+    /*public function users()
     {
-        return $this->belongsToMany(User::class);
-    }
+        //return $this->belongsToMany(User::class);
+        return $this->hasMany(User::class);
+    }*/
 }
