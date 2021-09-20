@@ -18,7 +18,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('school', 'SchoolController');
+Route::apiResource('districts', 'DistrictController');
+Route::apiResource('feedbacks', 'FeedbackController');
+Route::apiResource('feedback_types', 'FeedbackTypeController');
+Route::apiResource('posts', 'PostController');
+Route::apiResource('post_photos', 'PostPhotoController');
+Route::apiResource('post_types', 'PostTypeController');
+Route::apiResource('report_conclusions', 'ReportConclusionController');
+Route::apiResource('reports', 'ReportController');
 Route::apiResource('school_classes', 'SchoolClassController');
-Route::apiResource('district', 'DistrictController');
+Route::apiResource('schools', 'SchoolController');
+Route::apiResource('tags', 'TagController');
+Route::apiResource('users', 'UserController');
 Route::apiResource('user_types', 'UserTypeController');
+

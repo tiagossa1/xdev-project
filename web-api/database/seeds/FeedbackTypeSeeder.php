@@ -1,6 +1,4 @@
-Orange<?php        App\FeedbackType::create([
-            'name' => 'Falha Técnica',
-        ]);
+<?php
 
 use Illuminate\Database\Seeder;
 

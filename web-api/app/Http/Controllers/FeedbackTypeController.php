@@ -19,7 +19,7 @@ class FeedbackTypeController extends Controller
                 'data' => FeedbackType::all(),
                 'message' => 'Success'
             ], 200);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }
     }

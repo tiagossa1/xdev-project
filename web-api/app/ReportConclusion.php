@@ -6,5 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class ReportConclusion extends Model
 {
-    //
+    protected $fillable = [
+        'name'
+    ];
+
+    public $timestamps = false;
+
+    public function reports()
+    {
+        return $this->belongsToMany(Report::class);
+    }
 }

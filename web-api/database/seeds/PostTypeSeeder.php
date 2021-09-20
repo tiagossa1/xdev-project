@@ -11,6 +11,9 @@ class PostTypeSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\PostType::create([
+            'name' => 'Oferta de Emprego',
+            'iconName' => 'www.ofertadeemprego.org'
+        ]);
     }
 }

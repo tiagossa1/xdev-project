@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Report;
+use App\User;
 use Illuminate\Http\Request;
 
-class ReportController extends Controller
+class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class ReportController extends Controller
     {
         try {
             return response()->json([
-                'data' => Report::with('user','post','postComments','reportConclusions')->get(),
+                'data' => User::with('posts','feedbacks','reports','tags')->get(),
                 'message' => 'Success'
             ], 200);
         } catch(Exception $exception) {
@@ -33,15 +33,15 @@ class ReportController extends Controller
     public function store(Request $request)
     {
         try {
-            $report = Report::create($request->all());
+            $user = User::create($request->all());
 
-            $report->users()->async($request->input('users'));
-            $report->posts()->async($request->input('posts'));
-            $report->postComments()->async($request->input('postComments'));
-            $report->reportConclusions()->async($request->input('reportConclusions'));
+            $user->posts()->async($request->input('posts'));
+            $user->feedbacks()->async($request->input('feedbacks'));
+            $user->reports()->async($request->input('reports'));
+            $user->tags()->async($request->input('tags'));
 
             return response()->json([
-                'data' => $report,
+                'data' => $user,
                 'message' => 'Success'
             ], 201);
 
@@ -53,14 +53,14 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Report  $report
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Report $report)
+    public function show(Report $user)
     {
         try {
             return response()->json([
-                'data' => $report->load('user','post','postComments','reportConclusions'),
+                'data' => $user->load('posts','feedbacks','reports','tags'),
                 'message' => 'Success'
             ], 201);
 
@@ -73,21 +73,21 @@ class ReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Report  $report
+     * @param  \App\User $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, User $user)
     {
         try {
-            $report->update($request->all());
+            $user->update($request->all());
 
-            $report->users()->async($request->input('users'));
-            $report->posts()->async($request->input('posts'));
-            $report->postComments()->async($request->input('postComments'));
-            $report->reportConclusions()->async($request->input('reportConclusions'));
+            $user->posts()->async($request->input('posts'));
+            $user->feedbacks()->async($request->input('feedbacks'));
+            $user->reports()->async($request->input('reports'));
+            $user->tags()->async($request->input('tags'));
 
             return response()->json([
-                'data' => $report,
+                'data' => $user,
                 'message' => 'Success'
             ], 201);
 
@@ -99,13 +99,13 @@ class ReportController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Report  $report
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Report $report)
+    public function destroy(User $user)
     {
         try{
-            $report->delete();
+            $user->delete();
             return response()->json(['message' => 'Deleted'],205);
 
         }catch(Exception $exception){
