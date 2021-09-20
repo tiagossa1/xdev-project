@@ -78,6 +78,7 @@
                     <label class="float-left">Data de nascimento</label>
                     <b-form-datepicker id="example-datepicker" v-model="form.birthday"
                                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                                       :min="form.min" :max="form.max"
                                        class="mb-2"></b-form-datepicker>
                 </div>
                 <div class="col-6">
@@ -97,6 +98,10 @@ export default {
         console.log('Register component mounted.')
     },
     data() {
+        //min: 1900
+        //max: data atual
+        const now = new Date()
+        const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
         return {
             form: {
                 name: '',
@@ -104,10 +109,12 @@ export default {
                 password: '',
                 district: null,
                 schoolClass: null,
-                birthday: ''
+                birthday: '',
+                max: today,
+                min: new Date(1900,1,1)
             },
             districts: [{value: null, text: 'Escolha um distrito'}, 'Pedir à API'],
-            schoolClasses: [{value: null, text: 'Escolha uma turma'}, 'Pedir à API']
+            schoolClasses: [{value: null, text: 'Escolha uma turma'}, 'Pedir à API'],
         }
     },
     methods: {
