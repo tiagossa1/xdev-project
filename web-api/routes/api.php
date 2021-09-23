@@ -18,17 +18,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('districts', 'DistrictController');
+Route::post('/register', [\App\Http\Controllers\AuthController::class, 'register']);
+Route::post('/logout', [\App\Http\Controllers\AuthController::class, 'logout']);
+Route::post('/login', [\App\Http\Controllers\AuthController::class, 'login']);
+
+// Protected routes
+Route::group(['middleware' => ['auth:sanctum']], function() {
+    Route::apiResource('districts', 'DistrictController');
+});
+
 Route::apiResource('feedbacks', 'FeedbackController');
 Route::apiResource('feedback_types', 'FeedbackTypeController');
 Route::apiResource('posts', 'PostController');
-Route::apiResource('post_photos', 'PostPhotoController');
-Route::apiResource('post_types', 'PostTypeController');
-Route::apiResource('report_conclusions', 'ReportConclusionController');
+Route::apiResource('post-photos', 'PostPhotoController');
+Route::apiResource('post-types', 'PostTypeController');
+Route::apiResource('report-conclusions', 'ReportConclusionController');
 Route::apiResource('reports', 'ReportController');
-Route::apiResource('school_classes', 'SchoolClassController');
+Route::apiResource('school-classes', 'SchoolClassController');
 Route::apiResource('schools', 'SchoolController');
 Route::apiResource('tags', 'TagController');
 Route::apiResource('users', 'UserController');
-Route::apiResource('user_types', 'UserTypeController');
+Route::apiResource('user-types', 'UserTypeController');
 
