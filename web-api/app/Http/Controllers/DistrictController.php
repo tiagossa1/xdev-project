@@ -24,6 +24,7 @@ class DistrictController extends Controller
         }
     }
 
+
     /**
      * Store a newly created resource in storage.
      *
