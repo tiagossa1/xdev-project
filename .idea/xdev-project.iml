@@ -105,6 +105,7 @@
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/brick/math" />
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/hamcrest/hamcrest-php" />
+      <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/laravel/sanctum" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

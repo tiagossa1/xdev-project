@@ -101,6 +101,7 @@
       <path value="$PROJECT_DIR$/web-api/vendor/brick/math" />
       <path value="$PROJECT_DIR$/web-api/vendor/guzzlehttp/guzzle" />
       <path value="$PROJECT_DIR$/web-api/vendor/hamcrest/hamcrest-php" />
+      <path value="$PROJECT_DIR$/web-api/vendor/laravel/sanctum" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
