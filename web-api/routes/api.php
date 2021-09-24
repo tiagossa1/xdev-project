@@ -15,29 +15,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:sanctum')->group(function() {
+    Route::post('logout', 'AuthController@logout');
+    Route::apiResource('feedbacks', 'FeedbackController');
+    Route::apiResource('posts', 'PostController');
+    Route::apiResource('post-photos', 'PostPhotoController');
+    Route::apiResource('post-types', 'PostTypeController');
+    Route::apiResource('reports', 'ReportController');
+    Route::apiResource('tags', 'TagController');
+    Route::apiResource('users', 'UserController');
 });
 
-Route::post('/register', [AuthController::class, 'register']);
-//Route::post('/logout', [AuthController::class, 'logout']);
-//Route::post('/login', [AuthController::class, 'login']);
+Route::post('register', 'AuthController@register');
+Route::post('login', 'AuthController@login');
 
-// Protected routes
-Route::group(['middleware' => ['auth:sanctum']], function() {
-    Route::apiResource('districts', 'DistrictController');
-});
-
-Route::apiResource('feedbacks', 'FeedbackController');
+Route::apiResource('districts', 'DistrictController');
 Route::apiResource('feedback-types', 'FeedbackTypeController');
-Route::apiResource('posts', 'PostController');
-Route::apiResource('post-photos', 'PostPhotoController');
-Route::apiResource('post-types', 'PostTypeController');
 Route::apiResource('report-conclusions', 'ReportConclusionController');
-Route::apiResource('reports', 'ReportController');
 Route::apiResource('school-classes', 'SchoolClassController');
 Route::apiResource('schools', 'SchoolController');
-Route::apiResource('tags', 'TagController');
-Route::apiResource('users', 'UserController');
 Route::apiResource('user-types', 'UserTypeController');
 

@@ -20,10 +20,10 @@ class CreateUsersTable extends Migration
             $table->date('birth_date');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('github_url');
-            $table->string('linkedin_url');
-            $table->string('facebook_url');
-            $table->string('instagram_url');
+            $table->string('github_url')->nullable();
+            $table->string('linkedin_url')->nullable();
+            $table->string('facebook_url')->nullable();
+            $table->string('instagram_url')->nullable();
             $table->foreignId('district_id')->constrained();
             $table->foreignId('user_type_id')->constrained();
             $table->foreignId('school_class_id')->constrained();
