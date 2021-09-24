@@ -29,6 +29,11 @@ Route::get('recover', function () {
     return view('recover');
 });
 
+Route::get('admin', function () {
+    return view('admin');
+});
+
+
 //Auth::routes();
 
 //Route::get('/home', 'HomeController@index')->name('home');

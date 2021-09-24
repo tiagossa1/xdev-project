@@ -5,7 +5,6 @@
       <path value="$PROJECT_DIR$/web-api/vendor/doctrine/instantiator" />
       <path value="$PROJECT_DIR$/web-api/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/web-api/vendor/doctrine/inflector" />
-      <path value="$PROJECT_DIR$/web-api/vendor/hamcrest/hamcrest-php" />
       <path value="$PROJECT_DIR$/web-api/vendor/fideloper/proxy" />
       <path value="$PROJECT_DIR$/web-api/vendor/fruitcake/laravel-cors" />
       <path value="$PROJECT_DIR$/web-api/vendor/phpoption/phpoption" />
@@ -26,7 +25,6 @@
       <path value="$PROJECT_DIR$/web-api/vendor/fzaninotto/faker" />
       <path value="$PROJECT_DIR$/web-api/vendor/guzzlehttp/promises" />
       <path value="$PROJECT_DIR$/web-api/vendor/guzzlehttp/psr7" />
-      <path value="$PROJECT_DIR$/web-api/vendor/guzzlehttp/guzzle" />
       <path value="$PROJECT_DIR$/web-api/vendor/nunomaduro/collision" />
       <path value="$PROJECT_DIR$/web-api/vendor/swiftmailer/swiftmailer" />
       <path value="$PROJECT_DIR$/web-api/vendor/tijsverkoyen/css-to-inline-styles" />
@@ -37,7 +35,6 @@
       <path value="$PROJECT_DIR$/web-api/vendor/composer" />
       <path value="$PROJECT_DIR$/web-api/vendor/psr/http-message" />
       <path value="$PROJECT_DIR$/web-api/vendor/psr/container" />
-      <path value="$PROJECT_DIR$/web-api/vendor/psr/event-dispatcher" />
       <path value="$PROJECT_DIR$/web-api/vendor/psr/simple-cache" />
       <path value="$PROJECT_DIR$/web-api/vendor/psr/log" />
       <path value="$PROJECT_DIR$/web-api/vendor/psy/psysh" />
@@ -45,7 +42,6 @@
       <path value="$PROJECT_DIR$/web-api/vendor/opis/closure" />
       <path value="$PROJECT_DIR$/web-api/vendor/voku/portable-ascii" />
       <path value="$PROJECT_DIR$/web-api/vendor/asm89/stack-cors" />
-      <path value="$PROJECT_DIR$/web-api/vendor/brick/math" />
       <path value="$PROJECT_DIR$/web-api/vendor/nikic/php-parser" />
       <path value="$PROJECT_DIR$/web-api/vendor/facade/flare-client-php" />
       <path value="$PROJECT_DIR$/web-api/vendor/facade/ignition" />
@@ -75,8 +71,6 @@
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/http-foundation" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/polyfill-intl-normalizer" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/polyfill-php73" />
-      <path value="$PROJECT_DIR$/web-api/vendor/symfony/http-client-contracts" />
-      <path value="$PROJECT_DIR$/web-api/vendor/symfony/event-dispatcher-contracts" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/service-contracts" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/polyfill-iconv" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/polyfill-ctype" />
@@ -101,6 +95,12 @@
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/translation" />
       <path value="$PROJECT_DIR$/web-api/vendor/symfony/polyfill-intl-grapheme" />
       <path value="$PROJECT_DIR$/web-api/vendor/theseer/tokenizer" />
+      <path value="$PROJECT_DIR$/web-api/vendor/symfony/http-client-contracts" />
+      <path value="$PROJECT_DIR$/web-api/vendor/psr/event-dispatcher" />
+      <path value="$PROJECT_DIR$/web-api/vendor/symfony/event-dispatcher-contracts" />
+      <path value="$PROJECT_DIR$/web-api/vendor/brick/math" />
+      <path value="$PROJECT_DIR$/web-api/vendor/guzzlehttp/guzzle" />
+      <path value="$PROJECT_DIR$/web-api/vendor/hamcrest/hamcrest-php" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.0">
