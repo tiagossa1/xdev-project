@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\District;
+use Exception;
 use Illuminate\Http\Request;
 
 class DistrictController extends Controller
@@ -10,7 +11,7 @@ class DistrictController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -20,7 +21,7 @@ class DistrictController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
@@ -29,7 +30,7 @@ class DistrictController extends Controller
      * Store a newly created resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -43,7 +44,7 @@ class DistrictController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
@@ -51,7 +52,7 @@ class DistrictController extends Controller
      * Display the specified resource.
      *
      * @param \App\District $district
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(District $district)
     {
@@ -61,7 +62,7 @@ class DistrictController extends Controller
 
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
@@ -70,7 +71,7 @@ class DistrictController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      * @param \App\District $district
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, District $district)
     {
@@ -84,7 +85,7 @@ class DistrictController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
@@ -92,18 +93,16 @@ class DistrictController extends Controller
      * Remove the specified resource from storage.
      *
      * @param \App\District $district
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(District $district)
     {
-        //
         try {
             $district->delete();
             return response()->json(['message' => 'Deleted'], 205);
 
         } catch (Exception $exception) {
-
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

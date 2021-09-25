@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\PostPhoto;
+use Exception;
 use Illuminate\Http\Request;
 
 class PostPhotoController extends Controller
@@ -10,7 +11,7 @@ class PostPhotoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -19,16 +20,16 @@ class PostPhotoController extends Controller
                 'data' => PostPhoto::with('post')->get(),
                 'message' => 'Success'
             ], 200);
-        } catch(Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -39,17 +40,16 @@ class PostPhotoController extends Controller
                 'data' => $postPhoto,
                 'message' => 'Success'
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\PostPhoto  $postPhoto
-     * @return \Illuminate\Http\Response
+     * @param \App\PostPhoto $postPhoto
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(PostPhoto $postPhoto)
     {
@@ -60,16 +60,16 @@ class PostPhotoController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PostPhoto  $postPhoto
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\PostPhoto $postPhoto
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, PostPhoto $postPhoto)
     {
@@ -82,25 +82,23 @@ class PostPhotoController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PostPhoto  $postPhoto
-     * @return \Illuminate\Http\Response
+     * @param \App\PostPhoto $postPhoto
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(PostPhoto $postPhoto)
     {
-        try{
+        try {
             $postPhoto->delete();
-            return response()->json(['message' => 'Deleted'],205);
-
-        }catch(Exception $exception){
-
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['message' => 'Deleted'], 205);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginAuthRequest;
+use App\Http\Requests\RegisterAuthRequest;
 use App\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
@@ -11,38 +14,38 @@ class AuthController extends Controller
 {
     protected $table = 'users';
 
-    public function register(Request $request) {
-        $fields = $request->validate([
-            'name' => 'required',
-            'email' => 'required',
-            'birth_date' => 'required',
-            'password' => 'required',
-            'district_id' => 'required',
-            'user_type_id' => 'required',
-            'school_class_id' => 'required'
-        ]);
+    public function register(RegisterAuthRequest $request)
+    {
+        try {
+            $request->validate($request->rules());
 
-        $user = \App\User::create([
-            'name' => $fields['name'],
-            'email' => $fields['email'],
-            'birth_date' => $fields['birth_date'],
-            'password' => bcrypt($fields['password']),
-            'district_id' => $fields['district_id'],
-            'user_type_id' => $fields['user_type_id'],
-            'school_class_id' => $fields['school_class_id']
-        ]);
+            $user = \App\User::create([
+                'name' => $request['name'],
+                'email' => $request['email'],
+                'birth_date' => $request['birth_date'],
+                'password' => bcrypt($request['password']),
+                'district_id' => $request['district_id'],
+                'user_type_id' => $request['user_type_id'],
+                'school_class_id' => $request['school_class_id']
+            ]);
 
-        $token = $user->createToken('xdevToken')->plainTextToken;
+            $token = $user->createToken('xdevToken')->plainTextToken;
 
-        $response = [
-            'user' => $user,
-            'token' => $token
-        ];
+            $response = [
+                'user' => $user,
+                'token' => $token
+            ];
 
-        return response($response, 201);
+            return response($response, 201);
+        } catch (Exception $e) {
+            return response([
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    public function logout(Request $request) {
+    public function logout(Request $request)
+    {
         Auth::user()->tokens()->delete();
 
         return [
@@ -50,15 +53,13 @@ class AuthController extends Controller
         ];
     }
 
-    public function login(Request $request) {
-        $fields = $request->validate([
-            'email' => 'required',
-            'password' => 'required'
-        ]);
+    public function login(LoginAuthRequest $request)
+    {
+        $request->validate($request->rules());
 
-        $user = User::where('email', $fields['email'])->first();
+        $user = User::where('email', $request['email'])->first();
 
-        if(!$user || !Hash::check($fields['password'], $user->password)) {
+        if (!$user || !Hash::check($request['password'], $user->password)) {
             return response([
                 'message' => 'Bad Credentials'
             ], 401);

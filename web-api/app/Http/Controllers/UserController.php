@@ -17,10 +17,10 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::with('posts','feedbacks','reports','tags')->get(),
+                'data' => User::with('posts', 'feedbacks', 'reports', 'tags')->get(),
                 'message' => 'Success'
             ], 200);
-        } catch(Exception $exception) {
+        } catch (Exception $exception) {
             return response()->json(['error' => $exception], 500);
         }
     }
@@ -28,54 +28,54 @@ class UserController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
-    {
-        try {
-            $user = User::create($request->all());
+    /*    public function store(Request $request)
+        {
+            try {
+                $user = User::create($request->all());
 
-            $user->posts()->async($request->input('posts'));
-            $user->feedbacks()->async($request->input('feedbacks'));
-            $user->reports()->async($request->input('reports'));
-            $user->tags()->async($request->input('tags'));
+                $user->posts()->async($request->input('posts'));
+                $user->feedbacks()->async($request->input('feedbacks'));
+                $user->reports()->async($request->input('reports'));
+                $user->tags()->async($request->input('tags'));
 
-            return response()->json([
-                'data' => $user,
-                'message' => 'Success'
-            ], 201);
+                return response()->json([
+                    'data' => $user,
+                    'message' => 'Success'
+                ], 201);
 
-        } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
-        }
-    }
+            } catch (Exception $exception) {
+                return response()->json(['error' => $exception], 500);
+            }
+        }*/
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param \App\User $user
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Report $user)
+    public function show(Request $user)
     {
         try {
             return response()->json([
-                'data' => $user->load('posts','feedbacks','reports','tags'),
+                'data' => $user->load('posts', 'feedbacks', 'reports', 'tags'),
                 'message' => 'Success'
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User $user
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\User $user
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, User $user)
     {
@@ -93,25 +93,25 @@ class UserController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
-     * @return \Illuminate\Http\Response
+     * @param \App\User $user
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(User $user)
     {
-        try{
+        try {
             $user->delete();
-            return response()->json(['message' => 'Deleted'],205);
+            return response()->json(['message' => 'Deleted'], 205);
 
-        }catch(Exception $exception){
+        } catch (Exception $exception) {
 
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

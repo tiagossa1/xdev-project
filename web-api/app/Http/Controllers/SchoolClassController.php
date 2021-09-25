@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\School;
 use App\SchoolClass;
+use Exception;
 use Illuminate\Http\Request;
 
 class SchoolClassController extends Controller
@@ -11,7 +12,7 @@ class SchoolClassController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -20,16 +21,16 @@ class SchoolClassController extends Controller
                 'data' => SchoolClass::with('school')->get(),
                 'message' => 'Success'
             ], 200);
-        } catch(Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -40,17 +41,16 @@ class SchoolClassController extends Controller
                 'data' => $schoolClass,
                 'message' => 'Success'
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\SchoolClass  $schoolClass
-     * @return \Illuminate\Http\Response
+     * @param \App\SchoolClass $schoolClass
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(SchoolClass $schoolClass)
     {
@@ -61,16 +61,16 @@ class SchoolClassController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\SchoolClass  $schoolClass
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\SchoolClass $schoolClass
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, SchoolClass $schoolClass)
     {
@@ -83,25 +83,23 @@ class SchoolClassController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\SchoolClass  $schoolClass
-     * @return \Illuminate\Http\Response
+     * @param \App\SchoolClass $schoolClass
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(SchoolClass $schoolClass)
     {
-        try{
+        try {
             $schoolClass->delete();
-            return response()->json(['message' => 'Deleted'],205);
-
-        }catch(Exception $exception){
-
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['message' => 'Deleted'], 205);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

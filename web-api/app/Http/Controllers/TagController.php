@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tag;
+use Exception;
 use Illuminate\Http\Request;
 
 class TagController extends Controller
@@ -10,7 +11,7 @@ class TagController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -19,16 +20,16 @@ class TagController extends Controller
                 'data' => Tag::all(),
                 'message' => 'Success'
             ], 200);
-        } catch(Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -41,15 +42,15 @@ class TagController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
+     * @param \App\Tag $tag
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(Tag $tag)
     {
@@ -58,18 +59,17 @@ class TagController extends Controller
                 'data' => $tag,
                 'message' => 'Success'
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Tag $tag
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, Tag $tag)
     {
@@ -80,27 +80,24 @@ class TagController extends Controller
                 'data' => $tag,
                 'message' => 'Success'
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Tag  $tag
-     * @return \Illuminate\Http\Response
+     * @param \App\Tag $tag
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Tag $tag)
     {
-        try{
+        try {
             $tag->delete();
-            return response()->json(['message' => 'Deleted'],205);
-
-        }catch(Exception $exception){
-
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['message' => 'Deleted'], 205);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }
