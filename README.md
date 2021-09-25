@@ -22,19 +22,23 @@ To run this project, you will need to add the following environment variables to
 cp .env.example .env
 composer install
 php artisan migrate:fresh --seed
-php artisan serve
+php artisan serve --port=8001
 ```
 
 ## Web Site
-
 ```bash
 cp .env.example .env
 composer install
 npm install
 npm run dev
-cp .env.example .env
 php artisan key:generate
 php artisan serve
+```
+
+## Web Site
+```bash
+cd web-site
+npm run watch
 ```
 
 ## Authors
