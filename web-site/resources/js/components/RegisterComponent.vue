@@ -56,7 +56,6 @@
             <div class="row">
                 <div class="col-6">
                     <label class="float-left">Distrito *</label>
-
                     <b-form-select
                         id="input-2"
                         v-model="form.district_id"
@@ -81,6 +80,14 @@
                         :value="null"
                         required
                     ></b-form-select>
+                    <br>
+                    <!--<v-select
+                        id="input-3"
+                        label="text"
+                        v-model="form.school_class_id"
+                        :reduce="school => school.value"
+                        :options="schoolClasses"
+                        required/>-->
                 </div>
             </div>
             <br>
