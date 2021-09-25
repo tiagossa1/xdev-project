@@ -58,8 +58,8 @@
                     <label class="float-left">Distrito *</label>
 
                     <b-form-select
-                        id="input-3"
-                        v-model="form.district"
+                        id="input-2"
+                        v-model="form.district_id"
                         name="district_id"
                         :options="districts"
                         required
@@ -76,7 +76,7 @@
                     <b-form-select
                         id="input-3"
                         name="school_class_id"
-                        v-model="form.schoolClass"
+                        v-model="form.school_class_id"
                         :options="schoolClasses"
                         :value="null"
                         required
@@ -88,7 +88,7 @@
             <div class="row">
                 <div class="col-6">
                     <label class="float-left">Data de nascimento</label>
-                    <b-form-datepicker id="example-datepicker" v-model="form.birthday"
+                    <b-form-datepicker id="example-datepicker" v-model="form.birth_date"
                                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                                        :min="min" :max="max" name="birth_date"
                                        class="mb-2"></b-form-datepicker>
@@ -123,6 +123,7 @@ export default {
                 district_id: null,
                 school_class_id: null,
                 birth_date: '',
+                user_type_id: 1,
             },
             //districts: [{value: null, text: 'Escolha um distrito'}, 'Pedir à API'],
             //schoolClasses: [{value: null, text: 'Escolha uma turma'}, 'Pedir à API'],
@@ -135,14 +136,14 @@ export default {
     methods: {
         onSubmit(event) {
             event.preventDefault()
-            alert(JSON.stringify(this.form))
-            // vamos tentar ver com o console log
+            console.log(JSON.stringify(this.form))
             axios.post('http://127.0.0.1:8001/api/register', this.form)
                 .then((response) => {
                     $('#success').html(response.data.message)
                 }).catch(err => {
                     console.log(err);
             })
+
 
         },
         redirectToCreateAccount() {
@@ -152,7 +153,6 @@ export default {
             window.location.href = '/recover';
         },
         async getDistrict() {
-
             let result = await axios.get('http://127.0.0.1:8001/api/districts');
             this.districts = result.data.data.map(x => ({value: x.id, text: x.name}));
             console.log(result.data.data)
@@ -163,8 +163,8 @@ export default {
         }
     },
     created() {
-        this.getDistrict(),
-            this.getSchoolClasses()
+        this.getDistrict();
+        this.getSchoolClasses();
     }
 }
 </script>

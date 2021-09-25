@@ -2268,7 +2268,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
         password: '',
         district_id: null,
         school_class_id: null,
-        birth_date: ''
+        birth_date: '',
+        user_type_id: 1
       } //districts: [{value: null, text: 'Escolha um distrito'}, 'Pedir à API'],
       //schoolClasses: [{value: null, text: 'Escolha uma turma'}, 'Pedir à API'],
 
@@ -2281,8 +2282,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
   methods: {
     onSubmit: function onSubmit(event) {
       event.preventDefault();
-      alert(JSON.stringify(this.form)); // vamos tentar ver com o console log
-
+      console.log(JSON.stringify(this.form));
       axios.post('http://127.0.0.1:8001/api/register', this.form).then(function (response) {
         $('#success').html(response.data.message);
       })["catch"](function (err) {
@@ -2356,7 +2356,8 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
     }
   },
   created: function created() {
-    this.getDistrict(), this.getSchoolClasses();
+    this.getDistrict();
+    this.getSchoolClasses();
   }
 });
 
@@ -53180,17 +53181,17 @@ var render = function() {
                 _vm._v(" "),
                 _c("b-form-select", {
                   attrs: {
-                    id: "input-3",
+                    id: "input-2",
                     name: "district_id",
                     options: _vm.districts,
                     required: ""
                   },
                   model: {
-                    value: _vm.form.district,
+                    value: _vm.form.district_id,
                     callback: function($$v) {
-                      _vm.$set(_vm.form, "district", $$v)
+                      _vm.$set(_vm.form, "district_id", $$v)
                     },
-                    expression: "form.district"
+                    expression: "form.district_id"
                   }
                 })
               ],
@@ -53212,11 +53213,11 @@ var render = function() {
                     required: ""
                   },
                   model: {
-                    value: _vm.form.schoolClass,
+                    value: _vm.form.school_class_id,
                     callback: function($$v) {
-                      _vm.$set(_vm.form, "schoolClass", $$v)
+                      _vm.$set(_vm.form, "school_class_id", $$v)
                     },
-                    expression: "form.schoolClass"
+                    expression: "form.school_class_id"
                   }
                 })
               ],
@@ -53249,11 +53250,11 @@ var render = function() {
                     name: "birth_date"
                   },
                   model: {
-                    value: _vm.form.birthday,
+                    value: _vm.form.birth_date,
                     callback: function($$v) {
-                      _vm.$set(_vm.form, "birthday", $$v)
+                      _vm.$set(_vm.form, "birth_date", $$v)
                     },
-                    expression: "form.birthday"
+                    expression: "form.birth_date"
                   }
                 })
               ],
@@ -67114,8 +67115,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\To\Desktop\xdev-project\web-site\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\To\Desktop\xdev-project\web-site\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Edgar\Desktop\xdev-project\web-site\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Edgar\Desktop\xdev-project\web-site\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

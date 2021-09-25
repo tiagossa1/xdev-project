@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('facebook_url')->nullable();
             $table->string('instagram_url')->nullable();
             $table->foreignId('district_id')->constrained();
-            $table->foreignId('user_type_id')->constrained();
+            $table->foreignId('user_type_id')->default(1)->constrained();
             $table->foreignId('school_class_id')->constrained();
             $table->rememberToken();
             $table->timestamps();
