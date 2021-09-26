@@ -2,29 +2,11 @@
     <div>
         <footer :style="footerStyle">
             <div>
-                <h2 class="float-left font-weight-bold">ATEC</h2> <span class="ml-2">© {{ new Date().getFullYear() }}</span>
+                <h2 class="float-left font-weight-bold">ATEC</h2> <span class="ml-2 small">© {{ new Date().getFullYear() }}</span>
             </div>
         </footer>
     </div>
 </template>
-
-<!--
-<style scoped>
-    footer{
-        background-color: #00AEEF;
-
-        position: absolute;
-        margin-top:20px;
-        display:flex;
-        align-items:center;
-        padding: 5px;
-
-        bottom: 0;
-        width: 100%;
-        height: 50px;
-    }
-</style>
--->
 
 <script>
 export default {
