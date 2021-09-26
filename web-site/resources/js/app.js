@@ -6,12 +6,13 @@
 import Vue from "vue";
 import { BootstrapVue, BootstrapVueIcons } from "bootstrap-vue";
 import Vuex from 'vuex';
-import vSelect from 'vue-select'
+import VueCompositionAPI from '@vue/composition-api'
 
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
 Vue.use(Vuex);
-Vue.component('v-select', vSelect)
+Vue.use(VueCompositionAPI);
+
 window.Vue = require('vue');
 
 window.axios = require('axios');

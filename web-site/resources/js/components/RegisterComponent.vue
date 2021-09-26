@@ -1,116 +1,163 @@
 <template>
-    <div class="mt-4 w-50 text-center m-auto">
-        <br>
-        <h4 class="mb-4">Criar Conta</h4>
-        <b-form @submit="onSubmit">
+    <div class="mt-4 w-75 m-auto">
+        <b-alert
+            :show="dismissCountDown"
+            dismissible
+            variant="danger"
+            @dismissed="dismissCountDown=0"
+            @dismiss-count-down="countDownChanged"
+        >
+            {{ formStatus }}
+            <b-progress
+                variant="danger"
+                :max="dismissSecs"
+                :value="dismissCountDown"
+                height="4px"
+                class="mt-3"
+            ></b-progress>
+        </b-alert>
+        <h2 class="mt-4 mb-4 text-center">Criar Conta</h2>
+        <b-form @submit.prevent="onSubmit">
             <div class="row">
                 <div class="col-6">
-                    <label class="float-left">Nome *</label>
+                    <label class="float-left font-weight-bold">Nome *</label>
                     <b-form-input
                         id="input-name"
-                        v-model="form.name"
+                        v-model.trim="form.name"
                         name="name"
                         type="text"
                         placeholder="Inserir o nome"
-                        required
+                        :state="!v$.form.name.$invalid"
+                        @blur="v$.form.name.$touch"
                     ></b-form-input>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.form.name.required.$invalid">O campo nome é
+                        obrigatório.
+                    </div>
                 </div>
                 <div class="col-6">
-                    <label class="float-left">Email *</label>
-                    <b-form-input
-                        id="input-email"
-                        v-model="form.email"
-                        name="email"
-                        type="email"
-                        placeholder="Inserir o email"
-                        required
-                    ></b-form-input>
+                    <label class="float-left font-weight-bold">Email *</label>
+                    <b-input-group append="@edu.atec.pt">
+                        <b-form-input
+                            id="input-email"
+                            v-model="form.email"
+                            type="text"
+                            placeholder="Inserir o email"
+                            :state="!v$.form.email.$invalid"
+                            @blur="v$.form.email.$touch"
+                        ></b-form-input>
+                    </b-input-group>
+
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.form.email.required.$invalid">O campo email
+                        é obrigatório
+                    </div>
                 </div>
             </div>
             <br>
 
             <div class="row">
                 <div class="col-6">
-                    <label class="float-left">Password *</label>
+                    <label class="float-left font-weight-bold">Password *</label>
                     <b-form-input
                         id="input-password"
                         v-model="form.password"
                         name="password"
                         placeholder="Inserir password"
                         type="password"
-                        required
+                        :state="!v$.form.password.$invalid"
+                        @blur="v$.form.password.$touch"
                     ></b-form-input>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.form.password.required.$invalid">O campo
+                        password é obrigatório.
+                    </div>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if=v$.form.password.minLength.$invalid>O campo
+                        password deve ter pelo menos 6 caracteres.
+                    </div>
                 </div>
                 <div class="col-6">
-                    <label class="float-left">Confirmar Password</label>
+                    <label class="float-left font-weight-bold">Confirmar Password</label>
                     <b-form-input
                         id="input-confirm-password"
                         type="password"
+                        v-model="confirmPassword"
                         placeholder="Inserir o password"
-                        required
+                        :state="!v$.confirmPassword.$invalid"
+                        @blur="v$.confirmPassword.$touch"
                     ></b-form-input>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.confirmPassword.required.$invalid">Confirme a password.
+                    </div>
+                    <br>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.confirmPassword.sameAs.$invalid">As
+                        passwords não são iguais.
+                    </div>
                 </div>
             </div>
             <br>
 
             <div class="row">
                 <div class="col-6">
-                    <label class="float-left">Distrito *</label>
+                    <label class="float-left font-weight-bold">Distrito *</label>
                     <b-form-select
                         id="input-2"
                         v-model="form.district_id"
                         name="district_id"
                         :options="districts"
-                        required
                     ></b-form-select>
-
-                    <!--<select v-model="districts" class="form-control" >
-                        <option v-for="district in districts" :value="district.name">
-                            {{ district.name }}
-                        </option>
-                    </select>-->
                 </div>
                 <div class="col-6">
-                    <label class="float-left">Turma *</label>
+                    <label class="float-left font-weight-bold">Turma *</label>
                     <b-form-select
                         id="input-3"
                         name="school_class_id"
                         v-model="form.school_class_id"
                         :options="schoolClasses"
                         :value="null"
-                        required
+                        :state="!v$.form.school_class_id.$invalid"
+                        @blur="v$.form.school_class_id.$touch"
                     ></b-form-select>
-                    <br>
-                    <!--<v-select
-                        id="input-3"
-                        label="text"
-                        v-model="form.school_class_id"
-                        :reduce="school => school.value"
-                        :options="schoolClasses"
-                        required/>-->
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.form.school_class_id.required.$invalid">O campo
+                        turma é obrigatório.
+                        <br>
+                    </div>
                 </div>
             </div>
-            <br>
-
             <div class="row">
                 <div class="col-6">
-                    <label class="float-left">Data de nascimento</label>
-                    <b-form-datepicker id="example-datepicker" v-model="form.birth_date"
+                    <label class="float-left font-weight-bold">Data de nascimento</label>
+                    <b-form-datepicker v-model="form.birth_date"
                                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
                                        :min="min" :max="max" name="birth_date"
-                                       class="mb-2"></b-form-datepicker>
+                                       :state="!v$.form.birth_date.$invalid"
+                                       @blur="v$.form.birth_date.$touch"
+                                       class="mb-2">
+                    </b-form-datepicker>
+                    <div class="text-danger font-weight-bold float-left small mt-1"
+                         v-if="v$.form.birth_date.required.$invalid">O campo data de nascimento é obrigatório.
+                    </div>
                 </div>
                 <div class="col-6">
                 </div>
             </div>
             <br>
 
-            <b-button type="submit" class="text-white" variant="primary">Entrar</b-button>
+            <div class="text-center">
+                <b-button type="submit" class="text-white" variant="primary" :disabled="this.v$.$invalid">Criar</b-button>
+            </div>
+
         </b-form>
     </div>
 </template>
 
 <script>
+import useVuelidate from "@vuelidate/core";
+import {required, minLength, sameAs} from '@vuelidate/validators';
+
 export default {
     name: "register-component",
     data() {
@@ -123,6 +170,11 @@ export default {
             schoolClasses: [],
             max: today,
             min: new Date(1900, 1, 1),
+            dismissSecs: 5,
+            dismissCountDown: 0,
+            showErrorAlert: false,
+            confirmPassword: '',
+            formStatus: '',
             form: {
                 name: '',
                 email: '',
@@ -131,27 +183,41 @@ export default {
                 school_class_id: null,
                 birth_date: '',
                 user_type_id: 1,
+            }
+        }
+    },
+    setup: () => ({v$: useVuelidate()}),
+    validations() {
+        return {
+            form: {
+                name: {required},
+                email: {required},
+                password: {required, minLength: minLength(6)},
+                school_class_id: {required},
+                birth_date: {required}
             },
-            //districts: [{value: null, text: 'Escolha um distrito'}, 'Pedir à API'],
-            //schoolClasses: [{value: null, text: 'Escolha uma turma'}, 'Pedir à API'],
+            confirmPassword: {required, sameAs: sameAs(this.form.password)}
         }
     },
     mounted() {
-        //this.getDistrict();
         console.log('Register component mounted.')
     },
     methods: {
-        onSubmit(event) {
-            event.preventDefault()
-            console.log(JSON.stringify(this.form))
-            axios.post('http://127.0.0.1:8001/api/register', this.form)
-                .then((response) => {
-                    $('#success').html(response.data.message)
-                }).catch(err => {
+        onSubmit() {
+            if (!this.v$.$invalid) {
+                this.form.email += "@edu.atec.pt";
+
+                axios.post('http://127.0.0.1:8001/api/register', this.form)
+                    .then((response) => {
+                        $('#success').html(response.data.message)
+                    }).catch(err => {
                     console.log(err);
-            })
-
-
+                })
+            } else {
+                this.showErrorAlert = true;
+                this.showAlert();
+                this.formStatus = 'Existem campos inválidos. Por favor, reveja o formulário.'
+            }
         },
         redirectToCreateAccount() {
             window.location.href = '/register';
@@ -159,14 +225,25 @@ export default {
         redirectToRecoverPassword() {
             window.location.href = '/recover';
         },
+        countDownChanged(dismissCountDown) {
+            this.dismissCountDown = dismissCountDown
+        },
+        showAlert() {
+            this.dismissCountDown = this.dismissSecs
+        },
         async getDistrict() {
             let result = await axios.get('http://127.0.0.1:8001/api/districts');
             this.districts = result.data.data.map(x => ({value: x.id, text: x.name}));
-            console.log(result.data.data)
         },
         async getSchoolClasses() {
             let res = await axios.get('http://127.0.0.1:8001/api/school-classes');
             this.schoolClasses = res.data.data.map(x => ({value: x.id, text: x.name}));
+        },
+        inputState(input) {
+            return !!input;
+        },
+        passwordState() {
+            return (!!this.form.password && !!this.confirmPassword) && this.form.password === this.confirmPassword;
         }
     },
     created() {

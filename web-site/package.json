@@ -26,6 +26,8 @@
         "vuex": "^3.6.2"
     },
     "dependencies": {
-        "vue-select": "^3.13.0"
+        "@vue/composition-api": "^1.2.2",
+        "@vuelidate/core": "^2.0.0-alpha.26",
+        "@vuelidate/validators": "^2.0.0-alpha.22"
     }
 }
