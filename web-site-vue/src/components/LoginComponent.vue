@@ -28,7 +28,8 @@
                     Não tem conta?
                 </div>
                 <div class="col-6">
-                    <b-link @click="redirectToCreateAccount">Criar conta</b-link>
+                    <router-link to="/register">Criar Conta</router-link>
+                    <!-- <b-link @click="redirectToCreateAccount">Criar conta</b-link> -->
                 </div>
             </div>
 
@@ -37,7 +38,8 @@
                     Esqueceu-se da palavra-passe?
                 </div>
                 <div class="col-6">
-                    <b-link @click="redirectToRecoverPassword">Recuperar password</b-link>
+                    <router-link to="/login">Criar Conta</router-link>
+                    <!-- <b-link @click="redirectToRecoverPassword">Recuperar password</b-link> -->
                 </div>
             </div>
             <br>
@@ -52,26 +54,34 @@ export default {
     name: "login-component",
     mounted() {
         console.log('Login component mounted.')
+        
     },
     data() {
         return {
             form: {
                 email: '',
                 password: '',
-                rememberLogin: ''
+                //rememberLogin: ''
             }
         }
     },
     methods: {
         onSubmit() {
-            alert(JSON.stringify(this.form))
+            this.axios.post("http://127.0.0.1:8000/api/login", this.form)
+                .then((res) => {
+                    console.log(res);
+                    this.redirectToHome();
+                })
+                .catch((err) => {
+                console.log(err);
+            });
+
+            //alert(JSON.stringify(this.form))
+            
         },
-        redirectToCreateAccount() {
-            window.location.href = '/register';
+        redirectToHome() {
+            window.location.href = '/';
         },
-        redirectToRecoverPassword() {
-            window.location.href = '/recover';
-        }
     }
 }
 </script>

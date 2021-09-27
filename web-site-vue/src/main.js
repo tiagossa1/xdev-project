@@ -16,7 +16,9 @@ import router from "./router";
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuelidate);
+
 Vue.use(VueAxios, axios);
+
 Vue.use(VueCompositionAPI);
 
 Vue.config.productionTip = false;

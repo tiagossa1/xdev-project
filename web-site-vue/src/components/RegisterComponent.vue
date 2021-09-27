@@ -238,7 +238,7 @@ export default {
         this.form.email += "@edu.atec.pt";
 
         this.axios
-          .post("http://127.0.0.1:8001/api/register", this.form)
+          .post("http://127.0.0.1:8000/api/register", this.form)
           .then((res) => {
             console.log(res);
           })
@@ -265,7 +265,7 @@ export default {
       this.dismissCountDown = this.dismissSecs;
     },
     async getDistrict() {
-      let result = await this.axios.get("http://127.0.0.1:8001/api/districts");
+      let result = await this.axios.get("http://127.0.0.1:8000/api/districts");
       this.districts = result.data.data.map((x) => ({
         value: x.id,
         text: x.name,
@@ -273,7 +273,7 @@ export default {
     },
     async getSchoolClasses() {
       let res = await this.axios.get(
-        "http://127.0.0.1:8001/api/school-classes"
+        "http://127.0.0.1:8000/api/school-classes"
       );
       this.schoolClasses = res.data.data.map((x) => ({
         value: x.id,
