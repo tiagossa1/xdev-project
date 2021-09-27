@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::with('posts', 'feedbacks', 'reports', 'tags')->get(),
+                'data' => User::with('posts', 'feedbacks', 'reports', 'district')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -57,18 +57,15 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $user)
+    public function show(User $user)
     {
         try {
-            return response()->json([
-                'data' => $user->load('posts', 'feedbacks', 'reports', 'tags'),
-                'message' => 'Success'
-            ], 201);
-
+            return response()->json($user->load('reports', 'posts', 'feedbacks', 'district', 'tags'), 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return  response()->json(['error' => $exception], 500);
         }
     }
+
 
     /**
      * Update the specified resource in storage.

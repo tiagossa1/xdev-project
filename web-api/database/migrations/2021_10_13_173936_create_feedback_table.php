@@ -18,8 +18,7 @@ class CreateFeedbackTable extends Migration
             $table->string('description');
             $table->foreignId('user_id')->constrained();
             $table->foreignId('feedback_type_id')->constrained();
-            $table->timestamps();
-
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

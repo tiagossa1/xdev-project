@@ -13,7 +13,7 @@ class CreateFavoriteTagTable extends Migration
      */
     public function up()
     {
-        Schema::create('favorite_tag', function (Blueprint $table) {
+        Schema::create('tag_user', function (Blueprint $table) {
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
@@ -27,8 +27,7 @@ class CreateFavoriteTagTable extends Migration
                 'tag_id'
             ]);
 
-            $table->timestamps();
-            $table->dropColumn('updated_at');
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

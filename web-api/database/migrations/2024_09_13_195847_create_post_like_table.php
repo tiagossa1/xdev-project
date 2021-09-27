@@ -22,8 +22,8 @@ class CreatePostLikeTable extends Migration
             $table->foreignId('user_id')
                 ->constrained()
                 ->onDelete('cascade');
-            $table->timestamps();
-            $table->dropColumn('updated_at');
+
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

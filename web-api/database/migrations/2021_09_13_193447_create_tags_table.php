@@ -16,8 +16,7 @@ class CreateTagsTable extends Migration
         Schema::create('tags', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->timestamps();
-            $table->dropColumn('updated_at');
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

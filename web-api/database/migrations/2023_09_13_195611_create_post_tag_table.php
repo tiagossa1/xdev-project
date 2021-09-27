@@ -27,8 +27,7 @@ class CreatePostTagTable extends Migration
                 'tag_id'
             ]);
 
-            $table->timestamps();
-            $table->dropColumn('updated_at');
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 
