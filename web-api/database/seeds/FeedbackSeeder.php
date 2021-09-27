@@ -11,6 +11,10 @@ class FeedbackSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\Feedback::create([
+            'user_id' => 1,
+            'feedback_type_id'=> 2,
+            'description'=>"botão x não funciona"
+    ]);
     }
 }

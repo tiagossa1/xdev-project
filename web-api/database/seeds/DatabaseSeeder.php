@@ -18,5 +18,6 @@ class DatabaseSeeder extends Seeder
         $this->call(FeedbackTypeSeeder::class);
         $this->call(UserSeeder::class);
         $this->call(PostTypeSeeder::class);
+        $this->call(FeedbackSeeder::class);
     }
 }

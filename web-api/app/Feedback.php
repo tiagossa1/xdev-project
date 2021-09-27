@@ -16,7 +16,7 @@ class Feedback extends Model
 
     public function feedback_type()
     {
-        return $this->belongTo(FeedbackType::class);
+        return $this->belongsTo(FeedbackType::class);
     }
 
     public function user()
