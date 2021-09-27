@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('school-classes', 'SchoolClassController');
     Route::apiResource('schools', 'SchoolController');
     Route::apiResource('user-types', 'UserTypeController');
+    Route::apiResource('comments', 'CommentController');
 });
 
 // Users

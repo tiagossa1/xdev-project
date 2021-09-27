@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('tags', 'user')->get(),
+                'data' => Post::with('tags', 'user', 'post_photos', 'comments')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -58,7 +58,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('user', 'tags'),
+                'data' => $post->load('user', 'tags', 'post_photos', 'comments'),
                 'message' => 'Success'
             ], 201);
 
@@ -79,7 +79,7 @@ class PostController extends Controller
         try {
             $post->update($request->all());
 
-            $post->tags()->sync($request->input('tags'));
+            $post->tags()->attach($request->input('tags'));
 
             return response()->json([
                 'data' => $post,
@@ -100,6 +100,8 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         try {
+            $post->post_photos()->delete();
+            $post->comments()->delete();
             $post->delete();
             return response()->json(['message' => 'Deleted'], 205);
 

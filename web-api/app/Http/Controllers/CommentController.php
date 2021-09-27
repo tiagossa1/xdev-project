@@ -2,22 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\District;
-use Exception;
+use App\Comment;
 use Illuminate\Http\Request;
 
-class DistrictController extends Controller
+class CommentController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         try {
             return response()->json([
-                'data' => District::all(),
+                'data' => Comment::with('post', 'user')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -25,21 +24,19 @@ class DistrictController extends Controller
         }
     }
 
-
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
         try {
-            $district = District::create($request->all());
+            $comment = Comment::create($request->all());
 
             return response()->json([
-                'data' => $district,
+                'data' => $comment,
                 'message' => 'Success'
             ], 201);
 
@@ -51,13 +48,13 @@ class DistrictController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\District $district
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
      */
-    public function show(District $district)
+    public function show(Comment $comment)
     {
         try {
-            return response()->json(['data' => $district,
+            return response()->json(['data' => $comment,
                 'message' => 'Success'], 201);
 
 
@@ -69,17 +66,17 @@ class DistrictController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\District $district
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, District $district)
+    public function update(Request $request, Comment $comment)
     {
         try {
-            $district->update($request->all());
+            $comment->update($request->all());
 
             return response()->json([
-                'data' => $district,
+                'data' => $comment,
                 'message' => 'Success'
             ], 201);
 
@@ -91,13 +88,13 @@ class DistrictController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\District $district
-     * @return \Illuminate\Http\JsonResponse
+     * @param  \App\Comment  $comment
+     * @return \Illuminate\Http\Response
      */
-    public function destroy(District $district)
+    public function destroy(Comment $comment)
     {
         try{
-            $district->delete();
+            $comment->delete();
             return response()->json(['message' => 'Deleted'],205);
 
         }catch(Exception $exception){
@@ -106,4 +103,3 @@ class DistrictController extends Controller
         }
     }
 }
-

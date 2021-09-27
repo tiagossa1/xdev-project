@@ -2,7 +2,9 @@
 
 namespace App;
 
+use Egulias\EmailValidator\Warning\Comment;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
@@ -27,4 +29,15 @@ class Post extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function post_photos(){
+        return $this->hasMany(PostPhoto::class);
+    }
+
+    use softDeletes;
 }

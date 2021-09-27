@@ -34,7 +34,7 @@ class PostPhotoController extends Controller
     public function store(Request $request)
     {
         try {
-            $postPhoto = Post::create($request->all());
+            $postPhoto = PostPhoto::create($request->all());
 
             return response()->json([
                 'data' => $postPhoto,
@@ -55,7 +55,7 @@ class PostPhotoController extends Controller
     {
         try {
             return response()->json([
-                'data' => $postPhoto,
+                'data' => $postPhoto->load('post'),
                 'message' => 'Success'
             ], 201);
 
