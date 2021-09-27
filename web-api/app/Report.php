@@ -12,8 +12,6 @@ class Report extends Model
         'user_id'
     ];
 
-    public $timestamps = false;
-
     public function post()
     {
         return $this->belongsTo(Post::class);

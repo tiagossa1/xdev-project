@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('tags', 'users')->get(),
+                'data' => Post::with('tags', 'user')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -36,7 +36,6 @@ class PostController extends Controller
         try {
             $post = Post::create($request->all());
 
-            $post->users()->attach($request->input('users'));
             $post->tags()->attach($request->input('tags'));
 
             return response()->json([
@@ -59,7 +58,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('users', 'tags'),
+                'data' => $post->load('user', 'tags'),
                 'message' => 'Success'
             ], 201);
 
@@ -80,7 +79,6 @@ class PostController extends Controller
         try {
             $post->update($request->all());
 
-            $post->users()->sync($request->input('users'));
             $post->tags()->sync($request->input('tags'));
 
             return response()->json([

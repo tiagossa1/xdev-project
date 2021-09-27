@@ -13,7 +13,7 @@ class PostPhoto extends Model
 
     public $timestamps = false;
 
-    public function posts()
+    public function post()
     {
         return $this->belongsTo(Post::class);
     }
