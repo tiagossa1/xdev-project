@@ -97,12 +97,14 @@ class DistrictController extends Controller
      */
     public function destroy(District $district)
     {
-        try {
+        try{
             $district->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'],205);
 
-        } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+        }catch(Exception $exception){
+
+            return response()->json(['error' => $exception], 500);
         }
     }
 }
+

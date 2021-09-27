@@ -11,6 +11,29 @@ class PostPhotoSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\PostPhoto::create([
+            'url' => 'www.google.pt',
+            'post_id' => 2,
+        ]);
+
+        App\PostPhoto::create([
+            'url' => 'www.google.pt',
+            'post_id' => 1,
+        ]);
+
+        App\PostPhoto::create([
+            'url' => 'www.google.pt',
+            'post_id' => 4,
+        ]);
+
+        App\PostPhoto::create([
+            'url' => 'www.google.pt',
+            'post_id' => 5,
+        ]);
+
+        App\PostPhoto::create([
+            'url' => 'www.google.pt',
+            'post_id' => 3,
+        ]);
     }
 }

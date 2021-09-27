@@ -11,6 +11,28 @@ class TagSeeder extends Seeder
      */
     public function run()
     {
-        //
+        App\Tag::create([
+            'name' => 'c#',
+
+        ]);
+
+        App\Tag::create([
+            'name' => 'c',
+
+        ]);
+
+        App\Tag::create([
+            'name' => 'c++',
+
+        ]);
+
+        App\Tag::create([
+            'name' => 'laravel',
+
+        ]);
+
+        App\Tag::create([
+            'name' => 'php',
+        ]);
     }
 }

@@ -16,9 +16,11 @@ class CreateReportsTable extends Migration
         Schema::create('reports', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->foreignId('post_id')->constrained();
-            $table->foreignId('report_conclusion_id')->constrained();
-            $table->boolean('closed');
+            $table->foreignId('post_id')->nullable();
+            $table->foreignId('moderator')->nullable();
+            $table->foreignId('report_conclusion_id')->nullable();
+            $table->foreignId('post_comment_id')->nullable();
+            $table->boolean('closed')->default(0);
             $table->string('reason');
             $table->timestamps();
         });

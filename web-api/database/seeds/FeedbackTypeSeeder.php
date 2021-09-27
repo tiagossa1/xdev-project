@@ -18,5 +18,9 @@ class FeedbackTypeSeeder extends Seeder
         App\FeedbackType::create([
             'name' => 'Falha Técnica',
         ]);
+
+        App\FeedbackType::create([
+            'name' => 'Outros',
+        ]);
     }
 }

@@ -15,5 +15,10 @@ class PostTypeSeeder extends Seeder
             'name' => 'Oferta de Emprego',
             'iconName' => 'www.ofertadeemprego.org'
         ]);
+
+        App\PostType::create([
+            'name' => 'Post',
+            'iconName' => 'www.Post.org'
+        ]);
     }
 }

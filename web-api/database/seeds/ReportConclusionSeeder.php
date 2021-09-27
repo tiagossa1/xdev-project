@@ -19,5 +19,9 @@ class ReportConclusionSeeder extends Seeder
         ReportConclusion::create([
             'name' => 'Limpo'
         ]);
+
+        ReportConclusion::create([
+            'name' => 'Aberto'
+        ]);
     }
 }

@@ -29,7 +29,7 @@ $factory->define(User::class, function (Faker $faker) {
         'linkedin_url' => $faker->imageUrl(),
         'facebook_url' => $faker->imageUrl(),
         'instagram_url' => $faker->imageUrl(),
-        'user_type_id' => 1,
+        'user_type_id' => rand(1,4),
         'district_id' => rand(1,20),
         'school_class_id' => rand(1,25)
     ];

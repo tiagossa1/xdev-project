@@ -19,7 +19,7 @@ class CreateFeedbackTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('feedback_type_id')->constrained();
             $table->timestamps();
-            $table->dropColumn('updated_at');
+
         });
     }
 

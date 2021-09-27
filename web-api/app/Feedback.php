@@ -12,7 +12,8 @@ class Feedback extends Model
         'description'
     ];
 
-    public $timestamps = false;
+    //public $timestamps = false;
+    const UPDATED_AT = null;
 
     public function feedback_type()
     {
@@ -23,4 +24,5 @@ class Feedback extends Model
     {
         return $this->belongsTo(User::class);
     }
+
 }
