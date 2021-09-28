@@ -23,7 +23,7 @@ cp .env.example .env
 composer install
 php artisan migrate:fresh --seed
 php artisan key:generate
-php artisan serve --port=8001
+php artisan serve
 ```
 
 ## Web Site
