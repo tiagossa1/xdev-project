@@ -11,9 +11,9 @@ xDev is a community website created for both old and new students in ATEC to int
 
 ## Installation
 
-To run this project, you will need to add the following environment variables to your .env file
+To run this project, you will need to change the following environment variables to your .env file:
 
-- `API_KEY` (on web site)
+- `VUE_APP_API_URL` (on web site; once you run the Web API, change it here)
 - `DB_USERNAME` (on web API)
 - `DB_PASSWORD` (on web API)
 
