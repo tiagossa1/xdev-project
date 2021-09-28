@@ -185,6 +185,10 @@
 </template>
 
 <script>
+import userService from "../services/userService";
+import districtService from "../services/districtService";
+import schoolClassService from "../services/schoolClassService";
+
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
 
@@ -236,15 +240,7 @@ export default {
     onSubmit() {
       if (!this.v$.$invalid) {
         this.form.email += "@edu.atec.pt";
-
-        this.axios
-          .post("http://127.0.0.1:8000/api/register", this.form)
-          .then((res) => {
-            console.log(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        userService.register(this.form);
       } else {
         this.showErrorAlert = true;
         this.showAlert();
@@ -265,20 +261,32 @@ export default {
       this.dismissCountDown = this.dismissSecs;
     },
     async getDistrict() {
-      let result = await this.axios.get("http://127.0.0.1:8000/api/districts");
-      this.districts = result.data.data.map((x) => ({
-        value: x.id,
-        text: x.name,
-      }));
+      const config = {
+        headers: {
+          Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
+        },
+      };
+
+      districtService.getDistricts(config).then((res) => {
+        this.districts = res.data.data.map((x) => ({
+          value: x.id,
+          text: x.name,
+        }));
+      });
     },
     async getSchoolClasses() {
-      let res = await this.axios.get(
-        "http://127.0.0.1:8000/api/school-classes"
-      );
-      this.schoolClasses = res.data.data.map((x) => ({
-        value: x.id,
-        text: x.name,
-      }));
+      const config = {
+        headers: {
+          Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
+        },
+      };
+
+      schoolClassService.getSchoolClasses(config).then((res) => {
+        this.schoolClasses = res.data.data.map((x) => ({
+          value: x.id,
+          text: x.name,
+        }));
+      });
     },
     inputState(input) {
       return !!input;
