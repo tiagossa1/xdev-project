@@ -16,7 +16,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'pivot',
+        'password', 'remember_token', 'pivot', 'district_id', 'school_class_id', 'user_type_id'
     ];
 
     public function posts()
@@ -58,4 +58,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+    public function school_class()
+    {
+        return $this->belongsTo(SchoolClass::class);
+    }
+
+    public function user_type()
+    {
+        return $this->belongsTo(UserType::class);
+    }
+
 }

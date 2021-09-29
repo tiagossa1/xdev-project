@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Notifications\NewReport;
 use App\Report;
-use App\User;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Notification;
 
 class ReportController extends Controller
 {
@@ -20,7 +17,7 @@ class ReportController extends Controller
     {
         try {
             return response()->json([
-                'data' => Report::with('user', 'post')->get(),
+                'data' => Report::with('user', 'post', 'comments')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -36,24 +33,20 @@ class ReportController extends Controller
      */
     public function store(Request $request)
     {
-        //$mods = User::where('user_type_id',4);
-
         try {
             $report = Report::create($request->all());
 
-            if ($request->input('user') != null)
-                $report->user()->attach($request->input('user'));
+            if ($request->input('users') != null)
+                $report->users()->async($request->input('users'));
 
-            if ($request->input('post') != null)
-                $report->post()->attach($request->input('post'));
+            if ($request->input('posts') != null)
+                $report->posts()->async($request->input('posts'));
 
-            /*if ($request->input('postComments') != null)
+            if ($request->input('postComments') != null)
                 $report->postComments()->async($request->input('postComments'));
 
             if ($request->input('reportConclusions') != null)
-                $report->reportConclusions()->async($request->input('reportConclusions'));*/
-
-            //Notification::send($mods, new NewReport($report));
+                $report->reportConclusions()->async($request->input('reportConclusions'));
 
             return response()->json([
                 'data' => $report,
@@ -74,7 +67,7 @@ class ReportController extends Controller
     {
         try {
             return response()->json([
-                'data' => $report->load('user', 'post'),
+                'data' => $report->load('user', 'post', 'comments'),
                 'message' => 'Success'
             ], 201);
         } catch (Exception $exception) {
