@@ -5,7 +5,7 @@ export default new (class DistrictService {
     this.apiUrl = process.env.VUE_APP_API_URL;
   }
 
-  async getDistricts(config) {
-    return await axios.get(`${this.apiUrl}/api/districts`, config);
+  async getDistricts() {
+    return await axios.get(`${this.apiUrl}/api/districts`);
   }
 })();

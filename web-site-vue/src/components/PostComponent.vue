@@ -1,51 +1,49 @@
 <template>
   <div class="container">
-    <div class="buttons m-3">
-      <b-button pill variant="info" v-b-modal.modal-1>Criar +</b-button>
-      <b-modal id="modal-1" title="Criar Post">
-        <b-form>
-          <b-form-group label="Insira o titulo:" label-for="textTitle">
-            <b-form-input
-              id="textTitle"
-              type="email"
-              placeholder="Enter email"
-              required
-            ></b-form-input>
-          </b-form-group>
+    <br>
+    <div v-for="post in posts" class="post-container mt-3" :key="post.id">
+      <!--<span v-for="tag of tags" class="tags" v-bind:key="tag.name">
+          {{tag.name}}
+      </span>-->
+      <b-container class="bv-example-row p-2 ml-4">
 
-          <b-form-group label="Insira a descrição:" label-for="textarea">
-            <!--Substituir pelo richText-->
-            <b-form-textarea
-              id="textarea"
-              placeholder="Enter something..."
-              rows="3"
-              max-rows="6"
-            ></b-form-textarea>
-          </b-form-group>
-
-          <b-form-group label="Insira o tipo de post:" label-for="postType">
-            <b-form-select
-              id="postType"
-              v-model="form.post_type"
-              :options="postTypes"
-              required
-            ></b-form-select>
-          </b-form-group>
-        </b-form>
-      </b-modal>
-
-      <b-dropdown class="ml-2" id="dropdown-1" text="Filtro">
-        <b-dropdown-item>First Action</b-dropdown-item>
-      </b-dropdown>
-    </div>
-    <!--<div v-for="post in posts" class="post-container" v-bind:key="post.id">
-            <span v-for="tag of tags" class="tags" v-bind:key="tag.name">
-                {{tag.name}}
+        <b-row class="p-1" >
+          <b-col>
+            <span v-for="tag in post.tags" :key="tag.id" class="mr-4" >
+              <b-badge pill variant="info">{{tag.name}}</b-badge>
             </span>
-            <br>
-            <img width="70rem" src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="{{}}">
-        </div>-->
-    <p>s</p>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col cols="1">
+            <img class="rounded-circle" :style="{border: imgStyle.styleImg,color:imgStyle.hexColor}" width="70rem" fluid src="https://cdn-icons-png.flaticon.com/512/147/147144.png" alt="xDevIMG">
+              <!--Usar Pill-->
+              <figcaption class="imgLegend mx-auto" :style="{backgroundColor:imgStyle.hexColor}">xDev</figcaption>
+          </b-col>
+          <b-col>
+            <span>Toni</span><br>
+            <span>TPSIP 10.20 | ATEC Palmela</span><br>
+            <small>Adicionado a 10 anos</small>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col>
+            <h3 class="font-weight-bold">{{post.title}}</h3>
+          </b-col>
+        </b-row>
+
+        <b-row>
+          <b-col>
+            <b-icon v-on:click="liked = true" v-if="liked == false" icon="heart"></b-icon>
+            <b-icon v-else icon="heart-fill"></b-icon>
+          </b-col>
+        </b-row>
+
+        <p></p><p></p>
+      </b-container>
+    </div>
   </div>
 </template>
 
@@ -54,81 +52,47 @@ import postService from "../services/postService";
 
 export default {
   name: "post-component",
-  async mounted() {
-    const config = {
-      headers: {
-        Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
-      },
-    };
-
+  created(){
     postService
-      .getPostTypes(config)
+      .getPosts()
       .then(
-        (res) =>
-          (this.postTypes = res.data.data.map((x) => ({
-            value: x.id,
-            text: x.name,
-          })))
-      )
-      .catch((err) => console.log(err));
+        (res) => {
+          (this.posts = res.data.data.filter(x => x.suspended === 0 ))
+          console.log(this.posts)
+        }
+    ).catch(err => console.log(err))
 
-    // postService
-    //   .getPosts(config)
-    //   .then((res) => {
-    //     console.log(res.data.data);
-    //     this.posts = res.data.data;
-    //   })
-    //   .catch((err) => console.log(err));
-
-    /*res.forEach((postApi) => {
-                const {
-                    id,
-                    title,
-                    description,
-                    suspended,
-                    user_id,
-                    post_type_id,
-                    created_at: {post_date},
-                } = postApi;
-
-                const post = new Post(
-                    id,
-                    title,
-                    description,
-                    suspended,
-                    user_id,
-                    post_type_id,
-                    post_date
-                );
-                this.posts.push(post);
-            });*/
-    //console.log(res);
   },
   data() {
     return {
       posts: [],
-      form: {
-        post_type: null,
+      liked: false,
+      imgStyle: {
+        hexColor: '#31dde1',
+        //colorFromUser:`${post.hex}`,
+        borderRadius: '50%',
+        styleImg: '3px solid',
       },
-      postTypes: [
-        { text: "Escolha o tipo de post", value: null },
-        "Oferta de emprego",
-        "Batarde",
-      ],
-      /*posts:{
-                tags:[
-                    {name : 'C#'},
-                    {name : 'TS'},
-                    {name : 'JS'},
-                    {name : 'boostrap'},
-                ],
-                userInfo:[
-                    {name: 'Toni',school_class_id: 'TPSIP',school_id:'ATEC Matosinhos'},
-                ],
-            },*/
+      
     };
   },
+  computed: {
+    /*getAllTags(){
+      return this.tags.map(x =>x.name).join(', ')
+    }*/
+  }
 };
 </script>
 
-<style></style>
+<style scoped>
+.imgLegend{
+  border-radius: 25px;
+  width: 55px;
+  text-align: center;
+  /*margin-top: -15px;*/
+}
+.post-container{
+  background-color: cornflowerblue;
+  border-radius: 15px;
+}
+</style>

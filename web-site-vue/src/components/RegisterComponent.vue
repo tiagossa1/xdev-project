@@ -261,13 +261,13 @@ export default {
       this.dismissCountDown = this.dismissSecs;
     },
     async getDistrict() {
-      const config = {
+      /*const config = {
         headers: {
-          Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
+          Authorization: `Bearer 1|EFfVVMSNXDWXzjyiVDMsU29Y67WfAQsJAjhNrqHq`,
         },
-      };
+      };*/
 
-      districtService.getDistricts(config).then((res) => {
+      districtService.getDistricts().then((res) => {
         this.districts = res.data.data.map((x) => ({
           value: x.id,
           text: x.name,
@@ -275,13 +275,13 @@ export default {
       });
     },
     async getSchoolClasses() {
-      const config = {
+      /*const config = {
         headers: {
-          Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
+          Authorization: `Bearer 1|EFfVVMSNXDWXzjyiVDMsU29Y67WfAQsJAjhNrqHq`,
         },
-      };
+      };*/
 
-      schoolClassService.getSchoolClasses(config).then((res) => {
+      schoolClassService.getSchoolClasses().then((res) => {
         this.schoolClasses = res.data.data.map((x) => ({
           value: x.id,
           text: x.name,
