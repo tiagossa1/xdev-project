@@ -12,4 +12,8 @@ export default new (class UserService {
   async register(form) {
     return await axios.post(`${this.apiUrl}/api/register`, form);
   }
+
+  async logout() {
+    return await axios.post(`${this.apiUrl}/api/logout`);
+  }
 })();

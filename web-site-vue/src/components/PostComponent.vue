@@ -55,14 +55,8 @@ import postService from "../services/postService";
 export default {
   name: "post-component",
   async mounted() {
-    const config = {
-      headers: {
-        Authorization: `Bearer 1|7X7BTKjq40o7vfRHPqaeDYalI2Qm3FHDLOm0Cd4n`,
-      },
-    };
-
     postService
-      .getPostTypes(config)
+      .getPostTypes()
       .then(
         (res) =>
           (this.postTypes = res.data.data.map((x) => ({

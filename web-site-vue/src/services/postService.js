@@ -5,11 +5,11 @@ export default new (class PostService {
     this.apiUrl = process.env.VUE_APP_API_URL;
   }
 
-  async getPosts(config) {
-    return await axios.get(`${this.apiUrl}/api/posts`, config);
+  async getPosts() {
+    return await axios.get(`${this.apiUrl}/api/posts`);
   }
 
-  async getPostTypes(config) {
-    return await axios.get(`${this.apiUrl}/api/post-types`, config);
+  async getPostTypes() {
+    return await axios.get(`${this.apiUrl}/api/post-types`);
   }
 })();
