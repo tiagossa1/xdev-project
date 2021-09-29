@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::with('posts', 'feedbacks', 'reports', 'district')->get(),
+                'data' => User::with('posts', 'feedbacks', 'reports', 'district', 'tags')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -60,7 +60,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            return response()->json($user->load('reports', 'posts', 'feedbacks', 'district', 'tags'), 200);
+            return response()->json($user->load('reports', 'posts', 'feedbacks', 'district', 'tags', 'favorite_posts'), 200);
         } catch (Exception $exception) {
             return  response()->json(['error' => $exception], 500);
         }
@@ -79,10 +79,7 @@ class UserController extends Controller
         try {
             $user->update($request->all());
 
-            $user->posts()->async($request->input('posts'));
-            $user->feedbacks()->async($request->input('feedbacks'));
-            $user->reports()->async($request->input('reports'));
-            $user->tags()->async($request->input('tags'));
+            $user->tags()->attach($request->input('tags'));
 
             return response()->json([
                 'data' => $user,

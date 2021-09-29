@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('reports', 'ReportController');
     Route::apiResource('tags', 'TagController');
     Route::apiResource('users', 'UserController');
-    //Route::apiResource('districts', 'DistrictController');
+    Route::apiResource('districts', 'DistrictController');
     Route::apiResource('feedback-types', 'FeedbackTypeController');
     Route::apiResource('report-conclusions', 'ReportConclusionController');
     Route::apiResource('school-classes', 'SchoolClassController');

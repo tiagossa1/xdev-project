@@ -13,8 +13,6 @@ class Comment extends Model
         'post_id'
     ];
 
-    public $timestamps = false;
-
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -24,6 +22,4 @@ class Comment extends Model
     {
         return $this->belongsTo(Post::class);
     }
-
-    use softDeletes;
 }
