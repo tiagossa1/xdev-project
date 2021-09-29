@@ -12,12 +12,6 @@ class NewReport extends Notification
 {
     use Queueable;
 
-
-    /**
-     * New report
-     *
-     * @var Report
-     */
     public $report;
 
     /**
@@ -25,7 +19,7 @@ class NewReport extends Notification
      *
      * @return void
      */
-    public function __construct(Report $report)
+    public function __construct($report)
     {
         $this->report = $report;
     }
@@ -42,20 +36,6 @@ class NewReport extends Notification
     }
 
     /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
-
-    /**
      * Get the array representation of the notification.
      *
      * @param  mixed  $notifiable
@@ -64,7 +44,9 @@ class NewReport extends Notification
     public function toArray($notifiable)
     {
         return [
-            //
+            'reason'=>$this->report->reason,
+            'user_id'=>$this->report->user_id,
+            'post_id'=>$this->report->post_id
         ];
     }
 }
