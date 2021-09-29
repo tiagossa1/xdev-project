@@ -46,6 +46,16 @@ class User extends Authenticatable
 
     public function favorite_posts()
     {
-        return $this->belongsToMany(Post::class);
+        return $this->belongsToMany('App\Post', 'post_user');
+    }
+
+    public function liked_posts()
+    {
+        return $this->belongsToMany('App\Post', 'post_like');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

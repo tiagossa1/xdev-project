@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('tags', 'user', 'post_photos')->get(),
+                'data' => Post::with('tags', 'user', 'post_photos', 'comments')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

@@ -2,7 +2,6 @@
 
 namespace App;
 
-use Egulias\EmailValidator\Warning\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -13,6 +12,10 @@ class Post extends Model
         'description',
         'user_id',
         'post_type_id'
+    ];
+
+    protected $hidden = [
+        'pivot',
     ];
 
     public function post_type()
