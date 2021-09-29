@@ -19,5 +19,4 @@ class PostPhoto extends Model
         return $this->belongsTo(Post::class);
     }
 
-    use softDeletes;
 }

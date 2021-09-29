@@ -16,7 +16,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'pivot',
+        'password', 'remember_token', 'pivot', 'district_id', 'school_class_id', 'user_type_id'
     ];
 
     public function posts()
@@ -36,11 +36,37 @@ class User extends Authenticatable
 
     public function tags()
     {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Tag::class);
     }
 
     public function district()
     {
         return $this->belongsTo(District::class);
     }
+
+    public function favorite_posts()
+    {
+        return $this->belongsToMany('App\Post', 'post_user');
+    }
+
+    public function liked_posts()
+    {
+        return $this->belongsToMany('App\Post', 'post_like');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function school_class()
+    {
+        return $this->belongsTo(SchoolClass::class);
+    }
+
+    public function user_type()
+    {
+        return $this->belongsTo(UserType::class);
+    }
+
 }

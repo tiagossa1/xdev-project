@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::with('posts', 'feedbacks', 'reports', 'district')->get(),
+                'data' => User::with('district', 'school_class', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -60,12 +60,11 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            return response()->json($user->load('reports', 'posts', 'feedbacks', 'district', 'tags'), 200);
+            return response()->json($user->load('district', 'school_class','school_class.school', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments'), 200);
         } catch (Exception $exception) {
             return  response()->json(['error' => $exception], 500);
         }
     }
-
 
     /**
      * Update the specified resource in storage.
@@ -79,10 +78,9 @@ class UserController extends Controller
         try {
             $user->update($request->all());
 
-            $user->posts()->async($request->input('posts'));
-            $user->feedbacks()->async($request->input('feedbacks'));
-            $user->reports()->async($request->input('reports'));
-            $user->tags()->async($request->input('tags'));
+            $user->tags()->attach($request->input('tags'));
+            $user->favorite_posts()->attach($request->input('favorite_posts'));
+            $user->liked_posts()->attach($request->input('liked_posts'));
 
             return response()->json([
                 'data' => $user,

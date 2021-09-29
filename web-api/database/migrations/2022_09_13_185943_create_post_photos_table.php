@@ -17,9 +17,8 @@ class CreatePostPhotosTable extends Migration
             $table->id();
             $table->string('url');
             $table->foreignId('post_id')->constrained();
-            $table->timestamps();
-            $table->dropColumn('updated_at');
-            $table->softDeletes();
+
+            $table->dateTime('created_at')->useCurrent();
         });
     }
 

@@ -1,29 +1,51 @@
 <template>
-  <div class="mt-4 w-50 text-center m-auto">
-    <b-alert v-if="errorMessage" show variant="danger"> {{ errorMessage }} </b-alert>
+  <div class="mt-4 w-25 text-center m-auto">
+    <b-alert v-if="errorMessage" show variant="danger">
+      {{ errorMessage }}
+    </b-alert>
     <br />
     <h4 class="mb-4">Login</h4>
     <b-form @submit.prevent="onSubmit">
-      <b-form-input
-        id="input-email"
-        v-model="form.email"
-        type="email"
-        placeholder="Email"
-        required
-      ></b-form-input>
+      <b-input-group append="@edu.atec.pt">
+        <b-form-input
+          id="input-email"
+          v-model.trim="form.email"
+          type="text"
+          placeholder="Email"
+          :state="!v$.form.email.$invalid"
+        ></b-form-input>
+      </b-input-group>
+      <div
+        class="text-danger font-weight-bold float-left small mt-1 mb-4"
+        v-if="v$.form.email.required.$invalid"
+      >
+        O campo email é obrigatório.
+        <br />
+      </div>
       <br />
       <b-form-input
         id="input-password"
+        class="mt-2"
         v-model="form.password"
         placeholder="Password"
         type="password"
-        required
+        :state="!v$.form.password.$invalid"
       ></b-form-input>
-      <br />
-
-      <b-form-checkbox v-model="form.rememberLogin" class="float-left"
-        >Manter a sessão iniciada</b-form-checkbox
+      <div
+        class="text-danger font-weight-bold float-left small mt-1"
+        v-if="v$.form.password.required.$invalid"
       >
+        O campo password é obrigatório.
+        <br />
+        <br />
+      </div>
+      <div
+        class="text-danger font-weight-bold float-left small mt-1"
+        v-if="v$.form.password.minLength.$invalid"
+      >
+        A password tem de ter 6 caracteres.
+        <br />
+      </div>
       <br />
 
       <div class="row" style="margin-top: 3rem">
@@ -41,7 +63,11 @@
       </div>
       <br />
 
-      <b-button type="submit" class="text-white" variant="primary"
+      <b-button
+        type="submit"
+        class="text-white"
+        variant="primary"
+        :disabled="this.v$.$invalid"
         >Entrar</b-button
       >
     </b-form>
@@ -49,12 +75,24 @@
 </template>
 
 <script>
-import UserService from "../services/userService";
+import { mapActions } from "vuex";
+
+import useVuelidate from "@vuelidate/core";
+import { required, minLength } from "@vuelidate/validators";
 
 export default {
   name: "login-component",
   mounted() {
     console.log("Login component mounted.");
+  },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      form: {
+        email: { required },
+        password: { required, minLength: minLength(6) },
+      },
+    };
   },
   data() {
     return {
@@ -62,34 +100,23 @@ export default {
         email: "",
         password: "",
       },
-      errorMessage: ''
+      errorMessage: "",
     };
   },
   methods: {
-    async onSubmit() {
-      await UserService.login(this.form).then(() => {
-        this.redirectToHome();
-      }).catch(err => {
-        this.errorMessage = err.response.data.message;
-      });
+    ...mapActions({
+      signIn: "auth/signIn",
+    }),
 
-      return;
-
-      //if (response.status == 200) this.redirectToHome();
-
-      // this.axios.post("http://127.0.0.1:8000/api/login", this.form)
-      //     .then((res) => {
-      //         console.log(res);
-      //         this.redirectToHome();
-      //     })
-      //     .catch((err) => {
-      //     console.log(err);
-      // });
-
-      //alert(JSON.stringify(this.form))
-    },
-    redirectToHome() {
-      window.location.href = "/";
+    onSubmit() {
+      if (!this.v$.$invalid) {
+        this.signIn(this.form);
+      } else {
+        this.showErrorAlert = true;
+        this.showAlert();
+        this.errorMessage =
+          "Existem campos inválidos. Por favor, reveja o formulário.";
+      }
     },
   },
 };
