@@ -50,7 +50,7 @@ class ReportController extends Controller
 
             return response()->json([
                 'data' => $report,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

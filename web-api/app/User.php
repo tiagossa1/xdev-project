@@ -36,11 +36,26 @@ class User extends Authenticatable
 
     public function tags()
     {
-        return $this->hasMany(Tag::class);
+        return $this->belongsToMany(Tag::class);
     }
 
     public function district()
     {
         return $this->belongsTo(District::class);
+    }
+
+    public function favorite_posts()
+    {
+        return $this->belongsToMany('App\Post', 'post_user');
+    }
+
+    public function liked_posts()
+    {
+        return $this->belongsToMany('App\Post', 'post_like');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

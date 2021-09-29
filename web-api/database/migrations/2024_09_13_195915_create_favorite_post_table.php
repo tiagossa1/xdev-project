@@ -13,7 +13,7 @@ class CreateFavoritePostTable extends Migration
      */
     public function up()
     {
-        Schema::create('favorite_post', function (Blueprint $table) {
+        Schema::create('post_user', function (Blueprint $table) {
             $table->foreignId('post_id')
                 ->constrained()
                 ->onDelete('cascade');
