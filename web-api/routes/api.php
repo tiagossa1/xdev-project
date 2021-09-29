@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('reports', 'ReportController');
     Route::apiResource('tags', 'TagController');
     Route::apiResource('users', 'UserController');
-    Route::apiResource('districts', 'DistrictController');
+    //Route::apiResource('districts', 'DistrictController');
     Route::apiResource('feedback-types', 'FeedbackTypeController');
     Route::apiResource('report-conclusions', 'ReportConclusionController');
     Route::apiResource('school-classes', 'SchoolClassController');
@@ -59,6 +59,12 @@ Route::post('login', 'AuthController@login');
     Route::get('user-types', 'UserTypeController@index');
     Route::get('user-types/{id}', 'UserTypeController@show');
 */
+
+Route::get('districts', 'DistrictController@index');
+Route::get('districts/{id}', 'DistrictController@show');
+
+Route::get('school-classes', 'SchoolClassController@index');
+Route::get('school-classes/{id}', 'SchoolClassController@show');
 
 
 
