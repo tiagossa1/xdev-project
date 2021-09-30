@@ -1,7 +1,7 @@
 <template>
   <b-container
-    :style="{ 'border': '2px solid gray' }"
-    class="bv-example-row rounded p-4 ml-4 mb-4"
+    :style="{ 'border': '2px solid gray', 'border-radius': '25px' }"
+    class="bv-example-row p-4 ml-4 mb-4"
   >
     <b-row class="p-1">
       <b-col>
@@ -15,28 +15,25 @@
       <b-col cols="1">
         <img
           class="rounded-circle"
-          :style="{ color: post.user.user_type.hexColorCode }"
+          :style="{'border':'3px solid', color: post.user.user_type.hexColorCode,borderColor:post.user.user_type.hexColorCode }"
           width="70rem"
           fluid
           src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
           alt="xDevIMG"
         />
         <!--Usar Pill-->
-        <figcaption
-          class="imgLegend mx-auto"
-          :style="{ backgroundColor: post.user.user_type.hexColorCode }"
-        >
-          <span class="small">{{ post.user.user_type.name }}</span>
-        </figcaption>
+        <b-badge variant="info" class="imgLegend rounded-35 w-150 text-center" :style="{ backgroundColor: post.user.user_type.hexColorCode}">
+          {{ post.user.user_type.name }}
+        </b-badge>
       </b-col>
-      <b-col>
+      <b-col class="ml-2">
         <span> {{ post.user.name }} </span>
         <br />
         <span>
           {{ post.user.school_class.name }} |
           {{ post.user.school_class.school.name }}</span
         ><br />
-        <small>Adicionado a 10 anos</small>
+        <small>Adicionado {{post.createdAt}}</small>
       </b-col>
     </b-row>
 
@@ -48,8 +45,9 @@
 
     <b-row>
       <b-col>
-        <b-icon icon="heart"></b-icon>
-        <!-- <b-icon v-else icon="heart-fill"></b-icon> -->
+        <b-icon v-on:click="clicked = true" v-if="clicked === false" icon="heart">Like</b-icon>
+        <b-icon v-else v-on:click="clicked = false" icon="heart-fill">Like</b-icon>
+        
       </b-col>
     </b-row>
 
@@ -66,17 +64,14 @@ export default {
   props: {
     post: Post,
   },
+  data() {
+    return{
+      clicked : false
+    }
+    
+  }
 };
 </script>
 
 <style scoped>
-.imgLegend {
-  border-radius: 25px;
-  width: 55px;
-  text-align: center;
-}
-.post-container {
-  background-color: cornflowerblue;
-  border-radius: 15px;
-}
 </style>

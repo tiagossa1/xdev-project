@@ -1,6 +1,7 @@
 import axios from "axios";
 import Post from "../models/post";
 import PostType from "../models/postType";
+import dayjs from 'dayjs'
 
 export default new (class PostService {
   constructor() {
@@ -9,7 +10,9 @@ export default new (class PostService {
 
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
-
+    response.data.data.forEach(x => {
+      console.log(x)
+    });
     if (response.data.data) {
       return response.data.data.map(
         (x) =>
@@ -20,13 +23,15 @@ export default new (class PostService {
             x.suspended,
             x.user,
             x.postType,
-            x.createdAt
+            dayjs(dayjs(x.created_at)).fromNow()
+            //dayjs(x.createdAt).fromNow()
           )
       );
-    }
+    } 
 
     return [];
   }
+  
 
   async getPostTypes() {
     let response = await axios.get(`${this.apiUrl}/api/post-types`);
@@ -37,4 +42,13 @@ export default new (class PostService {
 
     return [];
   }
+
+  async insertPost(form){
+    return await axios.post(`${this.apiUrl}/api/posts`,form);
+  }
+
+  /*async insertPostTags(form){
+    return await axios.post(`${this.apiUrl}/api/post-tags`,form);
+  }*/
+
 })();

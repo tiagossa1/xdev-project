@@ -1,13 +1,14 @@
 <template>
   <div class="buttons m-3">
     <b-button pill variant="info" v-b-modal.modal-1>Criar +</b-button>
-    <b-modal id="modal-1" title="Criar Post">
+    <b-modal id="modal-1" title="Criar Post" @ok="createPost">
       <b-form>
         <b-form-group label="Insira o titulo:" label-for="textTitle">
           <b-form-input
             id="textTitle"
             type="email"
-            placeholder="Enter email"
+            v-model="form.title"
+            placeholder="Insira o titulo"
             required
           ></b-form-input>
         </b-form-group>
@@ -16,7 +17,8 @@
           <!--Substituir pelo richText-->
           <b-form-textarea
             id="textarea"
-            placeholder="Enter something..."
+            v-model="form.description"
+            placeholder="Insira o assunto do post"
             rows="3"
             max-rows="6"
           ></b-form-textarea>
@@ -31,6 +33,26 @@
             required
           ></b-form-select>
         </b-form-group>
+
+        <b-form-group label="Insira as tags do post:" label-for="postTags">
+          <b-form-tags 
+            id="postTags"
+            v-model="postTags.tag_id"
+            separator=" "
+            required
+          ></b-form-tags>
+
+          <template #invalid-feedback>
+            Tem de introduzir pelo menos 1 tag e no máximo 6.
+          </template>
+
+          <template #description>
+            <div id="tags-validation-help">
+              Os posts têm de ter pelo menos 1 tag e no máximo 6.
+            </div>
+          </template>
+        </b-form-group>
+
       </b-form>
     </b-modal>
 
@@ -61,9 +83,26 @@ export default {
     return {
       postTypes: [],
       form: {
-        post_type_id: null,
+        title: "",
+        description: "",
+        post_type_id: "",
+        // VERIFICAR QUAL O USER QUE FEZ O POST
+        user_id: 1,
+        suspended: 0,
       },
+      postTags:[ 
+        {
+          //post_id : "",
+          tag_id: "",
+        }
+      ]
     };
+  },
+  methods: {
+    createPost(){
+      postService.insertPost(this.form);
+      console.log(this.form)
+    },
   },
 };
 </script>
