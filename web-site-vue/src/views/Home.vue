@@ -1,15 +1,13 @@
 <template>
   <div class="container">
-    <post-options-component></post-options-component>
-    <post-component></post-component>
+    <post></post>
   </div>
 </template>
 
 <script>
-import PostComponent from '../components/PostComponent.vue';
-import PostOptionsComponent from '../components/PostOptionsComponent.vue';
+import Post from "./Post.vue";
 export default {
   name: "Home",
-  components: {PostComponent,PostOptionsComponent},
+  components: { Post },
 };
 </script>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import District from "../models/district";
 
 export default new (class DistrictService {
   constructor() {
@@ -6,6 +7,12 @@ export default new (class DistrictService {
   }
 
   async getDistricts() {
-    return await axios.get(`${this.apiUrl}/api/districts`);
+    let response = await axios.get(`${this.apiUrl}/api/districts`);
+
+    if (response.data.data) {
+      return response.data.data.map((x) => new District(x.id, x.name));
+    }
+
+    return [];
   }
 })();
