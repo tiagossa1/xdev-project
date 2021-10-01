@@ -8,6 +8,7 @@ export default class User {
     linkedin_url,
     facebook_url,
     instagram_url,
+    profile_picture,
     district,
     userType,
     schoolClass,
@@ -21,6 +22,7 @@ export default class User {
     this.linkedin_url = linkedin_url;
     this.facebook_url = facebook_url;
     this.instagram_url = instagram_url;
+    this.profile_picture = profile_picture;
     this.district = district;
     this.userType = userType;
     this.schoolClass = schoolClass;

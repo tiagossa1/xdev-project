@@ -36,11 +36,11 @@ dayjs.extend(relativeTime)
 dayjs.extend(updateLocale)
 dayjs.updateLocale('en', {
   relativeTime: {
-    future: "em %s",
+    future: "há %s",
     past: "há %s",
     s: 'alguns segundos',
     m: "1 minuto",
-    mm: "há %d minutos",
+    mm: "%d minutos",
     h: "1 hora",
     hh: "%d horas",
     d: "dia",

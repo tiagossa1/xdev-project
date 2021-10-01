@@ -3,7 +3,7 @@
     :style="{ border: '2px solid gray', 'border-radius': '25px' }"
     class="bv-example-row p-4 ml-4 mb-4"
   >
-    <b-row class="">
+    <b-row>
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
           <b-badge pill variant="info">{{ tag.name }}</b-badge>
@@ -16,7 +16,7 @@
         <b-container>
           <b-row class="justify-content-center">
             <b-avatar
-              src="https://placekitten.com/300/300"
+              :src= post.user.profile_picture
               size="5rem"
               :style="{
                 border: '3px solid ' + post.user.user_type.hexColorCode,
