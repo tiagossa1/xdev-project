@@ -1,11 +1,9 @@
 <template>
-    <div>
-        <footer :style="footerStyle">
+        <v-footer padless :style="footerStyle">
             <div>
                 <h2 class="float-left font-weight-bold">ATEC</h2> <span class="ml-2 small">© {{ new Date().getFullYear() }}</span>
             </div>
-        </footer>
-    </div>
+        </v-footer>
 </template>
 
 <script>
@@ -15,7 +13,7 @@ export default {
         return {
             footerStyle: {
                 backgroundColor: '#00AEEF',
-                position: 'absolute',
+                //position: 'absolute',
                 marginTop: '20px',
                 display: 'flex',
                 alignItems: 'center',

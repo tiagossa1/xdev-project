@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <post></post>
+      <post></post>
   </div>
 </template>
 
@@ -8,6 +8,6 @@
 import Post from "./Post.vue";
 export default {
   name: "Home",
-  components: { Post },
+  components: { Post }
 };
 </script>
