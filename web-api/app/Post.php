@@ -15,7 +15,7 @@ class Post extends Model
     ];
 
     protected $hidden = [
-        'pivot',
+        'pivot', 'user_id', 'post_type_id'
     ];
 
     public function post_type()

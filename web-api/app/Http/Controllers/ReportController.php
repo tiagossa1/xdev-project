@@ -37,16 +37,16 @@ class ReportController extends Controller
             $report = Report::create($request->all());
 
             if ($request->input('users') != null)
-                $report->users()->async($request->input('users'));
+                $report->users()->sync($request->input('users'));
 
             if ($request->input('posts') != null)
-                $report->posts()->async($request->input('posts'));
+                $report->posts()->sync($request->input('posts'));
 
             if ($request->input('postComments') != null)
-                $report->postComments()->async($request->input('postComments'));
+                $report->postComments()->sync($request->input('postComments'));
 
             if ($request->input('reportConclusions') != null)
-                $report->reportConclusions()->async($request->input('reportConclusions'));
+                $report->reportConclusions()->sync($request->input('reportConclusions'));
 
             return response()->json([
                 'data' => $report,
@@ -88,16 +88,16 @@ class ReportController extends Controller
             $report->update($request->all());
 
             if ($request->input('users') != null)
-                $report->users()->async($request->input('users'));
+                $report->users()->sync($request->input('users'));
 
             if ($request->input('posts') != null)
-                $report->posts()->async($request->input('posts'));
+                $report->posts()->sync($request->input('posts'));
 
             if ($request->input('postComments') != null)
-                $report->postComments()->async($request->input('postComments'));
+                $report->postComments()->sync($request->input('postComments'));
 
             if ($request->input('reportConclusions') != null)
-                $report->reportConclusions()->async($request->input('reportConclusions'));
+                $report->reportConclusions()->sync($request->input('reportConclusions'));
 
             return response()->json([
                 'data' => $report,
