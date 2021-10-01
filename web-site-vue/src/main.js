@@ -7,16 +7,15 @@ import VueCompositionAPI from "@vue/composition-api";
 
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import store from "./store";
-// import subscribe from './store/subscribe';
-
-import "./styles/_variables.scss";
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
+
 import router from "./router";
 
 require("@/store/subscriber");
 
+import './styles/app.scss';
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuelidate);

@@ -1,6 +1,6 @@
 <template>
   <div class="buttons m-3">
-    <b-button pill variant="info" v-b-modal.modal-1>Criar +</b-button>
+    <b-button pill variant="primary" v-b-modal.modal-1>Criar +</b-button>
     <b-modal id="modal-1" title="Criar Post" @ok="createPost">
       <b-form>
         <b-form-group label="Insira o titulo:" label-for="textTitle">

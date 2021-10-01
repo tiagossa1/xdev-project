@@ -1,9 +1,9 @@
 <template>
   <b-container
-    :style="{ 'border': '2px solid gray', 'border-radius': '25px' }"
+    :style="{ border: '2px solid gray', 'border-radius': '25px' }"
     class="bv-example-row p-4 ml-4 mb-4"
   >
-    <b-row class="p-1">
+    <b-row class="">
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
           <b-badge pill variant="info">{{ tag.name }}</b-badge>
@@ -12,47 +12,63 @@
     </b-row>
 
     <b-row>
-      <b-col cols="1">
-        <img
-          class="rounded-circle"
-          :style="{'border':'3px solid', color: post.user.user_type.hexColorCode,borderColor:post.user.user_type.hexColorCode }"
-          width="70rem"
-          fluid
-          src="https://cdn-icons-png.flaticon.com/512/147/147144.png"
-          alt="xDevIMG"
-        />
+      <b-col>
+        <b-container>
+          <b-row class="justify-content-center">
+            <b-avatar
+              src="https://placekitten.com/300/300"
+              size="5rem"
+              :style="{
+                border: '3px solid ' + post.user.user_type.hexColorCode,
+              }"
+            ></b-avatar>
+          </b-row>
+          <b-row class="justify-content-center mt-1">
+            <b-badge
+              class="rounded-35 text-center"
+              :style="{ backgroundColor: post.user.user_type.hexColorCode }"
+            >
+              {{ post.user.user_type.name }}
+            </b-badge>
+          </b-row>
+        </b-container>
         <!--Usar Pill-->
-        <b-badge variant="info" class="imgLegend rounded-35 w-150 text-center" :style="{ backgroundColor: post.user.user_type.hexColorCode}">
-          {{ post.user.user_type.name }}
-        </b-badge>
       </b-col>
-      <b-col class="ml-2">
-        <span> {{ post.user.name }} </span>
+      <b-col cols="10">
+        <span
+          class="font-weight-bold"
+          :style="{ color: post.user.user_type.hexColorCode }"
+        >
+          {{ post.user.name }}
+        </span>
         <br />
-        <span>
+        <small>
           {{ post.user.school_class.name }} |
-          {{ post.user.school_class.school.name }}</span
+          {{ post.user.school_class.school.name }}</small
         ><br />
-        <small>Adicionado {{post.createdAt}}</small>
+        <small>Adicionado {{ post.createdAt }}</small>
       </b-col>
     </b-row>
 
-    <b-row>
+    <b-row class="mt-3 ml-2">
       <b-col>
         <h3 class="font-weight-bold">{{ post.title }}</h3>
       </b-col>
     </b-row>
 
-    <b-row>
+    <b-row class="ml-2">
       <b-col>
-        <b-icon v-on:click="clicked = true" v-if="clicked === false" icon="heart">Like</b-icon>
-        <b-icon v-else v-on:click="clicked = false" icon="heart-fill">Like</b-icon>
-        
+        <b-icon
+          v-on:click="clicked = true"
+          v-if="clicked === false"
+          icon="heart"
+          >Like</b-icon
+        >
+        <b-icon v-else v-on:click="clicked = false" icon="heart-fill"
+          >Like</b-icon
+        >
       </b-col>
     </b-row>
-
-    <p></p>
-    <p></p>
   </b-container>
 </template>
 
@@ -65,13 +81,9 @@ export default {
     post: Post,
   },
   data() {
-    return{
-      clicked : false
-    }
-    
-  }
+    return {
+      clicked: false,
+    };
+  },
 };
 </script>
-
-<style scoped>
-</style>

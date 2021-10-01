@@ -4,7 +4,7 @@
     type="dark"
     style="background-color: rgb(0, 174, 239)"
   >
-    <b-navbar-brand :to="{ path: 'Home' }">xDev</b-navbar-brand>
+    <b-navbar-brand class="font-weight-bold" :to="{ path: 'Home' }">xDev</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -45,7 +45,7 @@
         </template>
 
         <template v-else>
-          <div class="align-self-center">
+          <div v-if="this.$router.currentRoute.name !== 'Login'" class="align-self-center">
             <router-link to="/login" class="text-white mr-2"
               >Entrar</router-link
             >
@@ -73,7 +73,7 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
-    }),
+    })
   },
   methods: {
     ...mapActions({
