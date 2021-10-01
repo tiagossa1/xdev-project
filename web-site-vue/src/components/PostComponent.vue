@@ -16,7 +16,7 @@
         <b-container>
           <b-row class="justify-content-center">
             <b-avatar
-              :src= post.user.profile_picture
+              :src="post.user.profile_picture"
               size="5rem"
               :style="{
                 border: '3px solid ' + post.user.user_type.hexColorCode,
@@ -56,17 +56,32 @@
       </b-col>
     </b-row>
 
-    <b-row class="ml-2">
-      <b-col>
-        <b-icon
-          v-on:click="clicked = true"
-          v-if="clicked === false"
-          icon="heart"
-          >Like</b-icon
-        >
-        <b-icon v-else v-on:click="clicked = false" icon="heart-fill"
-          >Like</b-icon
-        >
+    <b-row class="ml-2 mt-2">
+      <b-col style="cursor: pointer" @click="liked = !liked">
+        <p class="h5">
+          <b-icon
+            :icon="liked ? 'heart-fill' : 'heart'"
+            :variant="liked ? 'liked' : ''"
+            >Like</b-icon
+          >
+          Like
+        </p>
+      </b-col>
+      <b-col style="cursor: pointer">
+        <p class="h5">
+          <b-icon icon="chat-left">chat-left</b-icon>
+          Comentar
+        </p>
+      </b-col>
+      <b-col style="cursor: pointer" @click="saved = !saved">
+        <p class="h5">
+          <b-icon
+            :variant="saved ? 'danger' : ''"
+            :icon="saved ? 'bookmark-fill' : 'bookmark'"
+            >Bookmark</b-icon
+          >
+          Guardar
+        </p>
       </b-col>
     </b-row>
   </b-container>
@@ -82,8 +97,14 @@ export default {
   },
   data() {
     return {
-      clicked: false,
+      liked: false,
+      saved: false,
     };
   },
+  method: {
+    onLike() {
+      this.liked = true;
+    }
+  }
 };
 </script>

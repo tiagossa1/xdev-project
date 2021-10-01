@@ -21,8 +21,9 @@ export default {
       posts: [],
     };
   },
-  created() {
-    postService.getPosts().then((x) => (this.posts = x));
+  async created() {
+    this.posts = await postService.getPosts();
+    console.log(this.posts);
   },
 };
 </script>
