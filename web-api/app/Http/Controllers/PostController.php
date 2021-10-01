@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('tags', 'user', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type')->get(),
+                'data' => Post::with('tags', 'user', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type')->latest()->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
