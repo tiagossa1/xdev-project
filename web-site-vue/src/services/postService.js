@@ -10,9 +10,6 @@ export default new (class PostService {
 
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
-    response.data.data.forEach(x => {
-      console.log(x)
-    });
     if (response.data.data) {
       return response.data.data.map(
         (x) =>
