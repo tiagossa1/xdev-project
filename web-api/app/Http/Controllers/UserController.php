@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::with('district', 'school_class', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments')->get(),
+                'data' => User::with('district', 'school_class', 'school_class.school', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

@@ -12,6 +12,10 @@ class PostPhoto extends Model
         'post_id',
     ];
 
+    protected $hidden = [
+        'post_id', 'post.suspended'
+    ];
+
     public $timestamps = false;
 
     public function post()
