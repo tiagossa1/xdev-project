@@ -54,10 +54,10 @@ class CommentController extends Controller
     public function show(Comment $comment)
     {
         try {
-            return response()->json(['data' => $comment,
-                'message' => 'Success'], 201);
-
-
+            return response()->json([
+                'data' => $comment->load('post', 'user'),
+                'message' => 'Success'
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }

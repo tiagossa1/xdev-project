@@ -78,9 +78,9 @@ class UserController extends Controller
         try {
             $user->update($request->all());
 
-            $user->tags()->attach($request->input('tags'));
-            $user->favorite_posts()->attach($request->input('favorite_posts'));
-            $user->liked_posts()->attach($request->input('liked_posts'));
+            $user->tags()->sync($request->input('tags'));
+            $user->favorite_posts()->sync($request->input('favorite_posts'));
+            $user->liked_posts()->sync($request->input('liked_posts'));
 
             return response()->json([
                 'data' => $user,

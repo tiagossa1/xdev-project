@@ -16,7 +16,7 @@ class User extends Authenticatable
     ];
 
     protected $hidden = [
-        'password', 'remember_token', 'pivot', 'district_id', 'school_class_id', 'user_type_id'
+        'password', 'remember_token', 'pivot', 'district_id', 'school_class_id', 'user_type_id', 'deleted_at', 'email_verified_at'
     ];
 
     public function posts()
