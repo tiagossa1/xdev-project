@@ -1,4 +1,4 @@
-export default class PostTyoe {
+export default class PostType {
   constructor(id, name, iconName) {
     this.id = id;
     this.name = name;

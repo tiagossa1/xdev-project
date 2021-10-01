@@ -11,6 +11,10 @@ class SchoolClass extends Model
         'school_id'
     ];
 
+    protected $hidden = [
+        'school_id'
+    ];
+
     public $timestamps = false;
 
     public function users()

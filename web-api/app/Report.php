@@ -9,7 +9,12 @@ class Report extends Model
     protected $fillable = [
         'reason',
         'post_id',
-        'user_id'
+        'user_id',
+        'post_comment_id'
+    ];
+
+    protected $hidden = [
+        'user_id', 'post_id', 'post_comment_id'
     ];
 
     public function post()

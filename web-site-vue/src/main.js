@@ -4,9 +4,9 @@ import Vuelidate from "vuelidate";
 import axios from "axios";
 import VueAxios from "vue-axios";
 import VueCompositionAPI from "@vue/composition-api";
-
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import store from "./store";
+import VueQuillEditor from 'vue-quill-editor'
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -23,6 +23,10 @@ Vue.use(Vuelidate);
 Vue.use(VueAxios, axios);
 
 Vue.use(VueCompositionAPI);
+
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+Vue.use(VueQuillEditor);
 
 Vue.config.productionTip = false;
 
