@@ -99,7 +99,7 @@ export default {
   methods: {
     createPost() {
       // postService.insertPost(this.form);
-      console.log(this.form);
+      // console.log(this.form);
     },
   },
 };

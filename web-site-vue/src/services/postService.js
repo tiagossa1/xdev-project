@@ -10,7 +10,7 @@ export default new (class PostService {
 
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
-    
+
     if (response.data.data) {
       return response.data.data.map((x) => {
         return new Post(
@@ -23,6 +23,8 @@ export default new (class PostService {
           x.post_photos,
           x.likes,
           x.tags,
+          x.users_saved,
+          x.comments,
           dayjs(dayjs(x.created_at)).fromNow()
         );
       });
@@ -49,7 +51,13 @@ export default new (class PostService {
 
   async changeLikePost(postId, userLikes) {
     return await axios.put(`${this.apiUrl}/api/posts/${postId}`, {
-      likes: userLikes
+      likes: userLikes,
+    });
+  }
+
+  async changeSavedPost(postId, postSaved) {
+    return await axios.put(`${this.apiUrl}/api/posts/${postId}`, {
+      users_saved: postSaved,
     });
   }
 })();

@@ -47,5 +47,9 @@ class Post extends Model
         return $this->belongsToMany('App\User', 'post_like');
     }
 
+    public function users_saved() {
+        return $this->belongsToMany('App\User', 'post_user');
+    }
+
     use softDeletes;
 }

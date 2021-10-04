@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('user','tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'likes')->latest()->get(),
+                'data' => Post::with('user','tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved')->latest()->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -58,7 +58,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'likes'),
+                'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'likes', 'users_saved'),
                 'message' => 'Success'
             ], 201);
 
@@ -84,6 +84,9 @@ class PostController extends Controller
 
             if(!is_null($request->input('likes')))
                 $post->likes()->sync($request->input('likes'));
+
+            if(!is_null($request->input('users_saved')))
+                $post->users_saved()->sync($request->input('users_saved'));
 
             return response()->json([
                 'data' => $post,

@@ -1,10 +1,6 @@
 import axios from "axios";
 import User from "../models/requests/userRequest";
-import District from "../models/district";
-import SchoolClass from "../models/schoolClass";
-import School from "../models/school";
 import Post from "../models/post";
-import UserType from "../models/userType";
 
 export default new (class UserService {
   constructor() {
@@ -40,15 +36,8 @@ export default new (class UserService {
             user.facebook_url,
             user.instagram_url,
             user.created_at,
-            new District(user.district.id, user.district.name),
-            new SchoolClass(
-              user.school_class.id,
-              user.school_class.name,
-              new School(
-                user.school_class.school.id,
-                user.school_class.school.name
-              )
-            ),
+            user.district,
+            user.user_type,
             user.posts.map(
               (p) =>
                 new Post(
@@ -63,15 +52,17 @@ export default new (class UserService {
                   p.createdAt
                 )
             ),
-            new UserType(
-              user.usertype.id,
-              user.usertype.name,
-              user.usertype.hexColorCode
-            )
+            user.user_type
           )
       );
     }
 
     return new User();
+  }
+
+  async updateLikedPosts(userId, likedPosts) {
+    return await axios.put(`${this.apiUrl}/api/user/${userId}`, {
+      liked_posts: likedPosts
+    })
   }
 })();

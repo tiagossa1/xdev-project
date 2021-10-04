@@ -73,36 +73,45 @@
           Comentar
         </p>
       </b-col>
-      <b-col style="cursor: pointer">
+      <b-col style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
             :icon="saved ? 'bookmark-fill' : 'bookmark'"
             >Bookmark</b-icon
           >
-          Guardar
+          {{ saved ? "Guardado" : "Guardar" }}
         </p>
       </b-col>
     </b-row>
+
+    <div v-for="comment in post.comments" :key="comment.id">
+      <post-comment-component
+        class="mt-3"
+        :comment="comment"
+      ></post-comment-component>
+    </div>
   </b-container>
 </template>
 
 <script>
 import postService from "../services/postService";
 import Post from "../models/post";
+import PostCommentComponent from "./PostCommentComponent.vue";
 
 export default {
   name: "post-component",
+  components: { PostCommentComponent },
   props: {
     post: Post,
   },
   mounted() {
-    // console.log(this.post);
+    //console.log(this.post);
   },
   data() {
     return {
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
-      saved: false,
+      saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
     };
   },
   methods: {
@@ -122,6 +131,23 @@ export default {
       await postService.changeLikePost(this.post.id, this.post.userLikes);
 
       this.liked = !this.liked;
+    },
+
+    async onSave() {
+      if (this.saved) {
+        const indexToRemove = this.post.usersSaved.indexOf(
+          this.$store.getters["auth/user"].id
+        );
+
+        if (indexToRemove > -1) {
+          this.post.usersSaved.splice(indexToRemove, 1);
+        }
+      } else {
+        this.post.usersSaved.push(this.$store.getters["auth/user"].id);
+      }
+
+      await postService.changeSavedPost(this.post.id, this.post.usersSaved);
+      this.saved = !this.saved;
     },
   },
 };
