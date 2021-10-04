@@ -25,7 +25,7 @@ export default new (class UserService {
 
   async getUserById(id) {
     let response = await axios.get(`${this.apiUrl}/api/users/${id}`);
-    console.log(response);
+
     if (response.data) {
       return response.data.map(
         (user) =>
@@ -71,5 +71,7 @@ export default new (class UserService {
           )
       );
     }
+
+    return new User();
   }
 })();

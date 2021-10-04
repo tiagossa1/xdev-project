@@ -19,16 +19,16 @@
               :src="post.user.profile_picture"
               size="5rem"
               :style="{
-                border: '3px solid ' + post.user.user_type.hexColorCode,
+                border: '3px solid ' + post.user.userType.hexColorCode,
               }"
             ></b-avatar>
           </b-row>
           <b-row class="justify-content-center mt-1">
             <b-badge
               class="rounded-35 text-center"
-              :style="{ backgroundColor: post.user.user_type.hexColorCode }"
+              :style="{ backgroundColor: post.user.userType.hexColorCode }"
             >
-              {{ post.user.user_type.name }}
+              {{ post.user.userType.name }}
             </b-badge>
           </b-row>
         </b-container>
@@ -37,14 +37,14 @@
       <b-col cols="10">
         <span
           class="font-weight-bold"
-          :style="{ color: post.user.user_type.hexColorCode }"
+          :style="{ color: post.user.userType.hexColorCode }"
         >
           {{ post.user.name }}
         </span>
         <br />
         <small>
-          {{ post.user.school_class.name }} |
-          {{ post.user.school_class.school.name }}</small
+          {{ post.user.schoolClass.name }} |
+          {{ post.user.schoolClass.school.name }}</small
         ><br />
         <small>Adicionado {{ post.createdAt }}</small>
       </b-col>
@@ -57,7 +57,7 @@
     </b-row>
 
     <b-row class="ml-2 mt-2">
-      <b-col style="cursor: pointer" @click="liked = !liked">
+      <b-col style="cursor: pointer" @click="onLike">
         <p class="h5">
           <b-icon
             :icon="liked ? 'heart-fill' : 'heart'"
@@ -73,7 +73,7 @@
           Comentar
         </p>
       </b-col>
-      <b-col style="cursor: pointer" @click="saved = !saved">
+      <b-col style="cursor: pointer">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import postService from "../services/postService";
 import Post from "../models/post";
 
 export default {
@@ -95,16 +96,33 @@ export default {
   props: {
     post: Post,
   },
+  mounted() {
+    // console.log(this.post);
+  },
   data() {
     return {
-      liked: false,
+      liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: false,
     };
   },
-  method: {
-    onLike() {
-      this.liked = true;
-    }
-  }
+  methods: {
+    async onLike() {
+      if (this.liked) {
+        const indexToRemove = this.post.userLikes.indexOf(
+          this.$store.getters["auth/user"].id
+        );
+
+        if (indexToRemove > -1) {
+          this.post.userLikes.splice(indexToRemove, 1);
+        }
+      } else {
+        this.post.userLikes.push(this.$store.getters["auth/user"].id);
+      }
+
+      await postService.changeLikePost(this.post.id, this.post.userLikes);
+
+      this.liked = !this.liked;
+    },
+  },
 };
 </script>

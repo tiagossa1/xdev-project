@@ -1,3 +1,8 @@
+import District from "./district";
+import UserType from "./userType";
+import SchoolClass from "./schoolClass";
+import School from "./school";
+
 export default class User {
   constructor(
     id,
@@ -23,9 +28,22 @@ export default class User {
     this.facebook_url = facebook_url;
     this.instagram_url = instagram_url;
     this.profile_picture = profile_picture;
-    this.district = district;
-    this.userType = userType;
-    this.schoolClass = schoolClass;
+
+    if (district) this.district = new District(district.id, district.name);
+
+    if (userType)
+      this.userType = new UserType(
+        userType.id,
+        userType.name,
+        userType.hexColorCode
+      );
+
+    if (schoolClass)
+      this.schoolClass = new SchoolClass(
+        schoolClass.id,
+        schoolClass.name,
+        new School(schoolClass.school.id, schoolClass.school.name)
+      );
     this.created_at = created_at;
   }
 }

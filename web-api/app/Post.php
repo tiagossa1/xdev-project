@@ -42,5 +42,10 @@ class Post extends Model
         return $this->hasMany(PostPhoto::class);
     }
 
+    public function likes()
+    {
+        return $this->belongsToMany('App\User', 'post_like');
+    }
+
     use softDeletes;
 }

@@ -23,7 +23,6 @@ export default {
   },
   async created() {
     this.posts = await postService.getPosts();
-    console.log(this.posts);
   },
 };
 </script>

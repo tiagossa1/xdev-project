@@ -17,7 +17,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('user','tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments')->latest()->get(),
+                'data' => Post::with('user','tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'likes')->latest()->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -58,7 +58,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments'),
+                'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'likes'),
                 'message' => 'Success'
             ], 201);
 
@@ -79,7 +79,11 @@ class PostController extends Controller
         try {
             $post->update($request->all());
 
-            $post->tags()->sync($request->input('tags'));
+            if(!is_null($request->input('tags')))
+                $post->tags()->sync($request->input('tags'));
+
+            if(!is_null($request->input('likes')))
+                $post->likes()->sync($request->input('likes'));
 
             return response()->json([
                 'data' => $post,
@@ -102,7 +106,9 @@ class PostController extends Controller
         try {
             $post->post_photos()->delete();
             $post->comments()->delete();
+            $post->likes()->delete();
             $post->delete();
+            
             return response()->json(['message' => 'Deleted'], 205);
 
         } catch (Exception $exception) {

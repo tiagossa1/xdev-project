@@ -1,8 +1,6 @@
 import axios from "axios";
 import Post from "../models/post";
 import PostType from "../models/postType";
-import PostPhoto from "../models/postPhoto";
-import Tag from '../models/tag';
 import dayjs from "dayjs";
 
 export default new (class PostService {
@@ -12,28 +10,22 @@ export default new (class PostService {
 
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
+    
     if (response.data.data) {
-      return response.data.data.map(
-        (x) =>
-          new Post(
-            x.id,
-            x.title,
-            x.description,
-            x.suspended,
-            x.user,
-            new PostType(
-              x.post_type.id,
-              x.post_type.name,
-              x.post_type.iconName
-            ),
-            x.post_photos.map(
-              (pp) => new PostPhoto(pp.id, pp.url, pp.created_at)
-            ),
-            x.tags.map(t => new Tag(t.id, t.name, t.created_at)),
-            dayjs(dayjs(x.created_at)).fromNow()
-            //dayjs(x.createdAt).fromNow()
-          )
-      );
+      return response.data.data.map((x) => {
+        return new Post(
+          x.id,
+          x.title,
+          x.description,
+          x.suspended,
+          x.user,
+          x.post_type,
+          x.post_photos,
+          x.likes,
+          x.tags,
+          dayjs(dayjs(x.created_at)).fromNow()
+        );
+      });
     }
 
     return [];
@@ -55,7 +47,9 @@ export default new (class PostService {
     return await axios.post(`${this.apiUrl}/api/posts`, form);
   }
 
-  async likePost(id) {
-    return await axios.put(`${this.apiUrl}/api/posts/${id}`, {});
+  async changeLikePost(postId, userLikes) {
+    return await axios.put(`${this.apiUrl}/api/posts/${postId}`, {
+      likes: userLikes
+    });
   }
 })();
