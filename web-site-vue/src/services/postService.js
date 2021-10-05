@@ -60,4 +60,8 @@ export default new (class PostService {
       users_saved: postSaved,
     });
   }
+
+  async deletePost(postId) {
+    return await axios.delete(`${this.apiUrl}/api/posts/${postId}`);
+  }
 })();

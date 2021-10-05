@@ -1,106 +1,162 @@
 <template>
-  <div class="buttons m-3">
-    <b-button pill variant="primary" v-b-modal.modal-1>Criar +</b-button>
-    <b-modal
-      class="w-75"
-      id="modal-1"
-      title="Criar Post"
-      size="lg"
-      @ok="createPost"
+  <b-dropdown
+    class="float-right p-0"
+    size="lg"
+    variant="link"
+    toggle-class="text-decoration-none"
+    no-caret
+  >
+    <template #button-content>
+      <b-icon
+        class="float-right"
+        style="color: black"
+        icon="three-dots-vertical"
+      ></b-icon>
+    </template>
+    <b-dropdown-item v-if="isUserOwner">
+      <b-icon class="mr-1" icon="search"></b-icon> Editar
+    </b-dropdown-item>
+    <b-dropdown-item @click="openReportModal"
+      ><b-icon class="mr-2" icon="file-check"></b-icon>Reportar</b-dropdown-item
     >
-      <b-form>
-        <b-form-group label="Insira o titulo:" label-for="textTitle">
-          <b-form-input
-            id="textTitle"
-            type="email"
-            v-model="form.title"
-            placeholder="Insira o titulo"
-            required
-          ></b-form-input>
-        </b-form-group>
-
-        <b-form-group label="Insira a descrição:" label-for="textarea">
-          <quill-editor ref="myQuillEditor" v-model="form.description">
-          </quill-editor>
-        </b-form-group>
-
-        <b-form-group label="Insira o tipo de post:" label-for="postType">
-          <b-form-select
-            id="postType"
-            v-model="form.post_type_id"
-            :options="postTypes"
-            :value="null"
-            required
-          ></b-form-select>
-        </b-form-group>
-
-        <b-form-group label="Insira as tags do post:" label-for="postTags">
-          <b-form-tags
-            id="postTags"
-            v-model="postTags.tag_id"
-            separator=" "
-            required
-          ></b-form-tags>
-
-          <template #invalid-feedback>
-            Tem de introduzir pelo menos 1 tag e no máximo 6.
-          </template>
-
-          <template #description>
-            <div id="tags-validation-help">
-              Os posts têm de ter pelo menos 1 tag e no máximo 6.
-            </div>
-          </template>
-        </b-form-group>
-      </b-form>
+    <b-dropdown-item @click="onDelete" v-if="isUserOwner"
+      ><b-icon class="mr-2" icon="trash"></b-icon
+      ><span class="text-danger">Apagar</span></b-dropdown-item
+    >
+    <b-modal @ok="onOkReportModal" ref="modal-report" :title="reportTitle">
+      <b-form-textarea
+        v-model="reportComment"
+        rows="5"
+        max-rows="10"
+        :placeholder="reportPlaceholder"
+      ></b-form-textarea>
     </b-modal>
-
-    <b-dropdown class="ml-2" id="dropdown-1" text="Filtro">
-      <b-dropdown-item>First Action</b-dropdown-item>
-    </b-dropdown>
-  </div>
+  </b-dropdown>
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 import postService from "../services/postService";
+import commentService from "../services/commentService";
+import reportService from "../services/reportService";
+
+import Post from "../models/post";
+import Comment from "../models/comment";
+import ReportRequest from "../models/requests/reportRequest";
+
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+
 export default {
   name: "post-options-component",
-
+  props: {
+    post: Post,
+    comment: Comment,
+  },
   created() {
-    postService
-      .getPostTypes()
-      .then(
-        (res) =>
-          (this.postTypes = res.map((x) => ({
-            value: x.id,
-            text: x.name,
-          })))
-      )
-      .catch((err) => console.log(err));
+    if (this.post) {
+      this.isUserOwner =
+        this.post.user.id === this.$store.getters["auth/user"].id;
+      this.reportTitle = "Reportar post";
+      this.reportPlaceholder =
+        "Escreva o motivo pela qual pretende reportar o post...";
+    } else if (this.comment) {
+      this.isUserOwner =
+        this.comment.user.id === this.$store.getters["auth/user"].id;
+      this.reportTitle = "Reportar comentário";
+      this.reportPlaceholder =
+        "Escreva o motivo pela qual pretende reportar o comentário...";
+    }
   },
   data() {
     return {
-      postTypes: [],
-      form: {
-        title: "",
-        description: "",
-        post_type_id: "",
-        user_id: this.$store.getters["auth/user"].id,
-        suspended: 0,
-      },
-      postTags: [
-        {
-          tag_id: "",
-        },
-      ],
+      isUserOwner: false,
+      reportComment: "",
+      reportTitle: "",
+      reportPlaceholder: "",
+    };
+  },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      reportComment: { required },
     };
   },
   methods: {
-    createPost() {
-      // postService.insertPost(this.form);
-      // console.log(this.form);
+    openReportModal() {
+      this.$refs["modal-report"].show();
     },
+    async onDelete() {
+      let eventBody = {};
+
+      if (this.post) {
+        let res = await postService.deletePost(this.post.id);
+
+        if (res.status === 200) {
+          eventBody = { isPost: true, id: this.post.id };
+        }
+      } else if (this.comment) {
+        let res = await commentService.deleteComment(this.comment.id);
+
+        if (res.status === 200) {
+          eventBody = { isComment: true, id: this.comment.id };
+        }
+      }
+
+      this.$emit("on-deleted", eventBody);
+    },
+    async onOkReportModal(bvModalEvt) {
+      bvModalEvt.preventDefault();
+
+      let request = {};
+      let okRequest = false;
+      let alertMsg = "";
+
+      if (!this.v$.$invalid) {
+        if (this.post) {
+          request = new ReportRequest(
+            this.$store.getters["auth/user"].id,
+            this.post.id,
+            null,
+            null,
+            null,
+            false,
+            this.reportComment,
+            null
+          );
+        } else if (this.comment) {
+          request = new ReportRequest(
+            this.$store.getters["auth/user"].id,
+            null,
+            null,
+            null,
+            this.comment.id,
+            false,
+            this.reportComment,
+            null
+          );
+        }
+
+        let res = await reportService.createReport(request);
+        okRequest = res.status === 201;
+
+        if (okRequest) {
+          if (this.post) {
+            alertMsg = "Post reportado com sucesso!";
+          } else if (this.comment) {
+            alertMsg = "Comentário reportado com sucesso!";
+          }
+        } else {
+          alertMsg = "Ocorreu um erro";
+        }
+
+        this.$root.$emit("show-alert", {
+          alertMessage: alertMsg,
+          variant: okRequest ? "success" : "danger",
+        });
+
+        this.$refs["modal-report"].hide();
+      }
+    }
   },
 };
 </script>

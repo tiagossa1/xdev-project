@@ -78,7 +78,7 @@ class CommentController extends Controller
             return response()->json([
                 'data' => $comment,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -95,11 +95,11 @@ class CommentController extends Controller
     {
         try{
             $comment->delete();
-            return response()->json(['message' => 'Deleted'],205);
+            return response()->json(['message' => 'Deleted'], 200);
 
         }catch(Exception $exception){
 
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

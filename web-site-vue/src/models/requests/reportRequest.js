@@ -9,14 +9,13 @@ export default class ReportRequest {
     reason,
     createdAt
   ) {
-    this.id = id;
-    this.userId = userId;
-    this.postId = postId;
-    this.moderatorId = moderatorId;
-    this.reportConclusion = reportConclusion;
-    this.postCommentId = postCommentId;
+    this.user_id = userId;
+    this.post_id = postId;
+    this.moderator_id = moderatorId;
+    this.report_conclusion = reportConclusion;
+    this.post_comment_id = postCommentId;
     this.closed = closed;
     this.reason = reason;
-    this.createdAt = createdAt;
+    this.created_at = createdAt;
   }
 }

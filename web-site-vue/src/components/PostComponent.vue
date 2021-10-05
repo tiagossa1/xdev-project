@@ -3,6 +3,10 @@
     :style="{ border: '2px solid gray', 'border-radius': '25px' }"
     class="bv-example-row p-4 ml-4 mb-4"
   >
+    <post-options-component
+      @on-deleted="onDeleted"
+      :post="post"
+    ></post-options-component>
     <b-row>
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
@@ -32,7 +36,6 @@
             </b-badge>
           </b-row>
         </b-container>
-        <!--Usar Pill-->
       </b-col>
       <b-col cols="10">
         <span
@@ -67,12 +70,6 @@
           Like
         </p>
       </b-col>
-      <!-- <b-col style="cursor: pointer">
-        <p class="h5">
-          <b-icon icon="chat-left">chat-left</b-icon>
-          Comentar
-        </p>
-      </b-col> -->
       <b-col cols="10" style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
@@ -87,9 +84,9 @@
 
     <div v-for="comment in post.comments" :key="comment.id">
       <post-comment-component
+        @on-deleted="onDeleted"
         class="mt-3"
         :comment="comment"
-        @on-deleted-comment="onDeletedComment"
       ></post-comment-component>
     </div>
 
@@ -105,6 +102,7 @@
 
 <script>
 import PostCommentComponent from "./PostCommentComponent.vue";
+import PostOptionsComponent from "./PostOptionsComponent.vue";
 
 import postService from "../services/postService";
 import commentService from "../services/commentService";
@@ -115,18 +113,20 @@ import Comment from "../models/comment";
 
 export default {
   name: "post-component",
-  components: { PostCommentComponent },
+  components: { PostCommentComponent, PostOptionsComponent },
   props: {
     post: Post,
   },
   mounted() {
     //console.log(this.post);
+    this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
   },
   data() {
     return {
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
       comment: "",
+      isUserPost: false,
     };
   },
   methods: {
@@ -190,8 +190,12 @@ export default {
       }
     },
 
-    onDeletedComment(commentId) {
-      this.post.comments = this.post.comments.filter(c => c.id != commentId);
+    onDeleted(deleteOptions) {
+      if (deleteOptions.isPost) {
+        this.$emit("on-post-deleted", deleteOptions.id);
+      } else if (deleteOptions.isComment) {
+        this.$emit("on-comment-deleted", deleteOptions.id);
+      }
     },
   },
 };

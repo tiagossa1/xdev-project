@@ -69,7 +69,7 @@ class ReportController extends Controller
             return response()->json([
                 'data' => $report->load('user', 'post', 'comments'),
                 'message' => 'Success'
-            ], 201);
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -102,7 +102,7 @@ class ReportController extends Controller
             return response()->json([
                 'data' => $report,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -119,7 +119,7 @@ class ReportController extends Controller
     {
         try {
             $report->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }

@@ -110,9 +110,10 @@ class PostController extends Controller
             $post->post_photos()->delete();
             $post->comments()->delete();
             $post->likes()->delete();
+            $post->users_saved()->delete();
             $post->delete();
             
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

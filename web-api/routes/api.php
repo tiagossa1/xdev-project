@@ -33,6 +33,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('schools', 'SchoolController');
     Route::apiResource('user-types', 'UserTypeController');
     Route::apiResource('comments', 'CommentController');
+    Route::apiResource('posts', 'PostController');
+    Route::apiResource('post-types', 'PostTypeController');
 });
 
 // Users
@@ -66,8 +68,8 @@ Route::get('districts/{id}', 'DistrictController@show');
 Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
 
-//TEMPORÁRIO!!!! acrescentar ao middleware
-Route::apiResource('posts', 'PostController');
-Route::apiResource('post-types', 'PostTypeController');
+// TEMPORÁRIO!!!! acrescentar ao middleware
+// Route::apiResource('posts', 'PostController');
+// Route::apiResource('post-types', 'PostTypeController');
 
 
