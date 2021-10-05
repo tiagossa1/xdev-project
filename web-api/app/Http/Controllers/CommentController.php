@@ -36,7 +36,7 @@ class CommentController extends Controller
             $comment = Comment::create($request->all());
 
             return response()->json([
-                'data' => $comment,
+                'data' => $comment->load(['post', 'user', 'user.user_type']),
                 'message' => 'Success'
             ], 201);
 

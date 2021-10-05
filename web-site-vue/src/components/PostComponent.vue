@@ -57,7 +57,7 @@
     </b-row>
 
     <b-row class="ml-2 mt-2">
-      <b-col style="cursor: pointer" @click="onLike">
+      <b-col cols="2" style="cursor: pointer" @click="onLike">
         <p class="h5">
           <b-icon
             :icon="liked ? 'heart-fill' : 'heart'"
@@ -67,13 +67,13 @@
           Like
         </p>
       </b-col>
-      <b-col style="cursor: pointer">
+      <!-- <b-col style="cursor: pointer">
         <p class="h5">
           <b-icon icon="chat-left">chat-left</b-icon>
           Comentar
         </p>
-      </b-col>
-      <b-col style="cursor: pointer" @click="onSave">
+      </b-col> -->
+      <b-col cols="10" style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
@@ -89,15 +89,29 @@
       <post-comment-component
         class="mt-3"
         :comment="comment"
+        @on-deleted-comment="onDeletedComment"
       ></post-comment-component>
     </div>
+
+    <b-form @submit.prevent="onSubmit">
+      <b-form-input
+        class="mt-3"
+        v-model="comment"
+        placeholder="Escreva o seu comentário aqui..."
+      ></b-form-input>
+    </b-form>
   </b-container>
 </template>
 
 <script>
-import postService from "../services/postService";
-import Post from "../models/post";
 import PostCommentComponent from "./PostCommentComponent.vue";
+
+import postService from "../services/postService";
+import commentService from "../services/commentService";
+
+import Post from "../models/post";
+import CommentRequest from "../models/requests/commentRequest";
+import Comment from "../models/comment";
 
 export default {
   name: "post-component",
@@ -112,6 +126,7 @@ export default {
     return {
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
+      comment: "",
     };
   },
   methods: {
@@ -148,6 +163,35 @@ export default {
 
       await postService.changeSavedPost(this.post.id, this.post.usersSaved);
       this.saved = !this.saved;
+    },
+
+    async onSubmit() {
+      if (this.comment) {
+        const request = new CommentRequest(
+          this.comment,
+          this.$store.getters["auth/user"].id,
+          this.post.id
+        );
+
+        let res = await commentService.createComment(request);
+
+        if (res.status === 201) {
+          let newComment = new Comment(
+            res.data.data.id,
+            res.data.data.description,
+            res.data.data.user,
+            res.data.data.created_at,
+            res.data.data.updated_at
+          );
+
+          this.post.comments.push(newComment);
+          this.comment = "";
+        }
+      }
+    },
+
+    onDeletedComment(commentId) {
+      this.post.comments = this.post.comments.filter(c => c.id != commentId);
     },
   },
 };
