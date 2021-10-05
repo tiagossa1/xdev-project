@@ -24,15 +24,15 @@
           </quill-editor>
         </b-form-group>
 
-            <b-form-group label="Insira o tipo de post:" label-for="postType">
-              <b-form-select
-                id="postType"
-                v-model="form.post_type_id"
-                :options="postTypes"
-                :value="null"
-                required
-              ></b-form-select>
-            </b-form-group>
+        <b-form-group label="Insira o tipo de post:" label-for="postType">
+          <b-form-select
+            id="postType"
+            v-model="form.post_type_id"
+            :options="postTypes"
+            :value="null"
+            required
+          ></b-form-select>
+        </b-form-group>
 
         <b-form-group label="Insira as tags do post:" label-for="postTags">
           <b-form-tags
@@ -42,9 +42,9 @@
             required
           ></b-form-tags>
 
-              <template #invalid-feedback>
-                Tem de introduzir pelo menos 1 tag e no máximo 6.
-              </template>
+          <template #invalid-feedback>
+            Tem de introduzir pelo menos 1 tag e no máximo 6.
+          </template>
 
           <template #description>
             <div id="tags-validation-help">
@@ -86,7 +86,7 @@ export default {
         title: "",
         description: "",
         post_type_id: "",
-        user_id: this.$store.getters['auth/user'].id,
+        user_id: this.$store.getters["auth/user"].id,
         suspended: 0,
       },
       postTags: [
