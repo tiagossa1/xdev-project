@@ -34,7 +34,7 @@ export default new (class UserService {
         response.data?.profile_picture,
         response.data.district,
         response.data.user_type,
-        response.data.school_type,
+        response.data.school_class,
         response.data.created_at
       );
     }

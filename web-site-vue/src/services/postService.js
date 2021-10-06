@@ -3,6 +3,7 @@ import Post from "../models/post";
 import PostType from "../models/postType";
 import dayjs from "dayjs";
 
+
 export default new (class PostService {
   constructor() {
     this.apiUrl = process.env.VUE_APP_API_URL;
@@ -63,5 +64,13 @@ export default new (class PostService {
 
   async deletePost(postId) {
     return await axios.delete(`${this.apiUrl}/api/posts/${postId}`);
+  }
+
+  async getTotalPostsByUserId(userId){
+    let res = await axios.post(`${this.apiUrl}/api/getTotalPostsByUserId`,{
+      user_id : userId
+    });
+
+    return res.data.data
   }
 })();
