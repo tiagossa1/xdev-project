@@ -68,6 +68,8 @@ Route::get('districts/{id}', 'DistrictController@show');
 Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
 
+Route::post('getTotalPostsByUserId', 'PostController@getTotalPostsByUserId');
+
 // TEMPORÁRIO!!!! acrescentar ao middleware
 // Route::apiResource('posts', 'PostController');
 // Route::apiResource('post-types', 'PostTypeController');

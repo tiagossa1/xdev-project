@@ -119,4 +119,17 @@ class PostController extends Controller
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
+
+    public function getTotalPostsByUserId(Request $request){
+        try {
+            $posts=Post::where('user_id', '=', $request["user_id"])->count();
+
+            return response()->json([
+                'data' => $posts,
+                'message' => 'Success'
+            ], 201);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
+    }
 }
