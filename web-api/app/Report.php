@@ -10,11 +10,15 @@ class Report extends Model
         'reason',
         'post_id',
         'user_id',
-        'post_comment_id'
+        'comment_id',
+        'closed',
+        'moderator_id',
+        'report_conclusion_id'
+
     ];
 
     protected $hidden = [
-        'user_id', 'post_id', 'post_comment_id'
+        'user_id', 'post_id', 'comment_id', 'moderator_id', 'report_conclusion_id'
     ];
 
     public function post()
@@ -27,8 +31,18 @@ class Report extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    public function comment()
     {
         return $this->belongsTo(Comment::class);
+    }
+
+    public function report_conclusion()
+    {
+        return $this->belongsTo(ReportConclusion::class);
+    }
+
+    public function moderator()
+    {
+        return $this->belongsTo('App\User', 'moderator_id');
     }
 }

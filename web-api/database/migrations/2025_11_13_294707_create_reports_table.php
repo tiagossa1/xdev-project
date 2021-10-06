@@ -19,7 +19,7 @@ class CreateReportsTable extends Migration
             $table->foreignId('post_id')->nullable();
             $table->foreignId('moderator_id')->nullable();
             $table->foreignId('report_conclusion_id')->nullable()->constrained();
-            $table->foreignId('post_comment_id')->nullable();
+            $table->foreignId('comment_id')->nullable();
             $table->boolean('closed')->default(0);
             $table->string('reason');
             $table->timestamps();

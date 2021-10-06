@@ -32,6 +32,6 @@ $factory->define(User::class, function (Faker $faker) {
         'instagram_url' => $faker->imageUrl(),
         'user_type_id' => rand(1,4),
         'district_id' => rand(1,20),
-        'school_class_id' => rand(1,25)
+        'school_class_id' => rand(1,25),
     ];
 });

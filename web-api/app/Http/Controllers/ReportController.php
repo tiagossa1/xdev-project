@@ -20,7 +20,7 @@ class ReportController extends Controller
     {
         try {
             return response()->json([
-                'data' => Report::with('user', 'post', 'comments')->get(),
+                'data' => Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -46,12 +46,12 @@ class ReportController extends Controller
                 $report->posts()->sync($request->input('posts'));
 
             if ($request->input('comment') != null)
-                $report->comment()->attach($request->input('comment'));
+                $report->comments()->sync($request->input('comments'));
 
             /*if ($request->input('reportConclusion') != null)
                 $report->reportConclusions()->sync($request->input('reportConclusion'));*/
 
-            $mods = User::where('user_type_id', '=', 2)->get();
+            $mods = User::whereIn('user_type_id', [2,4])->get();
             if($mods != Null)
                 Notification::send($mods, new NewReport($report));
 
@@ -74,7 +74,7 @@ class ReportController extends Controller
     {
         try {
             return response()->json([
-                'data' => $report->load('user', 'post', 'comments'),
+                'data' => $report->load('user', 'post', 'comment', 'moderator', 'report_conclusion'),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

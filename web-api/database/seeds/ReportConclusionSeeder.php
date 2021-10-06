@@ -17,11 +17,8 @@ class ReportConclusionSeeder extends Seeder
         ]);
 
         ReportConclusion::create([
-            'name' => 'Limpo'
+            'name' => 'Sem medidas tomadas'
         ]);
 
-        ReportConclusion::create([
-            'name' => 'Aberto'
-        ]);
     }
 }

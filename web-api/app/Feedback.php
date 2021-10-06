@@ -12,6 +12,10 @@ class Feedback extends Model
         'description'
     ];
 
+    protected $hidden = [
+        'user_id', 'feedback_type_id'
+    ];
+
     public $timestamps = false;
 
     public function feedback_type()

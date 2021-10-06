@@ -44,9 +44,7 @@ class NewReport extends Notification
     public function toArray($notifiable)
     {
         return [
-            'reason'=>$this->report->reason,
-            'user_id'=>$this->report->user_id,
-            'post_id'=>$this->report->post_id
+            $this->report,
         ];
     }
 }
