@@ -60,7 +60,7 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            return response()->json($user->load('district', 'school_class','school_class.school', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments'), 200);
+            return response()->json($user->load('district', 'school_class','school_class.school', 'user_type','posts', 'posts.post_type', 'posts.tags', 'posts.users_saved', 'posts.post_photos', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments'), 200);
         } catch (Exception $exception) {
             return  response()->json(['error' => $exception], 500);
         }
