@@ -37,6 +37,8 @@ export default class Post {
         user.district,
         user.user_type,
         user.school_class,
+        user?.posts,
+        user?.tags,
         user.created_at
       );
     }

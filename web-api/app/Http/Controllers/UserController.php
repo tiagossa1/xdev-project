@@ -16,8 +16,10 @@ class UserController extends Controller
     public function index()
     {
         try {
+            $user = User::with('district', 'school_class', 'school_class.school', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments')->get();
+
             return response()->json([
-                'data' => User::with('district', 'school_class', 'school_class.school', 'user_type','posts', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments')->get(),
+                'data' => $user,
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -60,9 +62,15 @@ class UserController extends Controller
     public function show(User $user)
     {
         try {
-            return response()->json($user->load('district', 'school_class','school_class.school', 'user_type','posts', 'posts.post_type', 'posts.tags', 'posts.users_saved', 'posts.post_photos', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments'), 200);
+            $user = $user->load('district', 'school_class','school_class.school', 'user_type','posts', 'posts.post_type', 'posts.tags', 'posts.users_saved', 'posts.post_photos', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments');
+
+            if(!is_null($user)) {
+                $user->setProfilePicture($user->profile_picture);
+            }
+
+            return response()->json($user, 200);
         } catch (Exception $exception) {
-            return  response()->json(['error' => $exception], 500);
+            return  response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 

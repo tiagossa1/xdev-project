@@ -12,6 +12,8 @@ export default new (class PostService {
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
 
+    console.log(response.data.data);
+
     if (response.data.data) {
       return response.data.data.map((x) => {
         return new Post(
@@ -22,10 +24,10 @@ export default new (class PostService {
           x.user,
           x.post_type,
           x.post_photos,
-          null,
+          x?.likes,
           x.tags,
-          null,
-          null,
+          x?.users_saved,
+          x?.comments,
           dayjs(dayjs(x.created_at)).fromNow()
         );
       });

@@ -142,6 +142,7 @@
           </div>
         </div>
       </div>
+      <br />
       <div class="row">
         <div class="col-6">
           <label class="float-left font-weight-bold">Data de nascimento</label>
@@ -167,7 +168,15 @@
             O campo data de nascimento é obrigatório.
           </div>
         </div>
-        <div class="col-6"></div>
+        <div class="col-6">
+          <label class="float-left font-weight-bold">Foto de perfil</label>
+          <b-form-file
+            v-model="photo"
+            accept=".jpg, .png"
+            placeholder="Escolha uma fotografia..."
+            drop-placeholder="Escolha uma fotografia..."
+          ></b-form-file>
+        </div>
       </div>
       <br />
 
@@ -185,9 +194,14 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 import userService from "../services/userService";
+import imageUploadService from "../services/imageUploadService";
 import districtService from "../services/districtService";
 import schoolClassService from "../services/schoolClassService";
+
+import ImageUploadRequest from "../models/requests/imageUploadRequest";
 
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
@@ -204,11 +218,12 @@ export default {
       schoolClasses: [],
       max: today,
       min: new Date(1900, 1, 1),
-      dismissSecs: 5,
+      dismissSecs: 10,
       dismissCountDown: 0,
       showErrorAlert: false,
       confirmPassword: "",
       formStatus: "",
+      photo: null,
       form: {
         name: "",
         email: "",
@@ -237,15 +252,50 @@ export default {
     console.log("Register component mounted.");
   },
   methods: {
-    onSubmit() {
+    ...mapActions({
+      signIn: "auth/signIn",
+    }),
+
+    async onSubmit() {
+      let res = null;
       if (!this.v$.$invalid) {
         this.form.email += "@edu.atec.pt";
-        userService.register(this.form);
+
+        res = await userService.register(this.form).catch((err) => {
+          this.showErrorAlert = true;
+          this.formStatus = Object.values(err.response.data.errors)
+            .map((x) => x[0])
+            .toString();
+          this.showAlert();
+        });
+
+        console.log(res);
+
+        if (res.status === 201) {
+          this.signIn({
+            email: this.form.email,
+            password: this.form.password,
+          });
+
+          const config = {
+            headers: { Authorization: `Bearer ${res.data.token}` },
+          };
+
+          let request = new ImageUploadRequest(res.data.user.id, this.photo);
+
+          res = await imageUploadService
+            .createImageUpload(config, request)
+            .catch((err) => {
+              console.log(err.response);
+            });
+
+          console.log(res);
+        }
       } else {
         this.showErrorAlert = true;
-        this.showAlert();
         this.formStatus =
           "Existem campos inválidos. Por favor, reveja o formulário.";
+        this.showAlert();
       }
     },
     redirectToCreateAccount() {
@@ -261,32 +311,20 @@ export default {
       this.dismissCountDown = this.dismissSecs;
     },
     async getDistrict() {
-      /*const config = {
-        headers: {
-          Authorization: `Bearer 1|EFfVVMSNXDWXzjyiVDMsU29Y67WfAQsJAjhNrqHq`,
-        },
-      };*/
+      let res = await districtService.getDistricts();
 
-      districtService.getDistricts().then((res) => {
-        this.districts = res.data.data.map((x) => ({
-          value: x.id,
-          text: x.name,
-        }));
-      });
+      this.districts = res.map((res) => ({
+        value: res.id,
+        text: res.name,
+      }));
     },
     async getSchoolClasses() {
-      /*const config = {
-        headers: {
-          Authorization: `Bearer 1|EFfVVMSNXDWXzjyiVDMsU29Y67WfAQsJAjhNrqHq`,
-        },
-      };*/
+      let res = await schoolClassService.getSchoolClasses();
 
-      schoolClassService.getSchoolClasses().then((res) => {
-        this.schoolClasses = res.data.data.map((x) => ({
-          value: x.id,
-          text: x.name,
-        }));
-      });
+      this.schoolClasses = res.map((x) => ({
+        value: x.id,
+        text: x.name,
+      }));
     },
     inputState(input) {
       return !!input;

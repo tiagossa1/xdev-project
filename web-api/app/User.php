@@ -19,6 +19,14 @@ class User extends Authenticatable
         'password', 'remember_token', 'pivot', 'district_id', 'school_class_id', 'user_type_id', 'deleted_at', 'email_verified_at'
     ];
 
+    public function setProfilePicture($profile_picture_path) {
+        $path = dirname(public_path(), 1) . '/' . $profile_picture_path;
+
+        $value = base64_encode(file_get_contents($path));
+
+        $this->attributes['profile_picture'] = $value;
+    }
+
     public function posts()
     {
         return $this->hasMany(Post::class);

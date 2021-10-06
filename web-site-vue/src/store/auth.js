@@ -30,7 +30,7 @@ export default {
   },
 
   actions: {
-    async signIn({ dispatch }, credentials) {
+    signIn({ dispatch }, credentials) {
       userService.login(credentials).then((res) => {
         dispatch("attempt", res.data);
         router.push('Home');

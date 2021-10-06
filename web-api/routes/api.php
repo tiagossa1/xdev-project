@@ -35,6 +35,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('comments', 'CommentController');
     Route::apiResource('posts', 'PostController');
     Route::apiResource('post-types', 'PostTypeController');
+
+    Route::post('image-upload', 'ImageUploadController@store');
+    Route::post('get-profile-picture', 'ImageUploadController@getProfilePicture');
+    // Route::apiResource('image-upload', 'ImageUploadController');
 });
 
 // Users
