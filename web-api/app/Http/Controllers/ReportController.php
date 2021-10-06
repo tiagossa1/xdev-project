@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\NewReport;
 use App\Report;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class ReportController extends Controller
 {
@@ -36,17 +39,21 @@ class ReportController extends Controller
         try {
             $report = Report::create($request->all());
 
-            if ($request->input('users') != null)
+            if ($request->input('user') != null)
                 $report->users()->sync($request->input('users'));
 
-            if ($request->input('posts') != null)
+            if ($request->input('post') != null)
                 $report->posts()->sync($request->input('posts'));
 
-            if ($request->input('postComments') != null)
-                $report->postComments()->sync($request->input('postComments'));
+            if ($request->input('comment') != null)
+                $report->comment()->attach($request->input('comment'));
 
-            if ($request->input('reportConclusions') != null)
-                $report->reportConclusions()->sync($request->input('reportConclusions'));
+            /*if ($request->input('reportConclusion') != null)
+                $report->reportConclusions()->sync($request->input('reportConclusion'));*/
+
+            $mods = User::where('user_type_id', '=', 2)->get();
+            if($mods != Null)
+                Notification::send($mods, new NewReport($report));
 
             return response()->json([
                 'data' => $report,
