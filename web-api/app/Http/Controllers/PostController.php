@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\NewPost;
 use App\Post;
+use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
 
 class PostController extends Controller
 {
@@ -36,7 +39,15 @@ class PostController extends Controller
         try {
             $post = Post::create($request->all());
 
-            $post->tags()->sync($request->input('tags'));
+            $post->tags()->attach($request->input('tags'));
+
+            $users = User::where('id', '=' ,function ($query) use ($post) {
+                $query->select('user_id')->from('tag_user')->whereIn('tag_id',$post->tags()->get());
+            })->get();
+
+            if($users != Null) {
+                Notification::send($users, new NewPost($post));
+            }
 
             return response()->json([
                 'data' => $post,
@@ -112,7 +123,7 @@ class PostController extends Controller
             $post->likes()->delete();
             $post->users_saved()->delete();
             $post->delete();
-            
+
             return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
