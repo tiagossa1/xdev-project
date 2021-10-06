@@ -1,12 +1,11 @@
 <template>
-<div class="p-5">
     <b-card
       :img-alt="userInfo.name + ` photo`"
       img-top
+      rounded="circle"
       img-src="https://picsum.photos/600/300/?image=25"
       tag="article"
       style="max-width: 20rem"
-      class="p-0"
     >
     
       <b-card-body class="text-center p-0">
@@ -17,7 +16,7 @@
         
     <b-card-group>
       <b-card border-variant="light" header="Posts" header-text-variant="primary">
-      <b-card-text class="text-body" >{{getTotalUserPosts}}</b-card-text >
+      <b-card-text class="text-body" >{{userInfo.posts.length}}</b-card-text >
       </b-card>
     </b-card-group>
 
@@ -34,7 +33,7 @@
     <b-card-group class="mt-0">
       <b-card border-variant="light" header="Interesses" header-text-variant="primary">
       <b-card-text>
-        
+        {{userInfo.tags}}
       </b-card-text>
       </b-card>
     </b-card-group>
@@ -65,20 +64,13 @@
             </b-col>
           </b-row>
         </b-container>
-        
-        
-        
-        
       </div>
     </b-card>
-  </div>
-
-
 </template>
 
 <script>
 import userService from "../services/userService";
-import postControler from "../services/postService";
+//import postService from "../services/postService";
 
 export default {
   name: "user-card-component",
@@ -94,10 +86,10 @@ export default {
 
       console.log(this.userInfo);
     
-    this.getTotalUserPosts = await postControler
+    /*this.getTotalUserPosts = await postControler
     .getTotalPostsByUserId(this.$store.getters["auth/user"].id);
 
-    console.log(this.getTotalUserPosts);
+    console.log(this.getTotalUserPosts);*/
   },
 };
 </script>
