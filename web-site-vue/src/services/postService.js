@@ -22,10 +22,10 @@ export default new (class PostService {
           x.user,
           x.post_type,
           x.post_photos,
-          x.likes,
+          null,
           x.tags,
-          x.users_saved,
-          x.comments,
+          null,
+          null,
           dayjs(dayjs(x.created_at)).fromNow()
         );
       });

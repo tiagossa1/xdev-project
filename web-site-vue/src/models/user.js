@@ -1,7 +1,8 @@
 import District from "./district";
 import UserType from "./userType";
 import SchoolClass from "./schoolClass";
-import School from "./school";
+import Post from "./post";
+import Tag from "./tag";
 
 export default class User {
   constructor(
@@ -17,6 +18,8 @@ export default class User {
     district,
     userType,
     schoolClass,
+    posts,
+    tags,
     created_at
   ) {
     this.id = id;
@@ -42,8 +45,33 @@ export default class User {
       this.schoolClass = new SchoolClass(
         schoolClass.id,
         schoolClass.name,
-        new School(schoolClass.school.id, schoolClass.school.name)
+        schoolClass.school
       );
+
+    if (posts) {
+      this.posts = posts.map(
+        (x) =>
+          new Post(
+            x.id,
+            x.title,
+            x.description,
+            x.suspended,
+            x.user,
+            x.post_type,
+            x.post_photos,
+            x.user_likes,
+            x.tags,
+            x.users_saved,
+            x.comments,
+            x.created_at
+          )
+      );
+    }
+
+    if (tags) {
+      this.tags = tags.map((t) => new Tag(t.id, t.name, t.created_at));
+    }
+
     this.created_at = created_at;
   }
 }

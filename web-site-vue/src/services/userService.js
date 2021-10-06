@@ -35,6 +35,8 @@ export default new (class UserService {
         response.data.district,
         response.data.user_type,
         response.data.school_class,
+        response.data.posts,
+        response.data.tags,
         response.data.created_at
       );
     }
