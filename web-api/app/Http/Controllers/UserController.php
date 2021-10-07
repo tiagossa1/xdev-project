@@ -64,9 +64,9 @@ class UserController extends Controller
         try {
             $user = $user->load('district', 'school_class','school_class.school', 'user_type','posts', 'posts.post_type', 'posts.tags', 'posts.users_saved', 'posts.post_photos', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments');
 
-            if(!is_null($user)) {
+            /*if(!is_null($user)) {
                 $user->setProfilePicture($user->profile_picture);
-            }
+            }     -> NAO FUNCIONA O SHOW NO POSTMAN*/
 
             return response()->json($user, 200);
         } catch (Exception $exception) {
@@ -85,6 +85,11 @@ class UserController extends Controller
     {
         try {
             $user->update($request->all());
+
+            /*$user = User::find($user->id);
+            $user->name = $request->name;
+            $user->password = bcrypt($request->password);
+            $user->save();*/
 
             $user->tags()->sync($request->input('tags'));
             $user->favorite_posts()->sync($request->input('favorite_posts'));
