@@ -84,12 +84,18 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         try {
-            $user->update($request->all());
+            //$user->update($request->all());
 
-            /*$user = User::find($user->id);
+            $user = User::find($user->id);
             $user->name = $request->name;
+
+            $user->github_url = $request->github_url;
+            $user->linkedin_url = $request->linkedin_url;
+            $user->facebook_url = $request->facebook_url;
+            $user->instagram_url = $request->instagram_url;
+
             $user->password = bcrypt($request->password);
-            $user->save();*/
+            $user->save();
 
             $user->tags()->sync($request->input('tags'));
             $user->favorite_posts()->sync($request->input('favorite_posts'));

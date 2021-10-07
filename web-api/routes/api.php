@@ -20,9 +20,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', 'AuthController@logout');
 
     Route::apiResource('feedbacks', 'FeedbackController');
-    
+
     Route::apiResource('post-photos', 'PostPhotoController');
-    
+
     Route::apiResource('reports', 'ReportController');
     Route::apiResource('tags', 'TagController');
     Route::apiResource('users', 'UserController');
