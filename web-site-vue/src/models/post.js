@@ -4,82 +4,39 @@ import PostPhoto from "./postPhoto";
 import Tag from "./tag";
 import Comment from "./comment";
 
+import dayjs from "dayjs";
+
 export default class Post {
-  constructor(
-    id,
-    title,
-    description,
-    suspended,
-    user,
-    postType,
-    postPhotos,
-    userLikes,
-    tags,
-    usersSaved,
-    comments,
-    createdAt
-  ) {
-    (this.id = id), (this.title = title);
-    this.description = description;
-    this.suspended = suspended;
+  constructor(post) {
+    (this.id = post?.id), (this.title = post?.title);
+    this.description = post?.description;
+    this.suspended = post?.suspended;
+    this.user = new User(post?.user);
+    this.postType = new PostType(post?.post_type);
+    this.postPhotos = post?.post_photos.map((pp) => new PostPhoto(pp));
 
-    if (user) {
-      this.user = new User(
-        user.id,
-        user.email,
-        user.name,
-        user.birth_date,
-        user.github_url,
-        user.linkedin_url,
-        user.facebook_url,
-        user.instagram_url,
-        user.profile_picture ?? "",
-        user.district,
-        user.user_type,
-        user.school_class,
-        user?.posts,
-        user?.tags,
-        user.created_at
-      );
+    if (post?.userLikes?.length > 0) {
+      this.userLikes = post?.userLikes.map((ul) => ul);
+    } else {
+      this.userLikes = [];
     }
 
-    if (postType) {
-      this.postType = new PostType(
-        postType.id,
-        postType.name,
-        postType.iconName
-      );
+    this.tags = post?.tags.map((t) => new Tag(t));
+
+    if (post?.usersSaved?.length > 0) {
+      this.usersSaved = post?.usersSaved.map((x) => x);
+    } else {
+      this.usersSaved = [];
     }
 
-    if (postPhotos) {
-      this.postPhotos = postPhotos.map(
-        (pp) => new PostPhoto(pp.id, pp.url, pp.created_at)
-      );
-    }
-
-    if (userLikes) {
-      this.userLikes = userLikes.map((ul) => ul.id);
-    }
-
-    if (tags) {
-      this.tags = tags.map((t) => new Tag(t.id, t.name, t.created_at));
-    }
-
-    if (usersSaved) {
-      this.usersSaved = usersSaved.map((x) => x.id);
-    }
-
-    if (comments && comments.length > 0) {
-      this.comments = comments.map((x) => {
-        return new Comment(
-          x.id,
-          x.description,
-          x.user,
-          x.created_at,
-          x.updated_at
-        );
+    if (post.comments?.length > 0) {
+      this.comments = post.comments.map((c) => {
+        return new Comment(c);
       });
+    } else {
+      this.comments = [];
     }
-    this.createdAt = createdAt;
+
+    this.createdAt = dayjs(dayjs(post.created_at)).fromNow();
   }
 }

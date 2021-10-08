@@ -10,7 +10,7 @@ export default new (class DistrictService {
     let response = await axios.get(`${this.apiUrl}/api/districts`);
 
     if (response.data.data) {
-      return response.data.data.map((x) => new District(x.id, x.name));
+      return response.data.data.map((d) => new District(d));
     }
 
     return [];

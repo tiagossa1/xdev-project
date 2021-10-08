@@ -1,7 +1,7 @@
 export default class Tag {
-    constructor(id, name, createdAt) {
-        this.id = id;
-        this.name = name;
-        this.createdAt = createdAt;
-    }
+  constructor(tag) {
+    this.id = tag?.id;
+    this.name = tag?.name;
+    this.createdAt = tag?.created_at;
+  }
 }

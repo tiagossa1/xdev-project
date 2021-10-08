@@ -1,7 +1,7 @@
 export default class PostPhoto {
-  constructor(id, url, createdAt) {
-    this.id = id;
-    this.url = url;
-    this.createdAt = createdAt;
+  constructor(postPhoto) {
+    this.id = postPhoto?.id;
+    this.url = postPhoto?.url;
+    this.createdAt = postPhoto?.created_at;
   }
 }

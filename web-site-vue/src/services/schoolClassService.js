@@ -10,7 +10,7 @@ export default new (class SchoolClassService {
     let response = await axios.get(`${this.apiUrl}/api/school-classes`);
 
     if (response.data.data) {
-      return response.data.data.map((x) => new SchoolClass(x.id, x.name, x.school));
+      return response.data.data.map((x) => new SchoolClass(x));
     }
 
     return [];

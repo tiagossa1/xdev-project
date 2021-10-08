@@ -4,7 +4,9 @@
     type="dark"
     style="background-color: rgb(0, 174, 239)"
   >
-    <b-navbar-brand class="font-weight-bold" :to="{ path: 'Home' }">xDev</b-navbar-brand>
+    <b-navbar-brand class="font-weight-bold" :to="{ path: 'Home' }"
+      >xDev</b-navbar-brand
+    >
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -39,13 +41,16 @@
               <span class="mr-2"> {{ user.name }} </span>
               <b-avatar src="https://placekitten.com/300/300"></b-avatar>
             </template>
-            <b-dropdown-item>O meu perfil</b-dropdown-item>
+            <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
         </template>
 
         <template v-else>
-          <div v-if="this.$router.currentRoute.name !== 'Login'" class="align-self-center">
+          <div
+            v-if="this.$router.currentRoute.name !== 'Login'"
+            class="align-self-center"
+          >
             <router-link to="/login" class="text-white mr-2"
               >Entrar</router-link
             >
@@ -73,7 +78,7 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
-    })
+    }),
   },
   methods: {
     ...mapActions({

@@ -38,8 +38,6 @@ export default {
     async mounted() {
     this.userInfo = await userService
       .getUserById(this.$store.getters["auth/user"].id);
-
-      console.log(this.userInfo);
     
     /*this.getTotalUserPosts = await postControler
     .getTotalPostsByUserId(this.$store.getters["auth/user"].id);

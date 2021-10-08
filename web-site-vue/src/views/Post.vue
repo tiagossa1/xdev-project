@@ -1,7 +1,9 @@
 <template>
   <div class="container">
     <div class="buttons m-3">
-      <b-button pill variant="primary" v-b-modal.modal-1>Criar +</b-button>
+      <b-button class="text-white" variant="primary" v-b-modal.modal-1
+        >Criar +</b-button
+      >
       <b-modal
         class="w-75"
         id="modal-1"

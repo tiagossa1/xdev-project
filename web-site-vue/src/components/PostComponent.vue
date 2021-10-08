@@ -109,7 +109,6 @@ import commentService from "../services/commentService";
 
 import Post from "../models/post";
 import CommentRequest from "../models/requests/commentRequest";
-import Comment from "../models/comment";
 
 export default {
   name: "post-component",
@@ -118,7 +117,6 @@ export default {
     post: Post,
   },
   mounted() {
-    //console.log(this.post);
     this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
   },
   data() {
@@ -175,18 +173,17 @@ export default {
 
         let res = await commentService.createComment(request);
 
-        if (res.status === 201) {
-          let newComment = new Comment(
-            res.data.data.id,
-            res.data.data.description,
-            res.data.data.user,
-            res.data.data.created_at,
-            res.data.data.updated_at
-          );
-
-          this.post.comments.push(newComment);
+        if (res) {
+          this.post.comments.push(res);
           this.comment = "";
         }
+
+        // if (res.status === 201) {
+        //   let newComment = new Comment(res.data.data);
+
+        //   this.post.comments.push(newComment);
+        //   this.comment = "";
+        // }
       }
     },
 

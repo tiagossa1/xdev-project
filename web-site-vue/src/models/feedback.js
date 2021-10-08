@@ -1,9 +1,11 @@
+import User from "./user";
+
 export default class Feedback {
-  constructor(id, description, user, feedbackType, createdAt) {
-    this.id = id;
-    this.description = description;
-    this.user = user;
-    this.feedbackType = feedbackType;
-    this.createdAt = createdAt;
+  constructor(feedback) {
+    this.id = feedback?.id;
+    this.description = feedback?.description;
+    this.user = new User(feedback?.user);
+    this.feedbackType = feedback?.feedback_type;
+    this.createdAt = feedback?.created_at;
   }
 }

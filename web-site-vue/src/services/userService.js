@@ -22,26 +22,10 @@ export default new (class UserService {
     let response = await axios.get(`${this.apiUrl}/api/users/${id}`);
 
     if (response.data) {
-      return new User(
-        response.data.id,
-        response.data.email,
-        response.data.name,
-        response.data.birth_date,
-        response.data.github_url,
-        response.data.linkedin_url,
-        response.data.facebook_url,
-        response.data.instagram_url,
-        response.data?.profile_picture,
-        response.data.district,
-        response.data.user_type,
-        response.data.school_class,
-        response.data.posts,
-        response.data.tags,
-        response.data.created_at
-      );
+      return new User(response.data);
     }
 
-    return {};
+    return new User(null);
   }
 
   async updateLikedPosts(userId, likedPosts) {

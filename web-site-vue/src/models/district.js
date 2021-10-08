@@ -1,6 +1,6 @@
 export default class District {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
+  constructor(district) {
+    this.id = district?.id;
+    this.name = district?.name;
   }
 }

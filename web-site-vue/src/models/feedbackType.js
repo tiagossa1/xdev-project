@@ -1,6 +1,10 @@
 export default class FeedbackType {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
+  constructor(feedbackType) {
+    if (feedbackType) {
+      this.id = feedbackType?.id;
+      this.name = feedbackType?.name;
+    }
+
+    return {};
   }
 }

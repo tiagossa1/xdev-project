@@ -1,8 +1,6 @@
 import axios from "axios";
 import Post from "../models/post";
 import PostType from "../models/postType";
-import dayjs from "dayjs";
-
 
 export default new (class PostService {
   constructor() {
@@ -12,24 +10,9 @@ export default new (class PostService {
   async getPosts() {
     let response = await axios.get(`${this.apiUrl}/api/posts`);
 
-    console.log(response.data.data);
-
     if (response.data.data) {
       return response.data.data.map((x) => {
-        return new Post(
-          x.id,
-          x.title,
-          x.description,
-          x.suspended,
-          x.user,
-          x.post_type,
-          x.post_photos,
-          x?.likes,
-          x.tags,
-          x?.users_saved,
-          x?.comments,
-          dayjs(dayjs(x.created_at)).fromNow()
-        );
+        return new Post(x);
       });
     }
 
@@ -41,7 +24,7 @@ export default new (class PostService {
 
     if (response.data.data) {
       return response.data.data.map(
-        (x) => new PostType(x.id, x.name, x.iconName)
+        (x) => new PostType(x)
       );
     }
 
@@ -68,11 +51,11 @@ export default new (class PostService {
     return await axios.delete(`${this.apiUrl}/api/posts/${postId}`);
   }
 
-  async getTotalPostsByUserId(userId){
-    let res = await axios.post(`${this.apiUrl}/api/getTotalPostsByUserId`,{
-      user_id : userId
-    });
+  // async getTotalPostsByUserId(userId) {
+  //   let res = await axios.post(`${this.apiUrl}/api/getTotalPostsByUserId`, {
+  //     user_id: userId,
+  //   });
 
-    return res.data.data
-  }
+  //   return res.data.data;
+  // }
 })();

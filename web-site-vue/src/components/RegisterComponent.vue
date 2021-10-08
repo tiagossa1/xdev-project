@@ -269,8 +269,6 @@ export default {
           this.showAlert();
         });
 
-        console.log(res);
-
         if (res.status === 201) {
           this.signIn({
             email: this.form.email,
@@ -288,8 +286,6 @@ export default {
             .catch((err) => {
               console.log(err.response);
             });
-
-          console.log(res);
         }
       } else {
         this.showErrorAlert = true;

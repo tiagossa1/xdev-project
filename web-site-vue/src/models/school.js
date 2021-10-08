@@ -1,6 +1,6 @@
 export default class School {
-  constructor(id, name) {
-    this.id = id;
-    this.name = name;
+  constructor(school) {
+    this.id = school?.id;
+    this.name = school?.name;
   }
 }

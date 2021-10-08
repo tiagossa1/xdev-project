@@ -5,73 +5,32 @@ import Post from "./post";
 import Tag from "./tag";
 
 export default class User {
-  constructor(
-    id,
-    email,
-    name,
-    birth_date,
-    github_url = null,
-    linkedin_url = null,
-    facebook_url = null,
-    instagram_url = null,
-    profile_picture,
-    district,
-    userType,
-    schoolClass,
-    posts,
-    tags,
-    created_at
-  ) {
-    this.id = id;
-    this.email = email;
-    this.name = name;
-    this.birth_date = birth_date;
-    this.github_url = github_url;
-    this.linkedin_url = linkedin_url;
-    this.facebook_url = facebook_url;
-    this.instagram_url = instagram_url;
-    this.profile_picture = profile_picture;
+  constructor(user) {
+    this.id = user?.id;
+    this.email = user?.email;
+    this.name = user?.name;
+    this.birth_date = user?.birth_date;
+    this.github_url = user?.github_url;
+    this.linkedin_url = user?.linkedin_url;
+    this.facebook_url = user?.facebook_url;
+    this.instagram_url = user?.instagram_url;
+    this.profile_picture = user?.profile_picture;
+    this.district = new District(user?.district?.id, user?.district?.name);
+    this.userType = new UserType(user?.user_type);
+    this.schoolClass = new SchoolClass(user?.school_class);
 
-    if (district) this.district = new District(district.id, district.name);
-
-    if (userType)
-      this.userType = new UserType(
-        userType.id,
-        userType.name,
-        userType.hexColorCode
-      );
-
-    if (schoolClass)
-      this.schoolClass = new SchoolClass(
-        schoolClass.id,
-        schoolClass.name,
-        schoolClass.school
-      );
-
-    if (posts) {
-      this.posts = posts.map(
-        (x) =>
-          new Post(
-            x.id,
-            x.title,
-            x.description,
-            x.suspended,
-            x.user,
-            x.post_type,
-            x.post_photos,
-            x.user_likes,
-            x.tags,
-            x.users_saved,
-            x.comments,
-            x.created_at
-          )
-      );
+    if (user?.posts?.length > 0) {
+      this.posts = user.posts.map((x) => new Post(x));
+    } else {
+      this.posts = [];
     }
 
-    if (tags) {
-      this.tags = tags.map((t) => new Tag(t.id, t.name, t.created_at));
+    if (user?.tags?.length > 0) {
+      this.tags = user.tags.map((t) => new Tag(t));
+    } else {
+      this.tags = [];
     }
 
-    this.created_at = created_at;
+    this.createdAt = user?.created_at;
   }
 }

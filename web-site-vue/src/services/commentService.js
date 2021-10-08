@@ -1,3 +1,5 @@
+import Comment from "../models/comment";
+
 import axios from "axios";
 
 export default new (class CommentService {
@@ -6,7 +8,13 @@ export default new (class CommentService {
   }
 
   async createComment(commentRequest) {
-    return await axios.post(`${this.apiUrl}/api/comments/`, commentRequest);
+    let res = await axios.post(`${this.apiUrl}/api/comments/`, commentRequest);
+
+    if (res.data.data) {
+      return new Comment(res.data.data);
+    }
+
+    return null;
   }
 
   async deleteComment(id) {
