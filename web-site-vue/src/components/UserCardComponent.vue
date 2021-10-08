@@ -122,7 +122,6 @@ export default {
   data() {
     return {
       userInfo: User,
-      getTotalUserPosts: 0,
     };
   },
   async created() {

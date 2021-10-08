@@ -4,6 +4,7 @@
       <b-button class="text-white" variant="primary" v-b-modal.modal-1
         >Criar +</b-button
       >
+
       <b-modal
         class="w-75"
         id="modal-1"
@@ -63,13 +64,15 @@
       </b-dropdown>
     </div>
 
-    <div v-for="post in posts" :key="post.id">
-      <post-component
-        @on-post-deleted="onPostDeleted"
-        @on-comment-deleted="onCommentDeleted"
-        :post="post"
-      ></post-component>
-    </div>
+    <transition-group name="fade" tag="div">
+      <div v-for="post in posts" :key="post.id">
+        <post-component
+          @on-post-deleted="onPostDeleted"
+          @on-comment-deleted="onCommentDeleted"
+          :post="post"
+        ></post-component>
+      </div>
+    </transition-group>
   </div>
 </template>
 

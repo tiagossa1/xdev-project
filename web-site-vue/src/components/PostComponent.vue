@@ -59,6 +59,12 @@
       </b-col>
     </b-row>
 
+    <b-row class="mt-2 ml-2">
+      <b-col>
+        <h5>{{ post.description }}</h5>
+      </b-col>
+    </b-row>
+
     <b-row class="ml-2 mt-2">
       <b-col cols="2" style="cursor: pointer" @click="onLike">
         <p class="h5">
@@ -82,21 +88,34 @@
       </b-col>
     </b-row>
 
-    <div v-for="comment in post.comments" :key="comment.id">
-      <post-comment-component
-        @on-deleted="onDeleted"
-        class="mt-3"
-        :comment="comment"
-      ></post-comment-component>
-    </div>
+    <b-row class="ml-2 mt-2 mr-2">
+      <b-col>
+        <b-button
+          v-if="post.comments.length > 0"
+          class="text-white mt-2 mb-2"
+          v-b-toggle="collapseId"
+          variant="primary"
+          >Mostrar {{ post.comments.length }} comentários
+          <b-icon-arrow-down></b-icon-arrow-down
+        ></b-button>
+        <b-collapse :id="collapseId" class="mt-2">
+          <div v-for="comment in post.comments" :key="comment.id">
+            <post-comment-component
+              @on-deleted="onDeleted"
+              class="mb-3"
+              :comment="comment"
+            ></post-comment-component>
+          </div>
+        </b-collapse>
 
-    <b-form @submit.prevent="onSubmit">
-      <b-form-input
-        class="mt-3"
-        v-model="comment"
-        placeholder="Escreva o seu comentário aqui..."
-      ></b-form-input>
-    </b-form>
+        <b-form @submit.prevent="onSubmit">
+          <b-form-input
+            v-model="comment"
+            placeholder="Escreva o seu comentário aqui..."
+          ></b-form-input>
+        </b-form>
+      </b-col>
+    </b-row>
   </b-container>
 </template>
 
@@ -125,6 +144,7 @@ export default {
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
       comment: "",
       isUserPost: false,
+      collapseId: "collapse-" + this.post.id,
     };
   },
   methods: {
@@ -177,13 +197,6 @@ export default {
           this.post.comments.push(res);
           this.comment = "";
         }
-
-        // if (res.status === 201) {
-        //   let newComment = new Comment(res.data.data);
-
-        //   this.post.comments.push(newComment);
-        //   this.comment = "";
-        // }
       }
     },
 
