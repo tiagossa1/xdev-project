@@ -25,10 +25,12 @@
               :style="{
                 border: '3px solid ' + post.user.userType.hexColorCode,
               }"
+              :href="redirectProfile"
             ></b-avatar>
           </b-row>
           <b-row class="justify-content-center mt-1">
             <b-badge
+              :to="redirectProfile"
               class="rounded-35 text-center"
               :style="{ backgroundColor: post.user.userType.hexColorCode }"
             >
@@ -38,12 +40,12 @@
         </b-container>
       </b-col>
       <b-col cols="10">
-        <span
+        <b-link
           class="font-weight-bold"
           :style="{ color: post.user.userType.hexColorCode }"
+          :href="redirectProfile"
+          >{{ post.user.name }}</b-link
         >
-          {{ post.user.name }}
-        </span>
         <br />
         <small>
           {{ post.user.schoolClass.name }} |
@@ -145,6 +147,7 @@ export default {
       comment: "",
       isUserPost: false,
       collapseId: "collapse-" + this.post.id,
+      redirectProfile: `/profile/${this.post.user.id}`,
     };
   },
   methods: {

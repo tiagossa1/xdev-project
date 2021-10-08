@@ -4,9 +4,7 @@
     type="dark"
     style="background-color: rgb(0, 174, 239)"
   >
-    <b-navbar-brand class="font-weight-bold" :to="{ path: 'Home' }"
-      >xDev</b-navbar-brand
-    >
+    <b-navbar-brand class="font-weight-bold" to="/home">xDev</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
