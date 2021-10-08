@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row>
       <b-col class="p-5">
-        <user-card-component></user-card-component>
+        <user-card-component :userInfo="userInfo"></user-card-component>
       </b-col>
 
       <b-col>

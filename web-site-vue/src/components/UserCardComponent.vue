@@ -53,7 +53,9 @@
               <span class="font-weight-bold text-primary">Interesses</span>
             </template>
             <b-card-text v-if="userInfo.tags.length > 0">
-              {{ userInfo.tags }}
+              <b-badge class="m-2 text-white p-2" v-for="tag in userInfo.tags" :key="tag.id" pill variant="primary">
+                {{ tag.name }}
+              </b-badge>
             </b-card-text>
             <b-card-text v-else> Sem interesses </b-card-text>
           </b-card>
@@ -115,20 +117,10 @@
 
 <script>
 import User from '../models/user';
-import userService from "../services/userService";
 
 export default {
   name: "user-card-component",
-  data() {
-    return {
-      userInfo: User,
-    };
-  },
-  async created() {
-    this.userInfo = await userService.getUserById(
-      this.$store.getters["auth/user"].id
-    );
-  },
+  props: { userInfo: User},
 };
 </script>
 
