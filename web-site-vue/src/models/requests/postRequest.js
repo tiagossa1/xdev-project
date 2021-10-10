@@ -1,10 +1,17 @@
 export default class PostRequest {
-  constructor(title, description, suspended, userId, postTypeId, createdAt) {
-    (this.title = title);
+  constructor(
+    id,
+    title,
+    description,
+    suspended,
+    userId,
+    postTypeId,
+  ) {
+    this.id = id;
+    this.title = title;
     this.description = description;
     this.suspended = suspended;
-    this.userId = userId;
-    this.postTypeId = postTypeId;
-    this.createdAt = createdAt;
+    this.user_id = userId;
+    this.post_type_id = postTypeId;
   }
 }

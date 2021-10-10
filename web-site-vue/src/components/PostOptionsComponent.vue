@@ -13,8 +13,8 @@
         icon="three-dots-vertical"
       ></b-icon>
     </template>
-    <b-dropdown-item v-if="isUserOwner">
-      <b-icon class="mr-1" icon="search"></b-icon> Editar
+    <b-dropdown-item @click="onEdit" v-if="isUserOwner">
+      <b-icon class="mr-1" icon="pencil"></b-icon> Editar
     </b-dropdown-item>
     <b-dropdown-item @click="openReportModal"
       ><b-icon class="mr-2" icon="file-check"></b-icon>Reportar</b-dropdown-item
@@ -156,6 +156,9 @@ export default {
 
         this.$refs["modal-report"].hide();
       }
+    },
+    onEdit() {
+      this.$emit("on-edit", true);
     }
   },
 };

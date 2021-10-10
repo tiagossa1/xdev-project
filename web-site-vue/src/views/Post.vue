@@ -2,7 +2,7 @@
   <div class="container">
     <div class="buttons m-3">
       <b-button class="text-white" variant="primary" v-b-modal.modal-1
-        >Criar +</b-button
+        >Criar Post</b-button
       >
 
       <b-modal
@@ -32,8 +32,7 @@
             <b-form-select
               id="postType"
               v-model="form.post_type_id"
-              :options="postTypes"
-              :value="null"
+              :options="postTypesSelect"
               required
             ></b-form-select>
           </b-form-group>
@@ -60,8 +59,22 @@
       </b-modal>
 
       <b-dropdown class="ml-2" id="dropdown-1" text="Filtro">
-        <b-dropdown-item>First Action</b-dropdown-item>
+        <b-dropdown-item
+          @click="onFilterClick(postType.id)"
+          v-for="postType in postTypes"
+          :key="postType.id"
+        >
+          {{ postType.name }}
+        </b-dropdown-item>
       </b-dropdown>
+
+      <b-button
+        v-if="originalPosts && originalPosts.length > 0"
+        class="ml-2"
+        variant="success"
+        @click="onClearFilter"
+        >Limpar filtro</b-button
+      >
     </div>
 
     <transition-group name="fade" tag="div">
@@ -86,20 +99,30 @@ export default {
   components: { PostComponent },
   async created() {
     this.posts = await postService.getPosts();
-
     let postTypes = await postService.getPostTypes();
-    this.postTypes = postTypes.map((x) => ({ value: x.id, text: x.name }));
+
+    this.postTypes = postTypes;
+
+    this.postTypesSelect.push({ value: null, text: "Selecione uma opção" });
+    let selectOptions = postTypes.map((x) => ({
+      value: x.id,
+      text: x.name,
+    }));
+
+    this.postTypesSelect = this.postTypesSelect.concat(selectOptions);
   },
   data() {
     return {
+      originalPosts: [],
       posts: [],
       dismissSecs: 5,
       dismissCountDown: 0,
       postTypes: [],
+      postTypesSelect: [],
       form: {
         title: "",
         description: "",
-        post_type_id: "",
+        post_type_id: null,
         user_id: this.$store.getters["auth/user"].id,
         suspended: 0,
       },
@@ -124,6 +147,14 @@ export default {
         post.comments = post.comments.filter((c) => c.id != id);
         this.posts.find((x) => x.id === post.id).comments = post.comments;
       }
+    },
+    onFilterClick(postTypeId) {
+      this.originalPosts = this.posts;
+      this.posts = this.posts.filter((p) => p.postType.id === postTypeId);
+    },
+    onClearFilter() {
+      this.posts = this.originalPosts;
+      this.originalPosts = [];
     },
   },
 };

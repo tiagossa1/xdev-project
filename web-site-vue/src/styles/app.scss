@@ -22,7 +22,7 @@ $yellow: #ffc107 !default;
 $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
-$atecColor: #32B9F9 !default;
+$atecColor: #32b9f9 !default;
 
 // Theme color default definitions
 $primary: $atecColor !default;
@@ -38,21 +38,38 @@ $dark: $gray-800 !default;
 $theme-colors: () !default;
 $theme-colors: map-merge(
   (
-    'primary': $primary,
-    'secondary': $secondary,
-    'success': $success,
-    'info': $info,
-    'warning': $warning,
-    'danger': $danger,
-    'light': $light,
-    'dark': $dark,
-    'liked': $pink
+    "primary": $primary,
+    "secondary": $secondary,
+    "success": $success,
+    "info": $info,
+    "warning": $warning,
+    "danger": $danger,
+    "light": $light,
+    "dark": $dark,
+    "liked": $pink,
   ),
   $theme-colors
 );
 
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
-@import 'node_modules/bootstrap-vue/src/index.scss';
+.no-select {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0
+}
+
+@import "node_modules/bootstrap/scss/bootstrap.scss";
+@import "node_modules/bootstrap-vue/src/index.scss";
 
 $animationDuration: 0.5s;
 @import "vue2-animate/src/sass/vue2-animate.scss";

@@ -11,7 +11,12 @@
       {{ alertOptions.alertMessage }}
     </b-alert>
 
-    <router-view />
+    <transition
+      enter-active-class="animated fadeInRight"
+      leave-active-class="animated fadeOutLeft"
+    >
+      <router-view />
+    </transition>
     <footer-component></footer-component>
   </div>
 </template>

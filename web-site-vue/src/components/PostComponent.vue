@@ -3,8 +3,17 @@
     :style="{ border: '2px solid gray', 'border-radius': '25px' }"
     class="bv-example-row p-4 ml-4 mb-4"
   >
+    <b-badge
+      class="mb-4 ml-4 p-2 no-select"
+      :style="{
+        backgroundColor: post.user.userType.hexColorCode,
+      }"
+    >
+      <b-icon :icon="post.postType.iconName"></b-icon> {{ post.postType.name }}
+    </b-badge>
     <post-options-component
       @on-deleted="onDeleted"
+      @on-edit="onEdit"
       :post="post"
     ></post-options-component>
     <b-row>
@@ -57,13 +66,24 @@
 
     <b-row class="mt-3 ml-2">
       <b-col>
-        <h3 class="font-weight-bold">{{ post.title }}</h3>
+        <template v-if="toEdit">
+          <b-form-input v-model="post.title" :value="post.title"></b-form-input>
+        </template>
+        <template v-else>
+          <h2 class="font-weight-bold">{{ post.title }}</h2>
+        </template>
       </b-col>
     </b-row>
 
-    <b-row class="mt-2 ml-2">
+    <b-row class="mt-2 ml-2 mb-4">
       <b-col>
-        <h5>{{ post.description }}</h5>
+        <template v-if="toEdit">
+          <quill-editor ref="myQuillEditor" v-model="post.description">
+          </quill-editor>
+        </template>
+        <template v-else>
+          <span class="h5" v-html="post.description"></span>
+        </template>
       </b-col>
     </b-row>
 
@@ -73,19 +93,30 @@
           <b-icon
             :icon="liked ? 'heart-fill' : 'heart'"
             :variant="liked ? 'liked' : ''"
-            >Like</b-icon
-          >
-          Like
+            class="mr-1"
+          ></b-icon>
+          {{ liked ? "Gosto" : "Gostar" }}
         </p>
       </b-col>
-      <b-col cols="10" style="cursor: pointer" @click="onSave">
+      <b-col cols="3" style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
             :icon="saved ? 'bookmark-fill' : 'bookmark'"
-            >Bookmark</b-icon
-          >
+            class="mr-1"
+          ></b-icon>
           {{ saved ? "Guardado" : "Guardar" }}
+        </p>
+      </b-col>
+      <b-col
+        cols="3"
+        v-if="toEdit && isUserPost"
+        style="cursor: pointer"
+        @click="onEdited"
+      >
+        <p class="h5">
+          <b-icon icon="pencil" class="mr-1"> </b-icon>
+          Terminar edição
         </p>
       </b-col>
     </b-row>
@@ -95,19 +126,24 @@
         <b-button
           v-if="post.comments.length > 0"
           class="text-white mt-2 mb-2"
-          v-b-toggle="collapseId"
+          :aria-expanded="modalVisible ? 'true' : 'false'"
+          :aria-controls="collapseId"
+          @click="modalVisible = !modalVisible"
           variant="primary"
           >Mostrar {{ post.comments.length }} comentários
           <b-icon-arrow-down></b-icon-arrow-down
         ></b-button>
-        <b-collapse :id="collapseId" class="mt-2">
-          <div v-for="comment in post.comments" :key="comment.id">
-            <post-comment-component
-              @on-deleted="onDeleted"
-              class="mb-3"
-              :comment="comment"
-            ></post-comment-component>
-          </div>
+        <b-collapse :id="collapseId" class="mt-2" v-model="modalVisible">
+          <transition-group name="fade" tag="div">
+            <div v-for="comment in post.comments" :key="comment.id">
+              <post-comment-component
+                @on-deleted="onDeleted"
+                class="mb-3"
+                :comment="comment"
+                :ref="comment.id"
+              ></post-comment-component>
+            </div>
+          </transition-group>
         </b-collapse>
 
         <b-form @submit.prevent="onSubmit">
@@ -129,6 +165,7 @@ import postService from "../services/postService";
 import commentService from "../services/commentService";
 
 import Post from "../models/post";
+import PostRequest from "../models/requests/postRequest";
 import CommentRequest from "../models/requests/commentRequest";
 
 export default {
@@ -148,6 +185,8 @@ export default {
       isUserPost: false,
       collapseId: "collapse-" + this.post.id,
       redirectProfile: `/profile/${this.post.user.id}`,
+      toEdit: false,
+      modalVisible: false,
     };
   },
   methods: {
@@ -199,6 +238,8 @@ export default {
         if (res) {
           this.post.comments.push(res);
           this.comment = "";
+
+          this.modalVisible = true;
         }
       }
     },
@@ -208,6 +249,35 @@ export default {
         this.$emit("on-post-deleted", deleteOptions.id);
       } else if (deleteOptions.isComment) {
         this.$emit("on-comment-deleted", deleteOptions.id);
+      }
+    },
+
+    onEdit(toEdit) {
+      this.toEdit = toEdit;
+    },
+
+    async onEdited() {
+      let request = new PostRequest(
+        this.post.id,
+        this.post.title,
+        this.post.description,
+        this.post.suspended,
+        this.post.userId,
+        this.post.postTypeId
+      );
+
+      let res = await postService
+        .updatePost(request)
+        .catch((err) => console.log(err.response));
+
+      // TODO: response status should be 200, not 20
+
+      if (res.status === 201) {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Post editado com sucesso!",
+          variant: "success",
+        });
+        this.toEdit = false;
       }
     },
   },

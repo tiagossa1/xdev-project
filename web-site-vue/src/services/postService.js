@@ -47,15 +47,11 @@ export default new (class PostService {
     });
   }
 
+  async updatePost(post) {
+    return await axios.put(`${this.apiUrl}/api/posts/${post.id}`, post);
+  }
+
   async deletePost(postId) {
     return await axios.delete(`${this.apiUrl}/api/posts/${postId}`);
   }
-
-  // async getTotalPostsByUserId(userId) {
-  //   let res = await axios.post(`${this.apiUrl}/api/getTotalPostsByUserId`, {
-  //     user_id: userId,
-  //   });
-
-  //   return res.data.data;
-  // }
 })();
