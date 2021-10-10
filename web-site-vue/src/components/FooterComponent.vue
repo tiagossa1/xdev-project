@@ -1,9 +1,40 @@
 <template>
-  <footer class="navbar">
-    <div>
-      <h2 class="float-left font-weight-bold">ATEC</h2>
+  <footer class="position-absolute w-100 p-2 bg-primary">
+    <b-row class="text-center" align-v="center">
+      <b-col>
+        <h2 class="font-weight-bold">ATEC <span class="h6"> {{ new Date().getFullYear() }} </span> </h2>
+      </b-col>
+      <b-col>
+      </b-col>
+      <b-col>
+        <b-row align-v="center">
+          <b-col sm>
+            <a class="text-white" href="https://www.youtube.com/user/ATECAcademiaFormacao">
+              <b-icon-youtube></b-icon-youtube>
+            </a>
+          </b-col>
+          <b-col sm>
+            <a class="text-white" href="https://www.facebook.com/ATEC.AcademiadeFormacao">
+              <b-icon-facebook></b-icon-facebook>
+            </a>
+          </b-col>
+          <b-col sm>
+            <a class="text-white" href="https://www.linkedin.com/company/atec">
+              <b-icon-linkedin></b-icon-linkedin>
+            </a>
+          </b-col>
+          <b-col sm>
+            <a class="text-white" href="https://www.instagram.com/atec_academiadeformacao/?hl=pt">
+              <b-icon-instagram></b-icon-instagram>
+            </a>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
+    <!-- <div class="ml-4">
+      <h2 class="float-left m-0 font-weight-bold">ATEC</h2>
       <span class="ml-2 small">© {{ new Date().getFullYear() }}</span>
-    </div>
+    </div> -->
   </footer>
 </template>
 
@@ -18,8 +49,8 @@ export default {
 
 <style scoped>
 footer {
-    background-color: #32B9F9;
-  height: 60px; /* Height of the footer */
+  bottom: 0;
+  /* background-color: #32B9F9; */
+  /* height: 60px; */
 }
 </style>
-
