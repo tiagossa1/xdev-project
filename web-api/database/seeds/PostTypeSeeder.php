@@ -13,12 +13,12 @@ class PostTypeSeeder extends Seeder
     {
         App\PostType::create([
             'name' => 'Oferta de Emprego',
-            'iconName' => 'www.ofertadeemprego.org'
+            'iconName' => 'bag'
         ]);
 
         App\PostType::create([
             'name' => 'Post',
-            'iconName' => 'www.Post.org'
+            'iconName' => 'signpost'
         ]);
     }
 }
