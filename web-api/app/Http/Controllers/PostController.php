@@ -20,8 +20,8 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('user','tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved')->latest()->get(),
-                'message' => 'Success'
+                'data' => Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved')->latest()->get(),
+                'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -41,17 +41,17 @@ class PostController extends Controller
 
             $post->tags()->attach($request->input('tags'));
 
-            $users = User::where('id', '=' ,function ($query) use ($post) {
-                $query->select('user_id')->from('tag_user')->whereIn('tag_id',$post->tags()->get());
+            $users = User::where('id', '=', function ($query) use ($post) {
+                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->get());
             })->get();
 
-            if($users != Null) {
+            if (!is_null($users)) {
                 Notification::send($users, new NewPost($post));
             }
 
             return response()->json([
                 'data' => $post,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
 
         } catch (Exception $exception) {
@@ -69,8 +69,8 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved'),
-                'message' => 'Success'
+                'data' => $post->load('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved'),
+                'message' => 'Success',
             ], 200);
 
         } catch (Exception $exception) {
@@ -90,18 +90,21 @@ class PostController extends Controller
         try {
             $post->update($request->all());
 
-            if(!is_null($request->input('tags')))
+            if (!is_null($request->input('tags'))) {
                 $post->tags()->sync($request->input('tags'));
+            }
 
-            if(!is_null($request->input('likes')))
+            if (!is_null($request->input('likes'))) {
                 $post->likes()->sync($request->input('likes'));
+            }
 
-            if(!is_null($request->input('users_saved')))
+            if (!is_null($request->input('users_saved'))) {
                 $post->users_saved()->sync($request->input('users_saved'));
+            }
 
             return response()->json([
                 'data' => $post,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 200);
 
         } catch (Exception $exception) {
@@ -126,19 +129,6 @@ class PostController extends Controller
 
             return response()->json(['message' => 'Deleted'], 200);
 
-        } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
-        }
-    }
-
-    public function getTotalPostsByUserId(Request $request){
-        try {
-            $posts=Post::where('user_id', '=', $request["user_id"])->count();
-
-            return response()->json([
-                'data' => $posts,
-                'message' => 'Success'
-            ], 201);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }

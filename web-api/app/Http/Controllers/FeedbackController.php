@@ -17,8 +17,8 @@ class FeedbackController extends Controller
     {
         try {
             return response()->json([
-                'data' => Feedback::with('user','feedback_type')->get(),
-                'message' => 'Success'
+                'data' => Feedback::with('user', 'feedback_type')->get(),
+                'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -38,7 +38,7 @@ class FeedbackController extends Controller
 
             return response()->json([
                 'data' => $feedback,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
 
         } catch (Exception $exception) {
@@ -56,9 +56,9 @@ class FeedbackController extends Controller
     {
         try {
             return response()->json([
-                'data' => $feedback->load('user','feedback_type'),
-                'message' => 'Success'
-            ], 201);
+                'data' => $feedback->load('user', 'feedback_type'),
+                'message' => 'Success',
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -78,9 +78,9 @@ class FeedbackController extends Controller
             $feedback->update($request->all());
 
             return response()->json([
-                'data' => $feedback->load('user','feedback_type'),
-                'message' => 'Success'
-            ], 201);
+                'data' => $feedback->load('user', 'feedback_type'),
+                'message' => 'Success',
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

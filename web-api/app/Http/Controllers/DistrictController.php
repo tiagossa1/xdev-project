@@ -18,13 +18,12 @@ class DistrictController extends Controller
         try {
             return response()->json([
                 'data' => District::all(),
-                'message' => 'Success'
+                'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -40,7 +39,7 @@ class DistrictController extends Controller
 
             return response()->json([
                 'data' => $district,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
 
         } catch (Exception $exception) {
@@ -59,7 +58,6 @@ class DistrictController extends Controller
         try {
             return response()->json(['data' => $district,
                 'message' => 'Success'], 201);
-
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -80,7 +78,7 @@ class DistrictController extends Controller
 
             return response()->json([
                 'data' => $district,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
 
         } catch (Exception $exception) {
@@ -96,14 +94,13 @@ class DistrictController extends Controller
      */
     public function destroy(District $district)
     {
-        try{
+        try {
             $district->delete();
-            return response()->json(['message' => 'Deleted'],205);
+            return response()->json(['message' => 'Deleted'], 200);
 
-        }catch(Exception $exception){
+        } catch (Exception $exception) {
 
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }
-

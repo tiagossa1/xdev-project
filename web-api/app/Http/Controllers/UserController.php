@@ -23,35 +23,9 @@ class UserController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    /*    public function store(Request $request)
-        {
-            try {
-                $user = User::create($request->all());
-
-                $user->posts()->async($request->input('posts'));
-                $user->feedbacks()->async($request->input('feedbacks'));
-                $user->reports()->async($request->input('reports'));
-                $user->tags()->async($request->input('tags'));
-
-                return response()->json([
-                    'data' => $user,
-                    'message' => 'Success'
-                ], 201);
-
-            } catch (Exception $exception) {
-                return response()->json(['error' => $exception], 500);
-            }
-        }*/
 
     /**
      * Display the specified resource.
@@ -84,8 +58,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         try {
-            //$user->update($request->all());
-
             $user = User::find($user->id);
             $user->name = $request->name;
 
@@ -124,7 +96,6 @@ class UserController extends Controller
             return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
-
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }

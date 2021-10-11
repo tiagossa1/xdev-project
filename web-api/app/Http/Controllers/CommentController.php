@@ -17,7 +17,7 @@ class CommentController extends Controller
         try {
             return response()->json([
                 'data' => Comment::with('post', 'user')->get(),
-                'message' => 'Success'
+                'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -37,7 +37,7 @@ class CommentController extends Controller
 
             return response()->json([
                 'data' => $comment->load(['post', 'user', 'user.user_type']),
-                'message' => 'Success'
+                'message' => 'Success',
             ], 201);
 
         } catch (Exception $exception) {
@@ -56,7 +56,7 @@ class CommentController extends Controller
         try {
             return response()->json([
                 'data' => $comment->load('post', 'user'),
-                'message' => 'Success'
+                'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -77,7 +77,7 @@ class CommentController extends Controller
 
             return response()->json([
                 'data' => $comment,
-                'message' => 'Success'
+                'message' => 'Success',
             ], 200);
 
         } catch (Exception $exception) {
@@ -93,12 +93,10 @@ class CommentController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        try{
+        try {
             $comment->delete();
             return response()->json(['message' => 'Deleted'], 200);
-
-        }catch(Exception $exception){
-
+        } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }

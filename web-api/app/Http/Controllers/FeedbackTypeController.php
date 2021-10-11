@@ -58,7 +58,7 @@ class FeedbackTypeController extends Controller
             return response()->json([
                 'data' => $feedbackType,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -80,7 +80,7 @@ class FeedbackTypeController extends Controller
             return response()->json([
                 'data' => $feedbackType,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

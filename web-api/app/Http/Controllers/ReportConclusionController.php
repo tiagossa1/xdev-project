@@ -99,7 +99,7 @@ class ReportConclusionController extends Controller
             $reportConclusion->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception], 500);
+            return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 }

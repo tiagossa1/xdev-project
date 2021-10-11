@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ReportRequest;
 use App\Notifications\NewReport;
 use App\Report;
 use App\User;
@@ -34,7 +35,7 @@ class ReportController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(ReportRequest $request)
     {
         try {
             $report = Report::create($request->all());
@@ -48,11 +49,8 @@ class ReportController extends Controller
             if ($request->input('comment') != null)
                 $report->comments()->sync($request->input('comments'));
 
-            /*if ($request->input('reportConclusion') != null)
-                $report->reportConclusions()->sync($request->input('reportConclusion'));*/
-
             $mods = User::whereIn('user_type_id', [2,4])->get();
-            if($mods != Null)
+            if(!is_null($mods))
                 Notification::send($mods, new NewReport($report));
 
             return response()->json([
