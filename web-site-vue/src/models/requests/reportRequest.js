@@ -4,7 +4,7 @@ export default class ReportRequest {
     postId,
     moderatorId,
     reportConclusion,
-    postCommentId,
+    commentId,
     closed,
     reason,
     createdAt
@@ -13,7 +13,7 @@ export default class ReportRequest {
     this.post_id = postId;
     this.moderator_id = moderatorId;
     this.report_conclusion = reportConclusion;
-    this.post_comment_id = postCommentId;
+    this.comment_id = commentId;
     this.closed = closed;
     this.reason = reason;
     this.created_at = createdAt;
