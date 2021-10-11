@@ -58,7 +58,7 @@ class TagController extends Controller
             return response()->json([
                 'data' => $tag,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -79,7 +79,7 @@ class TagController extends Controller
             return response()->json([
                 'data' => $tag,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -95,7 +95,7 @@ class TagController extends Controller
     {
         try {
             $tag->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
