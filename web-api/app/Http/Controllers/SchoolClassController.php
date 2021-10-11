@@ -58,7 +58,7 @@ class SchoolClassController extends Controller
             return response()->json([
                 'data' => $schoolClass->load('school'),
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -80,7 +80,7 @@ class SchoolClassController extends Controller
             return response()->json([
                 'data' => $schoolClass,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -97,7 +97,7 @@ class SchoolClassController extends Controller
     {
         try {
             $schoolClass->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }

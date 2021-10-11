@@ -57,7 +57,7 @@ class PostPhotoController extends Controller
             return response()->json([
                 'data' => $postPhoto->load('post'),
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -79,7 +79,7 @@ class PostPhotoController extends Controller
             return response()->json([
                 'data' => $postPhoto,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -96,7 +96,7 @@ class PostPhotoController extends Controller
     {
         try {
             $postPhoto->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }

@@ -71,7 +71,7 @@ class PostController extends Controller
             return response()->json([
                 'data' => $post->load('user', 'tags' , 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved'),
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -102,7 +102,7 @@ class PostController extends Controller
             return response()->json([
                 'data' => $post,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

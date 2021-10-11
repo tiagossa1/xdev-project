@@ -57,7 +57,7 @@ class UserTypeController extends Controller
             return response()->json([
                 'data' => $userType,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
@@ -79,7 +79,7 @@ class UserTypeController extends Controller
             return response()->json([
                 'data' => $userType,
                 'message' => 'Success'
-            ], 201);
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -95,7 +95,7 @@ class UserTypeController extends Controller
     {
         try {
             $userType->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
