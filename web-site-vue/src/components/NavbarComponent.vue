@@ -64,9 +64,6 @@
           <b-tab title="Editar Password" active>
             <b-form @submit.prevent="updatePassword">
           <b-row>
-            <b-col sm="4">
-              <label for="input-password">Password atual</label>
-            </b-col>
             <b-col>
               <b-row>
                 <b-col sm="4">
@@ -100,18 +97,19 @@
                   </b-row>
                 </b-col>
               </b-row>
-
+            </b-col>
+            </b-row>
               <b-row class="mt-3">
                 <b-col sm="4">
                   <label for="input-newPassword">Nova password</label>
                 </b-col>
                 <b-col>
-                  <b-row>
+                  <b-row >
                     <b-col sm="10">
                       <b-form-input
                         id="input-newPassword"
                         :type="showNewPassword ? 'text' : 'password'"
-                        sm="2"
+                        
                       ></b-form-input>
                     </b-col>
                     <b-col @click="showNewPassword = !showNewPassword">
@@ -156,7 +154,7 @@
                 </b-col>
               </b-row>
 
-              </b-row>
+              
             </b-form>
           
           </b-tab>
@@ -164,9 +162,6 @@
         <b-tab title="Editar Redes Sociais">
            <b-form @submit.prevent="updateSocial">
           <b-row>
-          <b-col sm="3">
-            <label for="input-git">Github :</label>
-          </b-col>
           <b-col>
             <b-row>
               <b-col sm="3">
