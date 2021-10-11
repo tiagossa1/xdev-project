@@ -155,7 +155,10 @@
                   >
                 </b-col>
               </b-row>
+
+              </b-row>
             </b-form>
+          
           </b-tab>
 
         <b-tab title="Editar Redes Sociais">
