@@ -272,7 +272,7 @@ export default {
 
       // TODO: response status should be 200, not 20
 
-      if (res.status === 201) {
+      if (res.status === 200) {
         this.$root.$emit("show-alert", {
           alertMessage: "Post editado com sucesso!",
           variant: "success",
