@@ -33,4 +33,18 @@ export default new (class UserService {
       liked_posts: likedPosts,
     });
   }
+
+  async updateUserSocialMedia(userId, socialLink) {
+    return await axios.post(`${this.apiUrl}/api/user/${userId}`, {
+      github_url : socialLink.github_url,
+      facebook_url : socialLink.facebook_url,
+      instagram_url : socialLink.instagram_url,
+      linkedin_url : socialLink.linkedin_url,
+    });
+  }
+
+
+
+
+
 })();

@@ -40,9 +40,7 @@
               <b-avatar src="https://placekitten.com/300/300"></b-avatar>
             </template>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
-            <b-dropdown-item v-b-modal.settings-modal
-              >Configurações</b-dropdown-item
-            >
+            <b-dropdown-item v-b-modal.modal-2>Configurações</b-dropdown-item>
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
         </template>
@@ -59,15 +57,17 @@
         </template>
       </b-navbar-nav>
 
-      <b-modal
-        id="settings-modal"
-        ref="settings-modal"
-        hide-footer
-        title="Editar perfil"
-      >
+
+      <b-modal id="modal-2" ref="modal-2" hide-footer title="Editar perfil" @close="DetectCloseModal" @hide="DetectCloseModal">
+
         <b-tabs content-class="mt-3">
           <b-tab title="Editar Password" active>
-            <b-form @submit.prevent="onSubmit">
+            <b-form @submit.prevent="updatePassword">
+          <b-row>
+            <b-col sm="4">
+              <label for="input-password">Password atual</label>
+            </b-col>
+            <b-col>
               <b-row>
                 <b-col sm="4">
                   <label for="input-password">Password atual</label>
@@ -158,21 +158,20 @@
             </b-form>
           </b-tab>
 
-          <b-tab title="Editar Redes Sociais">
+        <b-tab title="Editar Redes Sociais">
+           <b-form @submit.prevent="updateSocial">
+          <b-row>
+          <b-col sm="3">
+            <label for="input-git">Github :</label>
+          </b-col>
+          <b-col>
             <b-row>
               <b-col sm="3">
                 <label for="input-git">Github :</label>
               </b-col>
               <b-col>
-                <b-row>
-                  <b-col>
-                    <b-form-input
-                      id="input-git"
-                      type="text"
-                      :value="userInfo.github_url"
-                    ></b-form-input>
-                  </b-col>
-                </b-row>
+                <!-- :value="userInfo.github_url" -->
+                <b-form-input id="input-git" type="text" v-model="socialLinks.github_url"></b-form-input>
               </b-col>
             </b-row>
 
@@ -181,15 +180,7 @@
                 <label for="input-linkedin">Linkedin :</label>
               </b-col>
               <b-col>
-                <b-row>
-                  <b-col>
-                    <b-form-input
-                      id="input-linkedin"
-                      type="text"
-                      :value="userInfo.linkedin_url"
-                    ></b-form-input>
-                  </b-col>
-                </b-row>
+                <b-form-input id="input-linkedin" type="text" v-model="socialLinks.linkedin_url"></b-form-input>
               </b-col>
             </b-row>
 
@@ -198,15 +189,7 @@
                 <label for="input-facebook">Facebook :</label>
               </b-col>
               <b-col>
-                <b-row>
-                  <b-col>
-                    <b-form-input
-                      id="input-facebook"
-                      type="text"
-                      :value="userInfo.facebook_url"
-                    ></b-form-input>
-                  </b-col>
-                </b-row>
+                <b-form-input id="input-facebook" type="text" v-model="socialLinks.facebook_url"></b-form-input>
               </b-col>
             </b-row>
 
@@ -215,24 +198,20 @@
                 <label for="input-instagram">Instagram :</label>
               </b-col>
               <b-col>
-                <b-row>
-                  <b-col>
-                    <b-form-input
-                      id="input-instagram"
-                      type="text"
-                      :value="userInfo.instagram_url"
-                    ></b-form-input>
-                  </b-col>
-                </b-row>
+                <b-form-input id="input-instagram" type="text" v-model="socialLinks.instagram_url"></b-form-input>
               </b-col>
             </b-row>
+          </b-col>
+        </b-row>
 
-            <b-row class="mt-3 text-center">
-              <b-col>
-                <b-button variant="success">Atualizar</b-button>
-              </b-col>
-            </b-row>
-          </b-tab>
+        <b-row class="mt-3 text-center">
+          <b-col>
+            <b-button type="submit" variant="success">Atualizar</b-button>
+          </b-col>
+        </b-row>
+
+        </b-form>
+        </b-tab>
         </b-tabs>
         <b-button
           class="mt-3"
@@ -257,10 +236,13 @@ export default {
   name: "navbar-component",
   async mounted() {
     console.log("Navbar component mounted.");
+    this.userInfo = await userService
+      .getUserById(this.$store.getters["auth/user"].id);
 
-    const userId = this.$store.getters["auth/user"]?.id;
-
-    if (userId) this.userInfo = await userService.getUserById(userId);
+    this.socialLinks.github_url = this.userInfo.github_url
+    this.socialLinks.facebook_url = this.userInfo.facebook_url
+    this.socialLinks.instagram_url = this.userInfo.instagram_url
+    this.socialLinks.linkedin_url = this.userInfo.linkedin_url
   },
   data() {
     return {
@@ -272,6 +254,13 @@ export default {
       actualPassword: "",
       confirmPassword: "",
       confirmNewPassword: "",
+
+      socialLinks: {
+        linkedin_url : "",
+        github_url : "",
+        facebook_url : "",
+        instagram_url : "",
+      }
     };
   },
 
@@ -303,16 +292,48 @@ export default {
       });
     },
 
-    closeModel() {
-      this.$refs["settings-modal"].hide();
+    closeModel(){
+      this.$refs['modal-2'].hide()
     },
 
-    async onSubmit() {
+    async updatePassword(){
       //let res = null ;
       if (!this.v$.$invalid) {
         console.log("d");
       }
     },
+    async updateSocial(){
+      //VERIFICAR SE TEM ALGUM LINK DIFERENTE DOS ATUAIS (TEM DE TER PELO MENOS 1 PARA PODER ATUALIZAR)
+      /*if(this.socialLinks.github_url === this.userInfo.github_url 
+      && this.socialLinks.facebook_url === this.userInfo.facebook_url
+      && this.socialLinks.instagram_url === this.userInfo.instagram_url
+      && this.socialLinks.linkedin_url === this.userInfo.linkedin_url){
+        console.log('todos iguais')
+      }
+      else{
+        //Verificar se o url está correto || acrescentar mais validações
+      if(this.socialLinks.facebook_url.indexOf('www.facebook.com/') !== -1 && 
+        this.socialLinks.github_url.indexOf('www.github.com/') !== -1 && 
+        this.socialLinks.instagram_url.indexOf('www.instagram.com/') !== -1 &&
+        this.socialLinks.linkedin_url.indexOf('www.linkedin.com/') !== -1
+      )
+      {
+       console.log('links "válidos" ')
+      }
+      else{
+        console.log('links inválidos')
+      }
+        console.log('dif')
+      }*/
+      let res = await userService.updateUserSocialMedia(this.userInfo.id,this.socialLinks)
+      console.log(res)
+    },
+    DetectCloseModal(){
+      this.socialLinks.github_url = this.userInfo.github_url
+      this.socialLinks.facebook_url = this.userInfo.facebook_url
+      this.socialLinks.instagram_url = this.userInfo.instagram_url
+      this.socialLinks.linkedin_url = this.userInfo.linkedin_url
+    }
   },
 };
 </script>
