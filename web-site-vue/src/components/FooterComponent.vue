@@ -1,5 +1,5 @@
 <template>
-  <footer class="position-absolute w-100 p-2 bg-primary">
+  <footer class="footer fixed-bottom w-100 p-2 bg-primary">
     <b-row class="text-center" align-v="center">
       <b-col>
         <h2 class="font-weight-bold">ATEC <span class="h6"> {{ new Date().getFullYear() }} </span> </h2>
@@ -50,7 +50,5 @@ export default {
 <style scoped>
 footer {
   bottom: 0;
-  /* background-color: #32B9F9; */
-  /* height: 60px; */
 }
 </style>
