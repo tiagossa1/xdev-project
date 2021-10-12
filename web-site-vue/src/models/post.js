@@ -15,16 +15,16 @@ export default class Post {
     this.postType = new PostType(post?.post_type);
     this.postPhotos = post?.post_photos.map((pp) => new PostPhoto(pp));
 
-    if (post?.userLikes?.length > 0) {
-      this.userLikes = post?.userLikes.map((ul) => ul);
+    if (post?.likes?.length > 0) {
+      this.userLikes = post?.likes.map((ul) => ul.id);
     } else {
       this.userLikes = [];
     }
 
     this.tags = post?.tags.map((t) => new Tag(t));
 
-    if (post?.usersSaved?.length > 0) {
-      this.usersSaved = post?.usersSaved.map((x) => x);
+    if (post?.users_saved?.length > 0) {
+      this.usersSaved = post?.users_saved.map((x) => x.id);
     } else {
       this.usersSaved = [];
     }

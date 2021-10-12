@@ -203,7 +203,7 @@ export default {
         this.post.userLikes.push(this.$store.getters["auth/user"].id);
       }
 
-      await postService.changeLikePost(this.post.id, this.post.userLikes);
+      await postService.changeLikePost(this.post.id, this.post.userLikes).catch(err => console.log(err.response));
 
       this.liked = !this.liked;
     },
