@@ -40,6 +40,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('image-upload', 'ImageUploadController@store');
     Route::post('get-profile-picture', 'ImageUploadController@getProfilePicture');
     // Route::apiResource('image-upload', 'ImageUploadController');
+
+    Route::get('notifications', 'NotificationController@index');
 });
 
 // Users
