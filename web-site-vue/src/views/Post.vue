@@ -69,7 +69,7 @@
       </b-dropdown>
 
       <b-button
-        v-if="originalPosts && originalPosts.length > 0"
+        v-if="filterMode"
         class="ml-2"
         variant="success"
         @click="onClearFilter"
@@ -99,6 +99,8 @@ export default {
   components: { PostComponent },
   async created() {
     this.posts = await postService.getPosts();
+    this.originalPosts = this.posts;
+
     let postTypes = await postService.getPostTypes();
 
     this.postTypes = postTypes;
@@ -126,6 +128,7 @@ export default {
         user_id: this.$store.getters["auth/user"].id,
         suspended: 0,
       },
+      filterMode: false,
       postTags: [
         {
           tag_id: "",
@@ -149,12 +152,14 @@ export default {
       }
     },
     onFilterClick(postTypeId) {
-      this.originalPosts = this.posts;
-      this.posts = this.posts.filter((p) => p.postType.id === postTypeId);
+      this.filterMode = true;
+      this.posts = this.originalPosts.filter(
+        (p) => p.postType.id === postTypeId
+      );
     },
     onClearFilter() {
       this.posts = this.originalPosts;
-      this.originalPosts = [];
+      this.filterMode = false;
     },
   },
 };
