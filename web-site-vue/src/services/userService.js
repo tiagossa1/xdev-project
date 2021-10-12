@@ -21,8 +21,8 @@ export default new (class UserService {
   async getUserById(id) {
     let response = await axios.get(`${this.apiUrl}/api/users/${id}`);
 
-    if (response.data) {
-      return new User(response.data);
+    if (response.data.data) {
+      return new User(response.data.data);
     }
 
     return new User(null);
@@ -34,17 +34,7 @@ export default new (class UserService {
     });
   }
 
-  async updateUserSocialMedia(userId, socialLink) {
-    return await axios.post(`${this.apiUrl}/api/user/${userId}`, {
-      github_url : socialLink.github_url,
-      facebook_url : socialLink.facebook_url,
-      instagram_url : socialLink.instagram_url,
-      linkedin_url : socialLink.linkedin_url,
-    });
+  async update(user) {
+    return await axios.put(`${this.apiUrl}/api/users/${user.id}`, user);
   }
-
-
-
-
-
 })();

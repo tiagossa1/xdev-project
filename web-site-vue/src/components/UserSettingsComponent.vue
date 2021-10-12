@@ -1,12 +1,5 @@
 <template>
-  <b-modal
-    id="modal2"
-    ref="modal2"
-    hide-footer
-    title="Editar perfil"
-    @close="DetectCloseModal"
-    @hide="DetectCloseModal"
-  >
+  <b-modal id="modal2" ref="modal2" hide-footer title="Editar perfil">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar Password" active>
         <b-form @submit.prevent="updatePassword">
@@ -112,52 +105,52 @@
             <b-col>
               <b-row>
                 <b-col sm="3">
-                  <label for="input-git">Github :</label>
+                  <label for="input-git">Github:</label>
                 </b-col>
                 <b-col>
                   <b-form-input
                     id="input-git"
                     type="text"
-                    v-model="socialLinks.github_url"
+                    v-model="userInfo.github_url"
                   ></b-form-input>
                 </b-col>
               </b-row>
 
               <b-row class="mt-3">
                 <b-col sm="3">
-                  <label for="input-linkedin">Linkedin :</label>
+                  <label for="input-linkedin">Linkedin:</label>
                 </b-col>
                 <b-col>
                   <b-form-input
                     id="input-linkedin"
                     type="text"
-                    v-model="socialLinks.linkedin_url"
+                    v-model="userInfo.linkedin_url"
                   ></b-form-input>
                 </b-col>
               </b-row>
 
               <b-row class="mt-3">
                 <b-col sm="3">
-                  <label for="input-facebook">Facebook :</label>
+                  <label for="input-facebook">Facebook:</label>
                 </b-col>
                 <b-col>
                   <b-form-input
                     id="input-facebook"
                     type="text"
-                    v-model="socialLinks.facebook_url"
+                    v-model="userInfo.facebook_url"
                   ></b-form-input>
                 </b-col>
               </b-row>
 
               <b-row class="mt-3">
                 <b-col sm="3">
-                  <label for="input-instagram">Instagram :</label>
+                  <label for="input-instagram">Instagram:</label>
                 </b-col>
                 <b-col>
                   <b-form-input
                     id="input-instagram"
                     type="text"
-                    v-model="socialLinks.instagram_url"
+                    v-model="userInfo.instagram_url"
                   ></b-form-input>
                 </b-col>
               </b-row>
@@ -166,7 +159,9 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button type="submit" variant="success">Atualizar</b-button>
+              <b-button type="submit" block variant="success"
+                >Atualizar</b-button
+              >
             </b-col>
           </b-row>
         </b-form>
@@ -179,10 +174,14 @@
 </template>
 
 <script>
+// import User from "../models/user.js";
+import UserRequest from "../models/requests/userRequest";
+
+import userService from "../services/userService";
+
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
-//import user from '../models/user.js'
-import userService from "../services/userService";
+
 export default {
   name: "user-settings",
   data() {
@@ -193,13 +192,6 @@ export default {
       actualPassword: "",
       confirmPassword: "",
       confirmNewPassword: "",
-
-      socialLinks: {
-        linkedin_url: "",
-        github_url: "",
-        facebook_url: "",
-        instagram_url: "",
-      },
     };
   },
   async mounted() {
@@ -207,11 +199,6 @@ export default {
 
     if (userId) {
       this.userInfo = await userService.getUserById(userId);
-      
-      this.socialLinks.github_url = this.userInfo.github_url;
-      this.socialLinks.facebook_url = this.userInfo.facebook_url;
-      this.socialLinks.instagram_url = this.userInfo.instagram_url;
-      this.socialLinks.linkedin_url = this.userInfo.linkedin_url;
     }
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -240,43 +227,34 @@ export default {
       }
     },
     async updateSocial() {
-      //VERIFICAR SE TEM ALGUM LINK DIFERENTE DOS ATUAIS (TEM DE TER PELO MENOS 1 PARA PODER ATUALIZAR)
-      /*if(this.socialLinks.github_url === this.userInfo.github_url 
-      && this.socialLinks.facebook_url === this.userInfo.facebook_url
-      && this.socialLinks.instagram_url === this.userInfo.instagram_url
-      && this.socialLinks.linkedin_url === this.userInfo.linkedin_url){
-        console.log('todos iguais')
-      }
-      else{
-        //Verificar se o url está correto || acrescentar mais validações
-      if(this.socialLinks.facebook_url.indexOf('www.facebook.com/') !== -1 && 
-        this.socialLinks.github_url.indexOf('www.github.com/') !== -1 && 
-        this.socialLinks.instagram_url.indexOf('www.instagram.com/') !== -1 &&
-        this.socialLinks.linkedin_url.indexOf('www.linkedin.com/') !== -1
-      )
-      {
-       console.log('links "válidos" ')
-      }
-      else{
-        console.log('links inválidos')
-      }
-        console.log('dif')
-      }*/
-      let res = await userService.updateUserSocialMedia(
+      let request = new UserRequest(
         this.userInfo.id,
-        this.socialLinks
+        this.userInfo.email,
+        this.userInfo.name,
+        this.userInfo.birth_date,
+        null,
+        this.userInfo.github_url,
+        this.userInfo.linkedin_url,
+        this.userInfo.facebook_url,
+        this.userInfo.instagram_url,
+        this.userInfo.createdAt,
+        this.userInfo.district.id,
+        this.userInfo.schoolClass.id,
+        this.userInfo.userType.id,
+        null,
+        null,
+        null,
+        null
       );
+
+      let res = await userService
+        .update(request)
+        .catch((err) => console.log(err.response));
+
       console.log(res);
-    },
-    DetectCloseModal() {
-      this.socialLinks.github_url = this.userInfo.github_url;
-      this.socialLinks.facebook_url = this.userInfo.facebook_url;
-      this.socialLinks.instagram_url = this.userInfo.instagram_url;
-      this.socialLinks.linkedin_url = this.userInfo.linkedin_url;
     },
   },
 };
 </script>
 
-<style>
-</style>
+<style></style>

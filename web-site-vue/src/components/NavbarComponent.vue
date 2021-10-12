@@ -77,7 +77,6 @@ export default {
     };
   },
 
-  
   computed: {
     ...mapGetters({
       authenticated: "auth/authenticated",
@@ -98,7 +97,6 @@ export default {
     showModal() {
       this.$refs.modalComponent.show();
     }
-    
   },
 };
 </script>

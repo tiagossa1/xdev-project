@@ -42,7 +42,10 @@ class UserController extends Controller
                 $user->setProfilePicture($user->profile_picture);
             }
 
-            return response()->json($user, 200);
+            return response()->json([
+                'data' => $user,
+                'message' => 'Success'
+            ], 200);
         } catch (Exception $exception) {
             return  response()->json(['error' => $exception->getMessage()], 500);
         }
