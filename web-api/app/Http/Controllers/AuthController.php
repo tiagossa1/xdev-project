@@ -9,6 +9,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use \Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -83,5 +84,42 @@ class AuthController extends Controller
         ];
 
         return response($response, 201);
+    }
+
+    public function changePassword(Request $request) {
+        $input = $request->all();
+        $userId = Auth::user()->id;
+        $rules = array(
+            'old_password' => 'required',
+            'new_password' => 'required|min:6',
+            'confirm_password' => 'required|same:new_password',
+        );
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            return response([
+                'message' => $validator->errors(),
+            ], 400);
+        } else {
+            try {
+                if (!Hash::check(request('old_password'), Auth::user()->password)) {
+                    return response([
+                        'message' => "Old password is wrong.",
+                    ], 400); 
+                } else if ((Hash::check($request['new_password'], Auth::user()->password)) == true) {
+                    return response([
+                        'message' => "Please enter a password which is not similar then current password.",
+                    ], 400);
+                } else {
+                    User::where('id', $userId)->update(['password' => Hash::make($input['new_password'])]);
+                    return response([
+                        'message' => "Password updated successfully.",
+                    ], 200);
+                }
+            } catch (Exception $ex) {
+                return response([
+                    'message' => $ex->getMessage(),
+                ], 500);
+            }
+        }
     }
 }

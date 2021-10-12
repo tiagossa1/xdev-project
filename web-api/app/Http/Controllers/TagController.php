@@ -17,7 +17,7 @@ class TagController extends Controller
     {
         try {
             return response()->json([
-                'data' => Tag::all(),
+                'data' => Tag::with('posts')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

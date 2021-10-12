@@ -14,9 +14,9 @@
                     <b-col sm="10">
                       <b-form-input
                         id="input-password"
-                        v-model="actualPassword"
-                        :state="!v$.actualPassword.$invalid"
-                        @blur="v$.actualPassword.$touch"
+                        v-model="old_password"
+                        :state="!v$.old_password.$invalid"
+                        @blur="v$.old_password.$touch"
                         :type="showPassword ? 'text' : 'password'"
                         sm="2"
                       ></b-form-input>
@@ -29,7 +29,7 @@
                           small
                           mt-1
                         "
-                        v-if="v$.actualPassword.required.$invalid"
+                        v-if="v$.old_password.required.$invalid"
                       >
                         Introduza a password.
                       </div>
@@ -54,6 +54,7 @@
                 <b-col sm="10">
                   <b-form-input
                     id="input-newPassword"
+                    v-model="confirm_password"
                     :type="showNewPassword ? 'text' : 'password'"
                   ></b-form-input>
                 </b-col>
@@ -76,7 +77,7 @@
                 <b-col sm="10">
                   <b-form-input
                     id="input-confirmNewPassword"
-                    v-model="confirmNewPassword"
+                    v-model="confirm_new_password"
                     :type="showNewPassword ? 'text' : 'password'"
                     sm="2"
                   ></b-form-input>
@@ -87,11 +88,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button
-                class="text-white"
-                type="submit"
-                variant="primary"
-                :disabled="this.v$.$invalid"
+              <b-button class="text-white" type="submit" variant="primary"
                 >Atualizar</b-button
               >
             </b-col>
@@ -174,11 +171,12 @@
 </template>
 
 <script>
-// import User from "../models/user.js";
 import UserRequest from "../models/requests/userRequest";
+import ChangePasswordRequest from "../models/requests/changePasswordRequest";
 
 import userService from "../services/userService";
 
+import { mapActions } from "vuex";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
 
@@ -189,9 +187,9 @@ export default {
       userInfo: {},
       showPassword: false,
       showNewPassword: false,
-      actualPassword: "",
-      confirmPassword: "",
-      confirmNewPassword: "",
+      old_password: "",
+      confirm_password: "",
+      confirm_new_password: "",
     };
   },
   async mounted() {
@@ -204,26 +202,54 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
-      actualPassword: { required, minLength: minLength(6) },
-      confirmPassword: { required, minLength: minLength(6) },
-      confirmNewPassword: { required, sameAs: sameAs(this.confirmPassword) },
+      old_password: { required, minLength: minLength(6) },
+      confirm_password: { required, minLength: minLength(6) },
+      confirm_new_password: { required, sameAs: sameAs(this.confirm_password) },
     };
   },
   inputState(input) {
     return !!input;
   },
   methods: {
+    ...mapActions({
+      signOutAction: "auth/signOut",
+    }),
+
+    signOut() {
+      this.signOutAction().then(() => {
+        this.$router.push("Login").catch(() => {});
+      });
+    },
     show() {
       this.$refs.modal2.show();
     },
     closeModel() {
+      this.clearPasswordChangeForm();
       this.$refs.modal2.hide();
     },
-
+    clearPasswordChangeForm() {
+      this.old_password = "";
+      this.confirm_password = "";
+      this.confirm_new_password = "";
+    },
     async updatePassword() {
-      //let res = null ;
-      if (!this.v$.$invalid) {
-        console.log("d");
+      // if (!this.v$.$invalid) {
+      let request = new ChangePasswordRequest(
+        this.old_password,
+        this.confirm_password,
+        this.confirm_new_password
+      );
+      let res = await userService
+        .changePassword(request)
+        .catch((err) => console.log(err.response));
+
+      if (res.status === 200) {
+        this.closeModel();
+        this.signOut();
+        // this.$root.$emit("show-alert", {
+        //   alertMessage: "Password alterada com sucesso!",
+        //   variant: "success",
+        // });
       }
     },
     async updateSocial() {

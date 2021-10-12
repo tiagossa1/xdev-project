@@ -18,6 +18,10 @@ export default new (class UserService {
     return await axios.post(`${this.apiUrl}/api/logout`);
   }
 
+  async changePassword(changePasswordRequest) {
+    return await axios.post(`${this.apiUrl}/api/change-password`, changePasswordRequest);
+  }
+
   async getUserById(id) {
     let response = await axios.get(`${this.apiUrl}/api/users/${id}`);
 

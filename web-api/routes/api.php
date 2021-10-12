@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 // Protected Routes:
 Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', 'AuthController@logout');
+    Route::post('change-password', 'AuthController@changePassword');
 
     Route::apiResource('feedbacks', 'FeedbackController');
 
