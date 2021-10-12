@@ -58,13 +58,14 @@
         </b-form>
       </b-modal>
 
-      <b-dropdown class="ml-2" id="dropdown-1" text="Filtro">
+      <b-dropdown class="ml-2" id="dropdown-1" :text="filterSelected">
+        <b-dropdown-item disabled value="0">Escolha o tipo de post</b-dropdown-item>
         <b-dropdown-item
-          @click="onFilterClick(postType.id)"
+          @click="onFilterClick(postType)"
           v-for="postType in postTypes"
           :key="postType.id"
         >
-          {{ postType.name }}
+          {{  postType.name }}
         </b-dropdown-item>
       </b-dropdown>
 
@@ -73,8 +74,8 @@
         class="ml-2"
         variant="success"
         @click="onClearFilter"
-        >Limpar filtro</b-button
-      >
+        >Limpar filtro
+      </b-button>
     </div>
 
     <transition-group name="fade" tag="div">
@@ -115,6 +116,8 @@ export default {
   },
   data() {
     return {
+      filterSelected: 'Filtro',
+
       originalPosts: [],
       posts: [],
       dismissSecs: 5,
@@ -151,14 +154,16 @@ export default {
         this.posts.find((x) => x.id === post.id).comments = post.comments;
       }
     },
-    onFilterClick(postTypeId) {
+    onFilterClick(postType) {
       this.filterMode = true;
       this.posts = this.originalPosts.filter(
-        (p) => p.postType.id === postTypeId
+        (p) => p.postType.id === postType.id
       );
+      this.filterSelected = postType.name
     },
     onClearFilter() {
       this.posts = this.originalPosts;
+      this.filterSelected = 'Filtro'
       this.filterMode = false;
     },
   },
