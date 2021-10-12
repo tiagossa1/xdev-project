@@ -22,15 +22,12 @@ class ImageUploadController extends Controller
             $user = User::find($request->user_id);
 
             if (!is_null($user)) {
-                // $file_name = time() . '.' . $request->file('profile_picture')->getClientOriginalExtension();
-                // $file_name = time() . '.' . $request->profile_picture->getClientOriginalExtension();
-                // $request->profile_picture->move(public_path('images'), $file_name);
-                // $path = "public/images/" . $file_name;
+                $file_name = time() . '.' . $request->file('profile_picture')->getClientOriginalExtension();
+                $file_name = time() . '.' . $request->profile_picture->getClientOriginalExtension();
+                $request->profile_picture->move(public_path('images'), $file_name);
+                $path = "public/images/" . $file_name;
 
-                $result = $request->file('profile_picture')->store('images');
-                $base64 = base64_encode($result);
-
-                $user->profile_picture = $base64;
+                $user->profile_picture = $path;
                 $user->update();
 
                 return response()->json([

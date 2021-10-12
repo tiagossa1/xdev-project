@@ -78,6 +78,9 @@ class AuthController extends Controller
 
         $token = $user->createToken('xdevToken')->plainTextToken;
 
+        // if(!is_null($user->profile_picture)) {
+        //     $user->setProfilePicture($user->profile_picture);
+        // }
         $response = [
             'user' => $user,
             'token' => $token,

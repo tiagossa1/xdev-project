@@ -98,7 +98,7 @@ export default {
   name: "Post",
   components: { PostComponent },
   async created() {
-    this.posts = await postService.getPosts();
+    this.posts = await postService.getPosts().catch(err => console.log(err.response));
     this.originalPosts = this.posts;
 
     let postTypes = await postService.getPostTypes();

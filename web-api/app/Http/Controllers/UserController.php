@@ -38,9 +38,9 @@ class UserController extends Controller
         try {
             $user = $user->load('district', 'school_class','school_class.school', 'user_type','posts', 'posts.post_type', 'posts.tags', 'posts.users_saved', 'posts.post_photos', 'feedbacks', 'reports', 'tags', 'favorite_posts', 'liked_posts', 'comments');
 
-            if(!is_null($user) && !is_null($user->profile_picture)) {
-                $user->setProfilePicture($user->profile_picture);
-            }
+            // if(!is_null($user) && !is_null($user->profile_picture)) {
+            //     $user->setProfilePicture($user->profile_picture);
+            // }
 
             return response()->json([
                 'data' => $user,

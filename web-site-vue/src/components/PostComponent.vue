@@ -29,7 +29,7 @@
         <b-container>
           <b-row class="justify-content-center">
             <b-avatar
-              :src="post.user.profile_picture"
+              :src="'data:image/jpeg;base64,' + post.user.profile_picture"
               size="5rem"
               :style="{
                 border: '3px solid ' + post.user.userType.hexColorCode,
@@ -82,7 +82,7 @@
           </quill-editor>
         </template>
         <template v-else>
-          <span class="h5" v-html="post.description"></span>
+          <span class="h6 w-25 h-25" v-html="post.description"></span>
         </template>
       </b-col>
     </b-row>
@@ -203,7 +203,9 @@ export default {
         this.post.userLikes.push(this.$store.getters["auth/user"].id);
       }
 
-      await postService.changeLikePost(this.post.id, this.post.userLikes).catch(err => console.log(err.response));
+      await postService
+        .changeLikePost(this.post.id, this.post.userLikes)
+        .catch((err) => console.log(err.response));
 
       this.liked = !this.liked;
     },
@@ -270,8 +272,6 @@ export default {
         .updatePost(request)
         .catch((err) => console.log(err.response));
 
-      // TODO: response status should be 200, not 20
-
       if (res.status === 200) {
         this.$root.$emit("show-alert", {
           alertMessage: "Post editado com sucesso!",
@@ -283,3 +283,10 @@ export default {
   },
 };
 </script>
+
+<style>
+img {
+  width: 100%;
+  height: 100%;
+}
+</style>

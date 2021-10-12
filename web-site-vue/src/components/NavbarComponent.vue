@@ -37,10 +37,14 @@
           <b-nav-item-dropdown right>
             <template #button-content>
               <span class="mr-2"> {{ user.name }} </span>
-              <b-avatar src="https://placekitten.com/300/300"></b-avatar>
+              <b-avatar
+                :src="'data:image/jpeg;base64,' + user.profile_picture"
+              ></b-avatar>
             </template>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
-            <b-dropdown-item @click="showModal()">Configurações</b-dropdown-item>
+            <b-dropdown-item @click="showModal()"
+              >Configurações</b-dropdown-item
+            >
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
         </template>
@@ -57,19 +61,18 @@
         </template>
       </b-navbar-nav>
 
-    <user-settings ref="modalComponent"/>
-      
+      <user-settings ref="modalComponent" />
     </b-collapse>
   </b-navbar>
 </template>
 
 <script>
 import { mapGetters, mapActions } from "vuex";
-import UserSettings from "./UserSettingsComponent.vue"
+import UserSettings from "./UserSettingsComponent.vue";
 export default {
   name: "navbar-component",
   components: {
-    UserSettings
+    UserSettings,
   },
   data() {
     return {
@@ -96,7 +99,7 @@ export default {
 
     showModal() {
       this.$refs.modalComponent.show();
-    }
+    },
   },
 };
 </script>
