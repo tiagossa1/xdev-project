@@ -16,8 +16,10 @@ class TagController extends Controller
     public function index()
     {
         try {
+            $tags = Tag::with('posts')->withCount('posts')->orderBy('posts_count', 'desc')->get();
+
             return response()->json([
-                'data' => Tag::with('posts')->get(),
+                'data' => $tags,
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

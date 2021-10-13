@@ -11,7 +11,7 @@ class Tag extends Model
     ];
 
     protected $hidden = [
-        'pivot',
+        'pivot', 'posts_count'
     ];
 
     public $timestamps = false;
@@ -23,6 +23,6 @@ class Tag extends Model
 
     public function posts()
     {
-        return $this->belongsToMany(Post::class)->orderBy('id');
+        return $this->belongsToMany(Post::class);
     }
 }

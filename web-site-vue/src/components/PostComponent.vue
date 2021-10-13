@@ -8,10 +8,8 @@
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
           <b-badge
             class="p-2"
-            :style="{
-              backgroundColor: post.user.userType.hexColorCode,
-            }"
             pill
+            variant="secondary"
             >{{ tag.name }}</b-badge
           >
         </span>
