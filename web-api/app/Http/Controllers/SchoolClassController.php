@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateSchoolClassRequest;
 use App\School;
 use App\SchoolClass;
 use Exception;
@@ -32,7 +33,7 @@ class SchoolClassController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateSchoolClassRequest $request)
     {
         try {
             $schoolClass = SchoolClass::create($request->all());

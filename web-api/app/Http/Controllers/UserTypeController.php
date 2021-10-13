@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateUserTypeRequest;
 use App\UserType;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class UserTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateUserTypeRequest $request)
     {
         try {
             $userType = UserType::create($request->all());

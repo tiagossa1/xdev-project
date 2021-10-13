@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateSchoolRequest;
 use App\School;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,16 +32,14 @@ class SchoolController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateSchoolRequest $request)
     {
         try {
-            $school = new School();
-            $school->name = $request->name;
-            $school->save();
+            $school = School::create($request->all());
 
             return response()->json([
                 'data' => $school,
-                'message' => 'Success'
+                'message' => 'School created with success'
             ], 201);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

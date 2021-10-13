@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\District;
+use App\Http\Requests\CreateDistrictRequest;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -31,15 +32,14 @@ class DistrictController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateDistrictRequest $request)
     {
-        //
         try {
             $district = District::create($request->all());
 
             return response()->json([
                 'data' => $district,
-                'message' => 'Success',
+                'message' => 'District created with success',
             ], 201);
 
         } catch (Exception $exception) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Feedback;
+use App\Http\Requests\CreateFeedBackRequest;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -31,7 +32,7 @@ class FeedbackController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateFeedBackRequest $request)
     {
         try {
             $feedback = Feedback::create($request->all());
