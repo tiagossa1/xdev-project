@@ -28,6 +28,25 @@ class PostController extends Controller
         }
     }
 
+    public function filter(Request $request) {
+        try {
+            $query = Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved');
+
+            if($request->user_id) {
+                $query->where('user_id', $request->user_id);
+            }
+    
+            $posts = $query->get();
+    
+            return response()->json([
+                'message' => 'Success',
+                'data' => $posts
+            ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
