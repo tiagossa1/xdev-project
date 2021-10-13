@@ -3,6 +3,20 @@
     :style="{ border: '2px solid gray', 'border-radius': '25px' }"
     class="bv-example-row p-4 ml-4 mb-4"
   >
+    <b-row class="ml-2 mb-4">
+      <b-col>
+        <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
+          <b-badge
+            class="p-2"
+            :style="{
+              backgroundColor: post.user.userType.hexColorCode,
+            }"
+            pill
+            >{{ tag.name }}</b-badge
+          >
+        </span>
+      </b-col>
+    </b-row>
     <b-badge
       class="mb-4 ml-4 p-2 no-select"
       :style="{
@@ -16,13 +30,6 @@
       @on-edit="onEdit"
       :post="post"
     ></post-options-component>
-    <b-row>
-      <b-col>
-        <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
-          <b-badge pill variant="info">{{ tag.name }}</b-badge>
-        </span>
-      </b-col>
-    </b-row>
 
     <b-row>
       <b-col>

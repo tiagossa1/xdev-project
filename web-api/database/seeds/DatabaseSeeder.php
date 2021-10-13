@@ -19,10 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(UserSeeder::class);
         $this->call(PostTypeSeeder::class);
         $this->call(FeedbackSeeder::class);
+        $this->call(TagSeeder::class);
         $this->call(PostSeeder::class);
         $this->call(ReportConclusionSeeder::class);
         $this->call(ReportSeeder::class);
-        $this->call(TagSeeder::class);
         $this->call(PostPhotoSeeder::class);
         $this->call(CommentSeeder::class);
     }

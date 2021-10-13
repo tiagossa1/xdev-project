@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer fixed-bottom w-100 p-2 bg-primary">
+  <footer class="footer fixed-bottom w-100 p-1 bg-primary">
     <b-row class="text-center" align-v="center">
       <b-col>
         <h2 class="font-weight-bold">ATEC <span class="h6"> {{ new Date().getFullYear() }} </span> </h2>
