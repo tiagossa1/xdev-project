@@ -7,7 +7,7 @@
 
 <script>
 export default {
-    name: 'top-posts'
+    name: 'topPosts-component'
 }
 </script>
 
