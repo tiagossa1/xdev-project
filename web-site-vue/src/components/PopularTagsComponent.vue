@@ -1,5 +1,5 @@
 <template>
-    <div>
+  <div>
     <b-card-group deck class="mb-3 text-center">
         <b-card border-variant="light">
             <template #header>
@@ -17,7 +17,7 @@
 
 <script>
 export default {
-    name: 'recent-feed',
+    name: 'popular-tags'
 }
 </script>
 
