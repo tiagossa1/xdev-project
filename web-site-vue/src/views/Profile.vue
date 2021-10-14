@@ -1,17 +1,19 @@
 <template>
   <b-container fluid>
     <b-row>
-      <b-col class="p-5">
+      <b-col class="p-5" sm="3">
         <user-card-component :userInfo="userInfo"></user-card-component>
       </b-col>
 
-      <b-col class="p-5">
+      <b-col class="p-5" sm="6">
         <div v-for="post in posts" :key="post.id">
           <post-component :post="post"></post-component>
         </div>
       </b-col>
 
-      <b-col> </b-col>
+      <b-col class="p-5" sm="3">
+        <recent-feed></recent-feed>
+      </b-col>
     </b-row>
   </b-container>
 </template>
@@ -22,12 +24,13 @@ import postService from "../services/postService";
 
 import UserCardComponent from "../components/UserCardComponent.vue";
 import PostComponent from "../components/PostComponent.vue";
+import RecentFeed from "../components/RecentFeedComponent.vue"
 
 import User from "../models/user";
 import Post from "../models/post";
 export default {
   name: "Profile",
-  components: { UserCardComponent, PostComponent },
+  components: { UserCardComponent, PostComponent, RecentFeed },
   data() {
     return {
       userInfo: User,
