@@ -52,7 +52,7 @@ class ReportController extends Controller
             $mods = User::whereIn('user_type_id', [2,4])->get();
             
             if(!is_null($mods))
-                Notification::send($mods, new NewReport(Report::with('user', 'user.user_type', 'user.district', 'user.school_class', 'user.school_class.school', 'post', 'post.user', 'post.post_type', 'post.tags', 'post.comments', 'post.post_photos', 'post.likes', 'post.users_saved', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+                Notification::send($mods, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
 
             return response()->json([
                 'data' => $report,

@@ -6,12 +6,7 @@
     <b-row class="ml-2 mb-3">
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
-          <b-badge
-            class="p-2"
-            pill
-            variant="secondary"
-            >{{ tag.name }}</b-badge
-          >
+          <b-badge class="p-2" pill variant="secondary">{{ tag.name }}</b-badge>
         </span>
       </b-col>
     </b-row>
@@ -23,7 +18,7 @@
     >
       <b-icon :icon="post.postType.iconName"></b-icon> {{ post.postType.name }}
     </b-badge>
-    <post-options-component
+    <post-options-component v-if="!viewOnly"
       @on-deleted="onDeleted"
       @on-edit="onEdit"
       :post="post"
@@ -80,7 +75,7 @@
       </b-col>
     </b-row>
 
-    <b-row class="ml-2 mb-4">
+    <b-row class="ml-2 mb-2">
       <b-col>
         <template v-if="toEdit">
           <quill-editor ref="myQuillEditor" v-model="post.description">
@@ -92,7 +87,7 @@
       </b-col>
     </b-row>
 
-    <b-row class="ml-2">
+    <b-row v-if="!viewOnly" class="ml-2">
       <b-col cols="2" style="cursor: pointer" @click="onLike">
         <p class="h5">
           <b-icon
@@ -144,6 +139,7 @@
               <post-comment-component
                 @on-deleted="onDeleted"
                 class="mb-3"
+                :viewOnly="viewOnly"
                 :comment="comment"
                 :ref="comment.id"
               ></post-comment-component>
@@ -151,7 +147,7 @@
           </transition-group>
         </b-collapse>
 
-        <b-form @submit.prevent="onSubmit">
+        <b-form v-if="!viewOnly" @submit.prevent="onSubmit">
           <b-form-input
             v-model="comment"
             placeholder="Escreva o seu comentário aqui..."
@@ -178,6 +174,10 @@ export default {
   components: { PostCommentComponent, PostOptionsComponent },
   props: {
     post: Post,
+    viewOnly: {
+      default: false,
+      type: Boolean
+    }
   },
   mounted() {
     this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;

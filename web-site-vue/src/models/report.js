@@ -6,12 +6,12 @@ import Comment from "./comment";
 export default class Report {
   constructor(report) {
     this.id = report?.id;
-    this.user = new User(report?.user);
-    this.post = new Post(report?.post);
-    this.moderator = new User(report?.moderator);
-    this.reportConclusion = new ReportConclusion(report?.reportConclusion);
-    this.postComment = new Comment(report?.postComment);
-    this.closed = report?.closed;
+    this.user = report?.user ? new User(report?.user) : null;
+    this.post = report?.post ? new Post(report?.post) : null;
+    this.moderator = report?.moderator ? new User(report?.moderator) : null;
+    this.reportConclusion = report?.reportConclusion ? new ReportConclusion(report?.reportConclusion) : null;
+    this.postComment = report?.postComment ? new Comment(report?.postComment) : null;
+    this.closed = Boolean(report?.closed);
     this.reason = report?.reason;
     this.createdAt = report?.created_at;
   }

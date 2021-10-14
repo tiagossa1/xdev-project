@@ -5,6 +5,8 @@ import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
+import Moderation from '../views/Moderation.vue';
+
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -29,6 +31,11 @@ const routes = [
     path: "/profile/:id?",
     name: "Profile",
     component: Profile,
+  },
+  {
+    path: "/moderation",
+    name: "Moderation",
+    component: Moderation
   },
   {
     path: "*",

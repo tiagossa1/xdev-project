@@ -13,7 +13,7 @@
         </template>
 
         <div id="commentOptionsDropdown">
-          <post-options-component
+          <post-options-component v-if="!viewOnly"
             @on-deleted="onDeleted"
             :comment="comment"
           ></post-options-component>
@@ -69,6 +69,10 @@ export default {
   components: { PostOptionsComponent },
   props: {
     comment: Comment,
+    viewOnly: {
+      default: false,
+      type: Boolean
+    }
   },
   data() {
     return {
