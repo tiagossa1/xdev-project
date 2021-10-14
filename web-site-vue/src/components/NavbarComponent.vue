@@ -78,6 +78,9 @@
               ></b-avatar>
             </template>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
+            <b-dropdown-item to="/moderation" v-if="this.authenticated"
+              >Moderação</b-dropdown-item
+            >
             <b-dropdown-item @click="showModal()"
               >Configurações</b-dropdown-item
             >

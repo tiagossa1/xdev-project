@@ -10,6 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, Notifiable;
+    
+    protected $with = ["district", 'school_class', "user_type", 'feedbacks', 'tags', 'favorite_posts', 'liked_posts'];
 
     protected $fillable = [
         'email', 'name', 'birth_date', 'password', 'github_url', 'linkedin_url', 'facebook_url', 'instagram_url', 'district_id', 'user_type_id', 'school_class_id'

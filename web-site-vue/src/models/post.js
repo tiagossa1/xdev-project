@@ -13,7 +13,12 @@ export default class Post {
     this.suspended = post?.suspended;
     this.user = new User(post?.user);
     this.postType = new PostType(post?.post_type);
-    this.postPhotos = post?.post_photos.map((pp) => new PostPhoto(pp));
+
+    if (post?.post_photos?.length > 0) {
+      this.postPhotos = post?.post_photos.map((pp) => new PostPhoto(pp));
+    } else {
+      this.postPhotos = [];
+    }
 
     if (post?.likes?.length > 0) {
       this.userLikes = post?.likes.map((ul) => ul.id);
@@ -21,7 +26,11 @@ export default class Post {
       this.userLikes = [];
     }
 
-    this.tags = post?.tags.map((t) => new Tag(t));
+    if (post?.tags?.length > 0) {
+      this.tags = post?.tags.map((t) => new Tag(t));
+    } else {
+      this.tags = [];
+    }
 
     if (post?.users_saved?.length > 0) {
       this.usersSaved = post?.users_saved.map((x) => x.id);

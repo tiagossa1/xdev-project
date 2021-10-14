@@ -20,7 +20,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved')->latest()->get(),
+                'data' => Post::all(),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -30,7 +30,9 @@ class PostController extends Controller
 
     public function filter(Request $request) {
         try {
-            $query = Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved');
+            // $query = Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved');
+
+            $query = Post::query();
 
             if($request->user_id) {
                 $query->where('user_id', $request->user_id);

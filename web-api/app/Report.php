@@ -21,6 +21,8 @@ class Report extends Model
         'user_id', 'post_id', 'comment_id', 'moderator_id', 'report_conclusion_id'
     ];
 
+    protected $with = ["post", 'user', 'comment', 'report_conclusion', 'moderator'];
+
     public function post()
     {
         return $this->belongsTo(Post::class);

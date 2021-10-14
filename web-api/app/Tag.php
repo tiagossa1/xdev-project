@@ -14,6 +14,8 @@ class Tag extends Model
         'pivot', 'posts_count'
     ];
 
+    protected $with = ['posts'];
+
     public $timestamps = false;
 
     public function users()

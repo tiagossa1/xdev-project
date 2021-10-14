@@ -26,7 +26,13 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::apiResource('reports', 'ReportController');
     Route::apiResource('tags', 'TagController');
-    Route::apiResource('users', 'UserController');
+    // Route::apiResource('users', 'UserController');
+
+    Route::get('users', 'UserController@index');
+    Route::get('users/{id}', 'UserController@show');
+    Route::put('users/{id}', 'UserController@update')->middleware('ismoderator');
+    Route::delete('users', 'UserController@destroy')->middleware('ismoderator');
+
     Route::apiResource('districts', 'DistrictController');
     Route::apiResource('feedback-types', 'FeedbackTypeController');
     Route::apiResource('report-conclusions', 'ReportConclusionController');
@@ -77,10 +83,6 @@ Route::get('districts/{id}', 'DistrictController@show');
 Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
 
-Route::post('getTotalPostsByUserId', 'PostController@getTotalPostsByUserId');
-
-// TEMPORÁRIO!!!! acrescentar ao middleware
-// Route::apiResource('posts', 'PostController');
-// Route::apiResource('post-types', 'PostTypeController');
+// Route::post('getTotalPostsByUserId', 'PostController@getTotalPostsByUserId');
 
 
