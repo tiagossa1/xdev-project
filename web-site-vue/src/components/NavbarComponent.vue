@@ -18,6 +18,7 @@
               v-model="value"
               size="lg"
               class="mb-2"
+              style="width: 30rem"
               add-on-change
               no-outer-focus
             >
@@ -50,6 +51,7 @@
                   v-on="inputHandlers"
                   :disabled="disabled || availableOptions.length === 0"
                   :options="availableOptions"
+                  style="width: 28rem"
                 >
                   <template #first>
                     <!-- This is required to prevent bugs with Safari -->
@@ -117,8 +119,10 @@ export default {
     };
   },
   async created() {
-    let tags = await tagService.getTags();
-    this.options = tags.map((t) => t.name);
+    if (this.authenticated) {
+      let tags = await tagService.getTags();
+      this.options = tags.map((t) => t.name).sort();
+    }
   },
   computed: {
     ...mapGetters({
