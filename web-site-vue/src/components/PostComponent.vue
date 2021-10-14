@@ -1,9 +1,9 @@
 <template>
   <b-container
     :style="{ border: '2px solid gray', 'border-radius': '25px' }"
-    class="bv-example-row p-4 ml-4 mb-4"
+    class="bv-example-row p-3 ml-4 mb-4"
   >
-    <b-row class="ml-2 mb-4">
+    <b-row class="ml-2 mb-3">
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
           <b-badge
@@ -69,18 +69,18 @@
       </b-col>
     </b-row>
 
-    <b-row class="mt-3 ml-2">
+    <b-row class="mt-2 ml-2">
       <b-col>
         <template v-if="toEdit">
           <b-form-input v-model="post.title" :value="post.title"></b-form-input>
         </template>
         <template v-else>
-          <h2 class="font-weight-bold">{{ post.title }}</h2>
+          <h3 class="font-weight-bold">{{ post.title }}</h3>
         </template>
       </b-col>
     </b-row>
 
-    <b-row class="mt-2 ml-2 mb-4">
+    <b-row class="ml-2 mb-4">
       <b-col>
         <template v-if="toEdit">
           <quill-editor ref="myQuillEditor" v-model="post.description">
@@ -92,7 +92,7 @@
       </b-col>
     </b-row>
 
-    <b-row class="ml-2 mt-2">
+    <b-row class="ml-2">
       <b-col cols="2" style="cursor: pointer" @click="onLike">
         <p class="h5">
           <b-icon
@@ -100,17 +100,17 @@
             :variant="liked ? 'liked' : ''"
             class="mr-1"
           ></b-icon>
-          {{ liked ? "Gosto" : "Gostar" }}
+          <span class="small"> {{ liked ? "Gosto" : "Gostar" }} </span>
         </p>
       </b-col>
-      <b-col cols="3" style="cursor: pointer" @click="onSave">
+      <b-col cols="2" style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
             :icon="saved ? 'bookmark-fill' : 'bookmark'"
             class="mr-1"
           ></b-icon>
-          {{ saved ? "Guardado" : "Guardar" }}
+          <span class="small"> {{ saved ? "Guardado" : "Guardar" }} </span>
         </p>
       </b-col>
       <b-col

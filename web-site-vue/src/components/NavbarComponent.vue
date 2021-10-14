@@ -12,18 +12,52 @@
       <b-navbar-nav class="ml-auto">
         <template v-if="authenticated">
           <b-nav-form>
-            <b-input-group size="md">
-              <b-input-group-prepend is-text>
-                <b-icon icon="search"></b-icon>
-              </b-input-group-prepend>
-              <b-form-tags
-                input-id="tags-separators"
-                v-model="value"
-                placeholder="Pesquise por tags..."
-                remove-on-delete
-                style="width: 35rem"
-              ></b-form-tags>
-            </b-input-group>
+            <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
+            <b-form-tags
+              id="tags-component-select"
+              v-model="value"
+              size="lg"
+              class="mb-2"
+              add-on-change
+              no-outer-focus
+            >
+              <template
+                v-slot="{
+                  tags,
+                  inputAttrs,
+                  inputHandlers,
+                  disabled,
+                  removeTag,
+                }"
+              >
+                <ul
+                  v-if="tags.length > 0"
+                  class="list-inline d-inline-block mb-2"
+                >
+                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                    <b-form-tag
+                      @remove="removeTag(tag)"
+                      class="text-white"
+                      :title="tag"
+                      :disabled="disabled"
+                      variant="primary"
+                      >{{ tag }}</b-form-tag
+                    >
+                  </li>
+                </ul>
+                <b-form-select
+                  v-bind="inputAttrs"
+                  v-on="inputHandlers"
+                  :disabled="disabled || availableOptions.length === 0"
+                  :options="availableOptions"
+                >
+                  <template #first>
+                    <!-- This is required to prevent bugs with Safari -->
+                    <option disabled value="">Escolha uma tag...</option>
+                  </template>
+                </b-form-select>
+              </template>
+            </b-form-tags>
             <b-button size="md" class="ml-2" variant="light" type="submit"
               >Procurar</b-button
             >
@@ -67,6 +101,8 @@
 </template>
 
 <script>
+import tagService from "../services/tagService.js";
+
 import { mapGetters, mapActions } from "vuex";
 import UserSettings from "./UserSettingsComponent.vue";
 export default {
@@ -77,14 +113,21 @@ export default {
   data() {
     return {
       value: [],
+      options: [],
     };
   },
-
+  async created() {
+    let tags = await tagService.getTags();
+    this.options = tags.map((t) => t.name);
+  },
   computed: {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
     }),
+    availableOptions() {
+      return this.options.filter((opt) => this.value.indexOf(opt) === -1);
+    },
   },
   methods: {
     ...mapActions({

@@ -68,14 +68,16 @@
           {{  postType.name }}
         </b-dropdown-item>
       </b-dropdown>
+      
+      <b-icon v-if="filterMode" class="ml-2 align-middle text-danger" style="cursor: pointer" icon="x" font-scale="2" @click="onClearFilter"></b-icon>
 
-      <b-button
+      <!-- <b-button
         v-if="filterMode"
         class="ml-2"
         variant="success"
         @click="onClearFilter"
         >Limpar filtro
-      </b-button>
+      </b-button> -->
     </div>
 
     <transition-group name="fade" tag="div">
