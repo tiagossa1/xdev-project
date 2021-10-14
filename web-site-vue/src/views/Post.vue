@@ -1,6 +1,10 @@
 <template>
-  <div class="container">
+  <div >
+    <b-container>
+      <b-row>
+        <b-col>
     <div class="buttons m-3">
+      
       <b-button class="text-white" variant="primary" v-b-modal.modal-1
         >Criar Post</b-button
       >
@@ -71,15 +75,11 @@
       
       <b-icon v-if="filterMode" class="ml-2 align-middle text-danger" style="cursor: pointer" icon="x" font-scale="2" @click="onClearFilter"></b-icon>
 
-      <!-- <b-button
-        v-if="filterMode"
-        class="ml-2"
-        variant="success"
-        @click="onClearFilter"
-        >Limpar filtro
-      </b-button> -->
     </div>
-
+</b-col>
+</b-row>
+<b-row class="w-100">
+  <b-col sm="9">
     <transition-group name="fade" tag="div">
       <div v-for="post in posts" :key="post.id">
         <post-component
@@ -89,20 +89,33 @@
         ></post-component>
       </div>
     </transition-group>
+    </b-col>
+    <b-col>
+      <topPosts-component></topPosts-component>
+      <popularTags-component></popularTags-component>
+    </b-col>
+    </b-row>
+    
+    </b-container>
   </div>
 </template>
 
 <script>
 import PostComponent from "../components/PostComponent.vue";
 
+import PopularTagsComponent from "../components/PopularTagsComponent.vue"
+import TopPostsComponent from "../components/TopPostsComponent.vue"
+
 import postService from "../services/postService";
+
 
 export default {
   name: "Post",
-  components: { PostComponent },
+  components: { PostComponent,PopularTagsComponent,TopPostsComponent },
   async created() {
     this.posts = await postService.getPosts().catch(err => console.log(err.response));
     this.originalPosts = this.posts;
+
 
     let postTypes = await postService.getPostTypes();
 
@@ -114,7 +127,9 @@ export default {
       text: x.name,
     }));
 
+
     this.postTypesSelect = this.postTypesSelect.concat(selectOptions);
+    
   },
   data() {
     return {
