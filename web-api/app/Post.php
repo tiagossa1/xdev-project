@@ -20,7 +20,7 @@ class Post extends Model
         'pivot', 'user_id', 'post_type_id'
     ];
 
-    protected $with = ['post_type', 'user', 'tags', 'comments', 'post_photos', 'likes', 'users_saved'];
+    protected $with = ['post_type', 'user', 'comments', 'likes'];
 
     public function post_type()
     {

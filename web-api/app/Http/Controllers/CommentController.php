@@ -55,7 +55,7 @@ class CommentController extends Controller
     {
         try {
             return response()->json([
-                'data' => $comment->load('post', 'user'),
+                'data' => $comment,
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
