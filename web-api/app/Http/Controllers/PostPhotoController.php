@@ -17,7 +17,7 @@ class PostPhotoController extends Controller
     {
         try {
             return response()->json([
-                'data' => PostPhoto::with('post')->get(),
+                'data' => PostPhoto::all(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -55,7 +55,7 @@ class PostPhotoController extends Controller
     {
         try {
             return response()->json([
-                'data' => $postPhoto->load('post'),
+                'data' => $postPhoto,
                 'message' => 'Success'
             ], 200);
 

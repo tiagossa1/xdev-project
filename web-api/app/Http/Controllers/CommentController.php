@@ -16,7 +16,7 @@ class CommentController extends Controller
     {
         try {
             return response()->json([
-                'data' => Comment::with('post', 'user')->get(),
+                'data' => Comment::all(),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -36,7 +36,7 @@ class CommentController extends Controller
             $comment = Comment::create($request->all());
 
             return response()->json([
-                'data' => $comment->load(['post', 'user', 'user.user_type']),
+                'data' => $comment,
                 'message' => 'Success',
             ], 201);
 

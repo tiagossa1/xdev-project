@@ -17,6 +17,8 @@ class Comment extends Model
         'user_id', 'post_id'
     ];
 
+    protected $with = ['user', 'post'];
+
     public function user()
     {
         return $this->belongsTo(User::class);

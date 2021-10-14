@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Post extends Model
 {
+    use softDeletes;
+    
     protected $fillable = [
         'title',
         'description',
@@ -17,6 +19,8 @@ class Post extends Model
     protected $hidden = [
         'pivot', 'user_id', 'post_type_id'
     ];
+
+    protected $with = ['post_type', 'user', 'tags', 'comments', 'post_photos', 'likes', 'users_saved'];
 
     public function post_type()
     {
@@ -50,6 +54,4 @@ class Post extends Model
     public function users_saved() {
         return $this->belongsToMany('App\User', 'post_user');
     }
-
-    use softDeletes;
 }

@@ -19,7 +19,7 @@ class SchoolClassController extends Controller
     {
         try {
             return response()->json([
-                'data' => SchoolClass::with('school')->get(),
+                'data' => SchoolClass::all(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -57,7 +57,7 @@ class SchoolClassController extends Controller
     {
         try {
             return response()->json([
-                'data' => $schoolClass->load('school'),
+                'data' => $schoolClass,
                 'message' => 'Success'
             ], 200);
 

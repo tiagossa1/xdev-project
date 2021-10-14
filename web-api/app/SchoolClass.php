@@ -15,6 +15,8 @@ class SchoolClass extends Model
         'school_id'
     ];
 
+    protected $with = ['school'];
+
     public $timestamps = false;
 
     public function users()

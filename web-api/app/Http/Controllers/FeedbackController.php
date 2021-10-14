@@ -18,7 +18,7 @@ class FeedbackController extends Controller
     {
         try {
             return response()->json([
-                'data' => Feedback::with('user', 'feedback_type')->get(),
+                'data' => Feedback::all(),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -57,7 +57,7 @@ class FeedbackController extends Controller
     {
         try {
             return response()->json([
-                'data' => $feedback->load('user', 'feedback_type'),
+                'data' => $feedback,
                 'message' => 'Success',
             ], 200);
 
