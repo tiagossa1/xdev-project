@@ -259,7 +259,9 @@ export default {
     async onSubmit() {
       let res = null;
       if (!this.v$.$invalid) {
-        this.form.email += "@edu.atec.pt";
+        if (!this.form.email.incldes("@edu.atec.pt")) {
+          this.form.email += "@edu.atec.pt";
+        }
 
         res = await userService.register(this.form).catch((err) => {
           this.showErrorAlert = true;
