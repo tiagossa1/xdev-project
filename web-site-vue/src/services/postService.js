@@ -20,7 +20,9 @@ export default new (class PostService {
   }
 
   async getPostsByUser(userId) {
-    let response = await axios.get(`${this.apiUrl}/api/posts?user_id=${userId}`);
+    let response = await axios.get(
+      `${this.apiUrl}/api/posts?user_id=${userId}`
+    );
 
     if (response.data.data) {
       return response.data.data.map((x) => {
@@ -35,9 +37,7 @@ export default new (class PostService {
     let response = await axios.get(`${this.apiUrl}/api/post-types`);
 
     if (response.data.data) {
-      return response.data.data.map(
-        (x) => new PostType(x)
-      );
+      return response.data.data.map((x) => new PostType(x));
     }
 
     return [];

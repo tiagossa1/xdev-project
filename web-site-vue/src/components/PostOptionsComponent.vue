@@ -16,7 +16,7 @@
     <b-dropdown-item @click="onEdit" v-if="isUserOwner">
       <b-icon class="mr-1" icon="pencil"></b-icon> Editar
     </b-dropdown-item>
-    <b-dropdown-item @click="openReportModal"
+    <b-dropdown-item @click="openReportModal" v-if="!isUserOwner"
       ><b-icon class="mr-2" icon="file-check"></b-icon>Reportar</b-dropdown-item
     >
     <b-dropdown-item @click="onDelete" v-if="isUserOwner"

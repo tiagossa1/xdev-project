@@ -12,13 +12,23 @@
     </b-row>
     <b-badge
       class="mb-4 ml-4 p-2 no-select"
+      v-if="!toEdit"
       :style="{
         backgroundColor: post.user.userType.hexColorCode,
       }"
     >
       <b-icon :icon="post.postType.iconName"></b-icon> {{ post.postType.name }}
     </b-badge>
-    <post-options-component v-if="!viewOnly"
+    <b-row v-if="toEdit" class="mt-2 ml-2 mb-3">
+      <b-col>
+        <b-form-select
+          v-model="post.postType.id"
+          :options="postTypesSelect"
+        ></b-form-select>
+      </b-col>
+    </b-row>
+    <post-options-component
+      v-if="!viewOnly"
       @on-deleted="onDeleted"
       @on-edit="onEdit"
       :post="post"
@@ -67,7 +77,11 @@
     <b-row class="mt-2 ml-2">
       <b-col>
         <template v-if="toEdit">
-          <b-form-input v-model="post.title" :value="post.title"></b-form-input>
+          <b-form-input
+            class="mt-2 mb-3"
+            v-model="post.title"
+            :value="post.title"
+          ></b-form-input>
         </template>
         <template v-else>
           <h3 class="font-weight-bold">{{ post.title }}</h3>
@@ -78,7 +92,11 @@
     <b-row class="ml-2 mb-2">
       <b-col>
         <template v-if="toEdit">
-          <quill-editor ref="myQuillEditor" v-model="post.description">
+          <quill-editor
+            class="mb-2"
+            ref="myQuillEditor"
+            v-model="post.description"
+          >
           </quill-editor>
         </template>
         <template v-else>
@@ -116,7 +134,7 @@
       >
         <p class="h5">
           <b-icon icon="pencil" class="mr-1"> </b-icon>
-          Terminar edição
+          <span class="small">Terminar edição</span>
         </p>
       </b-col>
     </b-row>
@@ -176,11 +194,15 @@ export default {
     post: Post,
     viewOnly: {
       default: false,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
-  mounted() {
+  async mounted() {
     this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
+    let postTypes = await postService.getPostTypes();
+
+    this.postTypes = postTypes;
+    this.postTypesSelect = postTypes.map((pt) => ({ value: pt.id, text: pt.name }));
   },
   data() {
     return {
@@ -190,6 +212,7 @@ export default {
       isUserPost: false,
       collapseId: "collapse-" + this.post.id,
       redirectProfile: `/profile/${this.post.user.id}`,
+      postTypesSelect: [],
       toEdit: false,
       modalVisible: false,
     };
@@ -270,7 +293,7 @@ export default {
         this.post.description,
         this.post.suspended,
         this.post.userId,
-        this.post.postTypeId
+        this.post.postType.id
       );
 
       let res = await postService
@@ -282,6 +305,8 @@ export default {
           alertMessage: "Post editado com sucesso!",
           variant: "success",
         });
+
+        this.post.postType = this.postTypes.find(pt => pt.id === this.post.postType.id);
         this.toEdit = false;
       }
     },
