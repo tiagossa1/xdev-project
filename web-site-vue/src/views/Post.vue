@@ -101,7 +101,7 @@
             ></post-component>
           </div> -->
 
-          <scroll-loader :loader-method="getPosts" :loader-disable="disable">
+          <transition-group name="fade" tag="div">
             <div v-for="post in posts" :key="post.id">
               <post-component
                 @on-post-deleted="onPostDeleted"
@@ -109,17 +109,7 @@
                 :post="post"
               ></post-component>
             </div>
-          </scroll-loader>
-
-          <!-- <transition-group name="fade" tag="div">
-            <div v-for="post in posts" :key="post.id">
-              <post-component
-                @on-post-deleted="onPostDeleted"
-                @on-comment-deleted="onCommentDeleted"
-                :post="post"
-              ></post-component>
-            </div>
-          </transition-group> -->
+          </transition-group>
         </b-col>
         <b-col class="ml-4">
           <topPosts-component></topPosts-component>
@@ -142,6 +132,10 @@ export default {
   name: "Post",
   components: { PostComponent, PopularTagsComponent, TopPostsComponent },
   async created() {
+    this.posts = await postService
+      .getPosts()
+      .catch((err) => console.log(err.response));
+    this.originalPosts = this.posts;
     let postTypes = await postService.getPostTypes();
 
     this.postTypes = postTypes;
@@ -170,7 +164,6 @@ export default {
         user_id: this.$store.getters["auth/user"].id,
         suspended: 0,
       },
-      disable: false,
       filterMode: false,
       postTags: [
         {
@@ -182,13 +175,6 @@ export default {
   methods: {
     createPost() {
       console.log(this.form);
-    },
-    async getPosts() {
-      this.posts = await postService
-        .getPosts()
-        .catch((err) => console.log(err.response));
-      this.originalPosts = this.posts;
-      this.disable = this.posts.length < this.pageSize;
     },
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);
