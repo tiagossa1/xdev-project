@@ -5,11 +5,32 @@ import auth from "./auth";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
-  state: {},
+  state: {
+    postTypes: [],
+  },
 
-  mutations: {},
+  getters: {
+    getPostTypes(state) {
+      return state.postTypes;
+    },
+  },
 
-  actions: {},
+  mutations: {
+    SET_POSTTYPES(state, postTypes) {
+      state.postTypes = postTypes;
+    },
+  },
+
+  actions: {
+    storePostTypes({ dispatch }, postTypes) {
+      dispatch("savePostTypes", postTypes);
+    },
+    async savePostTypes({ commit }, data) {
+      if (data) {
+        commit("SET_POSTTYPES", data);
+      }
+    },
+  },
 
   modules: {
     auth,

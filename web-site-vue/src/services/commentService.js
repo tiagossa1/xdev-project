@@ -9,12 +9,15 @@ export default new (class CommentService {
 
   async createComment(commentRequest) {
     let res = await axios.post(`${this.apiUrl}/api/comments/`, commentRequest);
-
     if (res.data.data) {
       return new Comment(res.data.data);
     }
 
     return null;
+  }
+
+  async edit(request) {
+    return await axios.put(`${this.apiUrl}/api/comments/${request.id}`, request);
   }
 
   async deleteComment(id) {

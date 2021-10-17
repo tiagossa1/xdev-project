@@ -9,8 +9,12 @@ export default new (class NotificationService {
 
   async getNotifications() {
     let res = await axios.get(`${this.apiUrl}/api/notifications`);
-
-    console.log(res);
     return res.data.data.map((n) => new Notification(n));
+  }
+
+  async markAsRead(notificationId) {
+    return await axios.post(`${this.apiUrl}/api/mark-notification`, {
+      id: notificationId,
+    });
   }
 })();

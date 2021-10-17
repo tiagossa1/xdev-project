@@ -22,7 +22,7 @@
     <b-row v-if="toEdit" class="mt-2 ml-2 mb-3">
       <b-col>
         <b-form-select
-          v-model="post.postType.id"
+          v-model="post.postType.name"
           :options="postTypesSelect"
         ></b-form-select>
       </b-col>
@@ -199,10 +199,10 @@ export default {
   },
   async mounted() {
     this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
-    let postTypes = await postService.getPostTypes();
 
-    this.postTypes = postTypes;
-    this.postTypesSelect = postTypes.map((pt) => ({ value: pt.id, text: pt.name }));
+    if (this.isUserPost) {
+      this.getPostTypes();
+    }
   },
   data() {
     return {
@@ -212,12 +212,19 @@ export default {
       isUserPost: false,
       collapseId: "collapse-" + this.post.id,
       redirectProfile: `/profile/${this.post.user.id}`,
+      postTypes: [],
       postTypesSelect: [],
       toEdit: false,
       modalVisible: false,
     };
   },
   methods: {
+    async getPostTypes() {
+      let postTypes = await postService.getPostTypes();
+      this.postTypes = postTypes;
+
+      this.postTypesSelect = this.postTypes.map((pt) => pt.name);
+    },
     async onLike() {
       if (this.liked) {
         const indexToRemove = this.post.userLikes.indexOf(
@@ -231,8 +238,20 @@ export default {
         this.post.userLikes.push(this.$store.getters["auth/user"].id);
       }
 
+      let request = new PostRequest(
+        this.post.id,
+        this.post.title,
+        this.post.description,
+        this.post.suspended,
+        this.post.user.id,
+        this.post.postType.id,
+        this.post.userLikes,
+        null,
+        this.post.usersSaved
+      );
+
       await postService
-        .changeLikePost(this.post.id, this.post.userLikes)
+        .updatePost(request)
         .catch((err) => console.log(err.response));
 
       this.liked = !this.liked;
@@ -251,7 +270,22 @@ export default {
         this.post.usersSaved.push(this.$store.getters["auth/user"].id);
       }
 
-      await postService.changeSavedPost(this.post.id, this.post.usersSaved);
+      let request = new PostRequest(
+        this.post.id,
+        this.post.title,
+        this.post.description,
+        this.post.suspended,
+        this.post.user.id,
+        this.post.postType.id,
+        this.post.userLikes,
+        null,
+        this.post.usersSaved
+      );
+
+      await postService
+        .updatePost(request)
+        .catch((err) => console.log(err.response));
+
       this.saved = !this.saved;
     },
 
@@ -287,13 +321,20 @@ export default {
     },
 
     async onEdited() {
+      let postTypeId = this.postTypes.find(
+        (pt) => pt.name === this.post.postType.name
+      )?.id;
+
       let request = new PostRequest(
         this.post.id,
         this.post.title,
         this.post.description,
         this.post.suspended,
-        this.post.userId,
-        this.post.postType.id
+        this.post.user.id,
+        postTypeId,
+        null,
+        null,
+        null
       );
 
       let res = await postService
@@ -306,7 +347,10 @@ export default {
           variant: "success",
         });
 
-        this.post.postType = this.postTypes.find(pt => pt.id === this.post.postType.id);
+        this.post.postType = this.postTypes.find(
+          (pt) => pt.name === this.post.postType.name
+        );
+
         this.toEdit = false;
       }
     },

@@ -14,7 +14,7 @@ class Tag extends Model
         'pivot', 'posts_count'
     ];
 
-    protected $with = ['posts'];
+    // protected $with = ['posts'];
 
     public $timestamps = false;
 

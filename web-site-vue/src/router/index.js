@@ -5,7 +5,7 @@ import Home from "../views/Home.vue";
 import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
-import Moderation from '../views/Moderation.vue';
+import Moderation from "../views/Moderation.vue";
 
 import store from "@/store";
 
@@ -35,7 +35,7 @@ const routes = [
   {
     path: "/moderation",
     name: "Moderation",
-    component: Moderation
+    component: Moderation,
   },
   {
     path: "*",
@@ -50,7 +50,18 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, __, next) => {
+  const user = store.getters["auth/user"];
   const isAuthenticated = store.getters["auth/authenticated"];
+  const moderatorIds = [2, 4];
+  let isModerator = false;
+
+  if (user) {
+    isModerator = moderatorIds.includes(user.user_type.id);
+  }
+
+  if (to.name === "Moderation" && !isModerator) {
+    next({ name: "Home" });
+  }
 
   if (isAuthenticated) {
     if (to.name === "Login" || to.name === "Register") {

@@ -12,7 +12,7 @@ class NotificationController extends Controller
     {
         try {
             return response()->json([
-                'data' => $user =auth()->user()->unreadNotifications,
+                'data' => auth()->user()->unreadNotifications,
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -28,6 +28,6 @@ class NotificationController extends Controller
             return $query->where('id', $request->input('id'));
         })->markAsRead();
 
-        return response()->noContent();
+        return response()->json(['message' => 'Marked as read.', 200]);
     }
 }

@@ -270,14 +270,13 @@ export default {
         null,
         null,
         null,
-        null
+        null,
+        this.userInfo.suspended
       );
 
-      let res = await userService
+      await userService
         .update(request)
         .catch((err) => console.log(err.response));
-
-      console.log(res);
     },
   },
 };

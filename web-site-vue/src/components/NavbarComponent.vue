@@ -78,7 +78,7 @@
               ></b-avatar>
             </template>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
-            <b-dropdown-item to="/moderation" v-if="this.authenticated"
+            <b-dropdown-item to="/moderation" v-if="this.isModerator"
               >Moderação</b-dropdown-item
             >
             <b-dropdown-item @click="showModal()"
@@ -134,6 +134,9 @@ export default {
     }),
     availableOptions() {
       return this.options.filter((opt) => this.value.indexOf(opt) === -1);
+    },
+    isModerator() {
+      return this.user.user_type.id === 2 || this.user.user_type.id === 4;
     },
   },
   methods: {

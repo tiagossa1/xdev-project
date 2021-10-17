@@ -28,7 +28,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('district_id')->constrained();
             $table->foreignId('user_type_id')->default(1)->constrained();
             $table->foreignId('school_class_id')->constrained();
-            $table->rememberToken();
+            $table->boolean('suspended')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

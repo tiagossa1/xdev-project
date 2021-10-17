@@ -2,7 +2,7 @@
   <footer class="footer fixed-bottom w-100 p-1 bg-primary">
     <b-row class="text-center" align-v="center">
       <b-col>
-        <h2 class="font-weight-bold">ATEC <span class="h6"> {{ new Date().getFullYear() }} </span> </h2>
+        <h3 class="font-weight-bold text-white">ATEC <span class="h6"> {{ new Date().getFullYear() }} </span> </h3>
       </b-col>
       <b-col>
       </b-col>
@@ -31,10 +31,6 @@
         </b-row>
       </b-col>
     </b-row>
-    <!-- <div class="ml-4">
-      <h2 class="float-left m-0 font-weight-bold">ATEC</h2>
-      <span class="ml-2 small">© {{ new Date().getFullYear() }}</span>
-    </div> -->
   </footer>
 </template>
 

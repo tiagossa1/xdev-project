@@ -1,0 +1,171 @@
+<template>
+  <div>
+    <template v-if="notifications.length > 0">
+      <b-table
+        ref="notificationTable"
+        table-variant="light"
+        striped
+        :fields="fields"
+        :items="notifications"
+      >
+        <template #cell(username)="data">
+          <a target="_blank" :href="'/profile/' + data.item.report.user.id">
+            {{ data.item.report.user.name }} ({{ data.item.report.user.email }})
+          </a>
+        </template>
+        <template #cell(postTitle)="data">
+          <a
+            v-b-modal.post-modal
+            :ref="data.item.report.post.title"
+            href=""
+            @click.prevent="setPost(data.item.report.post)"
+            >{{ data.item.report.post.title }}</a
+          >
+        </template>
+        <template #cell(reason)="data">
+          {{ data.item.report.reason }}
+        </template>
+        <template #cell(actions)="data">
+          <b-button-group>
+            <b-button @click="onSuspendedPost(data.item)" variant="warning"
+              >Suspender Post</b-button
+            >
+            <b-button @click="onDelete(data.item.post.id)" variant="danger"
+              >Eliminar Report</b-button
+            >
+          </b-button-group>
+        </template>
+      </b-table>
+
+      <b-modal id="post-modal" size="xl" title="Post reportado">
+        <post-component
+          class="w-75 m-auto"
+          :post="postSelected"
+          :viewOnly="true"
+        ></post-component>
+      </b-modal>
+    </template>
+    <template v-else> Não tem notificações. </template>
+  </div>
+</template>
+
+<script>
+import { mapGetters } from "vuex";
+
+import PostRequest from "../../models/requests/postRequest";
+import ReportRequest from "../../models/requests/reportRequest";
+import notificationService from "../../services/notificationService";
+
+import postService from "../../services/postService";
+import reportConclusionService from "../../services/reportConclusionService";
+import reportService from "../../services/reportService";
+
+import PostComponent from "../PostComponent.vue";
+
+export default {
+  name: "notifications-component",
+  props: { notifications: [] },
+  data() {
+    return {
+      fields: [
+        {
+          key: "username",
+          label: "Reportado por",
+        },
+        {
+          key: "postTitle",
+          label: "Post reportado",
+        },
+        {
+          key: "reason",
+          label: "Razão",
+        },
+        {
+          key: "actions",
+          label: "Ações",
+        },
+      ],
+      postSelected: null,
+    };
+  },
+  computed: {
+    ...mapGetters({
+      user: "auth/user",
+    }),
+  },
+  components: { PostComponent },
+  mounted() {},
+  methods: {
+    setPost(post) {
+      this.postSelected = post;
+    },
+    async onSuspendedPost(item) {
+      let reportConclusions = await reportConclusionService.get();
+      let suspendedConclusion = reportConclusions.find((rc) =>
+        rc.name.toLowerCase().includes("suspenso")
+      );
+
+      let postRequest = new PostRequest(
+        item.report.post.id,
+        item.report.post.title,
+        item.report.post.description,
+        true,
+        item.report.post.user.id,
+        item.report.post.postType.id
+      );
+
+      await postService.updatePost(postRequest).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+          variant: "danger",
+        });
+      });
+
+      let reportRequest = new ReportRequest(
+        item.report.id,
+        item.report.user.id,
+        item.report.post.id,
+        this.user.id,
+        suspendedConclusion?.id ?? null,
+        item.report?.comment?.id ?? null,
+        true,
+        null,
+        null
+      );
+
+      await reportService.update(reportRequest).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+          variant: "danger",
+        });
+      });
+
+      let notificationRes = await notificationService
+        .markAsRead(item.id)
+        .catch((err) => {
+          this.$root.$emit("show-alert", {
+            alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+            variant: "danger",
+          });
+        });
+
+      if (notificationRes.status === 200) {
+        // this.$emit("on-notification-deleted", item.id);
+        const index = this.notifications.findIndex((n) => n.id === item.id);
+
+        if (index >= 0) {
+          this.notifications.splice(index, 1);
+          this.$refs.notificationTable.refresh();
+        }
+        this.$root.$emit("show-alert", {
+          alertMessage: "Post suspenso com sucesso!",
+          variant: "success",
+        });
+      }
+    },
+    onDelete(postId) {
+      console.log(postId);
+    },
+  },
+};
+</script>

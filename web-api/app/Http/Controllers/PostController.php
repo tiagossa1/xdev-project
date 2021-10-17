@@ -19,8 +19,10 @@ class PostController extends Controller
     public function index()
     {
         try {
+            $posts = Post::latest()->get();
+
             return response()->json([
-                'data' => Post::all(),
+                'data' => $posts,
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -30,15 +32,13 @@ class PostController extends Controller
 
     public function filter(Request $request) {
         try {
-            // $query = Post::with('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved');
-
             $query = Post::query();
 
             if($request->user_id) {
                 $query->where('user_id', $request->user_id);
             }
-    
-            $posts = $query->get();
+
+            $posts = $query->latest()->get();
     
             return response()->json([
                 'message' => 'Success',
@@ -71,7 +71,7 @@ class PostController extends Controller
             }
 
             return response()->json([
-                'data' => $post,
+                'data' => Post::find($post->id),
                 'message' => 'Success',
             ], 201);
 
@@ -90,7 +90,7 @@ class PostController extends Controller
     {
         try {
             return response()->json([
-                'data' => $post->load('user', 'tags', 'user.school_class', 'user.school_class.school', 'user.user_type', 'post_photos', 'post_type', 'comments', 'comments.user', 'comments.user.user_type', 'likes', 'users_saved'),
+                'data' => $post,
                 'message' => 'Success',
             ], 200);
 
@@ -109,7 +109,17 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         try {
-            $post->update($request->all());
+            $post = Post::find($post->id);
+
+            if(!is_null($post)) {
+                $post->title = $request->title;
+                $post->description = $request->description;
+                $post->suspended = $request->suspended;
+                $post->user_id = $request->user_id;
+                $post->post_type_id = $request->post_type_id;
+                
+                $post->save();
+            }
 
             if (!is_null($request->input('tags'))) {
                 $post->tags()->sync($request->input('tags'));

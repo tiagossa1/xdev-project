@@ -1,5 +1,6 @@
 export default class ReportRequest {
   constructor(
+    id,
     userId,
     postId,
     moderatorId,
@@ -9,6 +10,7 @@ export default class ReportRequest {
     reason,
     createdAt
   ) {
+    this.id = id;
     this.user_id = userId;
     this.post_id = postId;
     this.moderator_id = moderatorId;

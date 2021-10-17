@@ -6,6 +6,9 @@ export default class PostRequest {
     suspended,
     userId,
     postTypeId,
+    userLikes,
+    tags,
+    usersSaved,
   ) {
     this.id = id;
     this.title = title;
@@ -13,5 +16,8 @@ export default class PostRequest {
     this.suspended = suspended;
     this.user_id = userId;
     this.post_type_id = postTypeId;
+    this.likes = userLikes;
+    this.tags = tags;
+    this.users_saved = usersSaved;
   }
 }

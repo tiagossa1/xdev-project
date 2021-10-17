@@ -13,13 +13,18 @@ class TagController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $tags = Tag::withCount('posts')->orderBy('posts_count', 'desc')->get();
+            $query = Tag::withCount('posts')->orderBy('posts_count', 'desc');
+            $count = $request->count;
+
+            if(!is_null($count)) {
+                $query->take($count);
+            }
 
             return response()->json([
-                'data' => $tags,
+                'data' => $query->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

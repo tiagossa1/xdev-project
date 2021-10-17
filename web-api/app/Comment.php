@@ -14,7 +14,7 @@ class Comment extends Model
     ];
 
     protected $hidden = [
-        'user_id', 'post_id'
+        'user_id'
     ];
 
     protected $with = ['user'];

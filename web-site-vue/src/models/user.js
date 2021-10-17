@@ -15,7 +15,7 @@ export default class User {
     this.facebook_url = user?.facebook_url;
     this.instagram_url = user?.instagram_url;
     this.profile_picture = user?.profile_picture;
-    this.district = new District(user?.district?.id, user?.district?.name);
+    this.district = new District(user?.district);
     this.userType = new UserType(user?.user_type);
     this.schoolClass = new SchoolClass(user?.school_class);
 
@@ -31,6 +31,7 @@ export default class User {
       this.tags = [];
     }
 
+    this.suspended = user?.suspended;
     this.createdAt = user?.created_at;
   }
 }

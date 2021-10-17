@@ -23,8 +23,7 @@ export default {
         }
     },
     async created(){
-        let popularTags = await tagService.getTags();
-        this.popularTags = popularTags.slice(0, 5);
+        this.popularTags = await tagService.getTagsByCount(5);
     }
 }
 

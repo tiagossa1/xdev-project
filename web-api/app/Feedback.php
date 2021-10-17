@@ -16,7 +16,7 @@ class Feedback extends Model
         'user_id', 'feedback_type_id'
     ];
 
-    protected $with = ['feedback_type'];
+    protected $with = ['feedback_type', 'user'];
 
     public $timestamps = false;
 

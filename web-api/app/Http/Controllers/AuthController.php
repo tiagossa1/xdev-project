@@ -70,6 +70,11 @@ class AuthController extends Controller
 
         $user = User::where('email', $request['email'])->first();
 
+        // When login in, we don't need these entities loaded.
+        unset($user->tags);
+        unset($user->favorite_posts);
+        unset($user->liked_posts);
+
         if (!$user || !Hash::check($request['password'], $user->password)) {
             return response([
                 'message' => 'Bad Credentials',
@@ -78,15 +83,12 @@ class AuthController extends Controller
 
         $token = $user->createToken('xdevToken')->plainTextToken;
 
-        // if(!is_null($user->profile_picture)) {
-        //     $user->setProfilePicture($user->profile_picture);
-        // }
         $response = [
             'user' => $user,
             'token' => $token,
         ];
 
-        return response($response, 201);
+        return response($response, 200);
     }
 
     public function changePassword(Request $request) {

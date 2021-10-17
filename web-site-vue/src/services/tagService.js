@@ -15,4 +15,14 @@ export default new (class TagService {
 
     return [];
   }
+
+  async getTagsByCount(count) {
+    let res = await axios.get(`${this.apiUrl}/api/tags?count=${count}`);
+
+    if (res.data) {
+      return res.data.data.map((t) => new Tag(t));
+    }
+
+    return [];
+  }
 })();

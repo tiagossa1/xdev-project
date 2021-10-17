@@ -13,8 +13,10 @@
         </template>
 
         <div id="commentOptionsDropdown">
-          <post-options-component v-if="!viewOnly"
+          <post-options-component
+            v-if="!viewOnly"
             @on-deleted="onDeleted"
+            @on-edit="onEdit"
             :comment="comment"
           ></post-options-component>
         </div>
@@ -45,9 +47,27 @@
         >
           {{ comment.user.name }}
         </h5>
-        <p>
-          {{ comment.description }}
-        </p>
+        <template v-if="!toEdit">
+          <p>
+            {{ comment.description }}
+          </p>
+        </template>
+        <template v-else>
+          <b-container>
+            <b-row>
+              <b-col class="pl-0 pr-0" cols="10">
+                <b-form-input
+                  v-model="comment.description"
+                  placeholder="Escreva o seu comentário..."
+                  required
+                ></b-form-input>
+              </b-col>
+              <b-col class="align-self-center" style="cursor: pointer" @click="onEdited">
+                <b-icon-pencil></b-icon-pencil>
+              </b-col>
+            </b-row>
+          </b-container>
+        </template>
       </b-media>
     </b-card>
   </div>
@@ -55,9 +75,11 @@
 
 <script>
 import reportService from "../services/reportService";
+import commentService from "../services/commentService";
 
 import Comment from "../models/comment";
 import ReportRequest from "../models/requests/reportRequest";
+import CommentRequest from "../models/requests/commentRequest";
 
 import PostOptionsComponent from "../components/PostOptionsComponent";
 
@@ -71,13 +93,14 @@ export default {
     comment: Comment,
     viewOnly: {
       default: false,
-      type: Boolean
-    }
+      type: Boolean,
+    },
   },
   data() {
     return {
       isUserComment: false,
-      reportComment: ""
+      reportComment: "",
+      toEdit: false,
     };
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -124,6 +147,32 @@ export default {
 
         this.$refs["modal-report"].hide();
       }
+    },
+    onEdit(toEdit) {
+      this.toEdit = toEdit;
+    },
+    async onEdited() {
+      let request = new CommentRequest(
+        this.comment.id,
+        this.comment.description,
+        this.comment.user.id
+      );
+
+      let res = await commentService.edit(request).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.message + ".",
+          variant: "danger",
+        });
+      });
+
+      if (res.status === 200) {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Comentário editado com sucesso!",
+          variant: "success",
+        });
+      }
+
+      this.toEdit = false;
     },
   },
 };

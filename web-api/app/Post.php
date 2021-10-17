@@ -17,10 +17,10 @@ class Post extends Model
     ];
 
     protected $hidden = [
-        'pivot', 'user_id', 'post_type_id'
+        'user_id', 'post_type_id'
     ];
 
-    protected $with = ['post_type', 'user', 'comments', 'likes'];
+    protected $with = ['post_type', 'user', 'comments', 'likes', 'tags', 'users_saved'];
 
     public function post_type()
     {

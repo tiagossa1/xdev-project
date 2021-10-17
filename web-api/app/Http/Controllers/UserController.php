@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'data' => User::all(),
+                'data' => User::orderBy('name')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -62,7 +62,8 @@ class UserController extends Controller
                 $user->github_url = $request->github_url;
                 $user->linkedin_url = $request->linkedin_url;
                 $user->facebook_url = $request->facebook_url;
-                $user->instagram_url = $request->instagram_url;
+                $user->instagram_url = $request->instagram_url; 
+                $user->suspended = $request->suspended;
     
                 $user->password = bcrypt($request->password);
                 $user->save();
@@ -86,10 +87,15 @@ class UserController extends Controller
      * @param \App\User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(User $user)
+    public function destroy($id)
     {
         try {
-            $user->delete();
+            $user = User::find($id);
+
+            if(!is_null($user)) {
+                $user->delete();
+            }
+
             return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {

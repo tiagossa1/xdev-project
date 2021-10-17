@@ -31,7 +31,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('users', 'UserController@index');
     Route::get('users/{id}', 'UserController@show');
     Route::put('users/{id}', 'UserController@update')->middleware('ismoderator');
-    Route::delete('users', 'UserController@destroy')->middleware('ismoderator');
+    Route::delete('users/{id}', 'UserController@destroy')->middleware('ismoderator');
 
     Route::apiResource('districts', 'DistrictController');
     Route::apiResource('feedback-types', 'FeedbackTypeController');
@@ -50,6 +50,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('get-profile-picture', 'ImageUploadController@getProfilePicture');
 
     Route::get('notifications', 'NotificationController@index');
+    Route::post('mark-notification', 'NotificationController@markNotification');
 });
 
 // Users

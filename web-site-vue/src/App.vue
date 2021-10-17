@@ -57,7 +57,7 @@ export default {
   watch: {
     $route(to) {
       const DEFAULT_TITLE = "xDev";
-      document.title = `${DEFAULT_TITLE} - ${to.name}` || DEFAULT_TITLE;
+      document.title = to.name ? `${DEFAULT_TITLE} - ${to.name}` : DEFAULT_TITLE;
     },
   },
 };

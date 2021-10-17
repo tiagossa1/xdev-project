@@ -114,6 +114,7 @@ export default {
       if (!this.v$.$invalid) {
         if (this.post) {
           request = new ReportRequest(
+            null,
             this.$store.getters["auth/user"].id,
             this.post.id,
             null,
@@ -125,6 +126,7 @@ export default {
           );
         } else if (this.comment) {
           request = new ReportRequest(
+            null,
             this.$store.getters["auth/user"].id,
             null,
             null,
@@ -159,7 +161,7 @@ export default {
     },
     onEdit() {
       this.$emit("on-edit", true);
-    }
+    },
   },
 };
 </script>

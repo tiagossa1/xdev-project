@@ -259,7 +259,7 @@ export default {
     async onSubmit() {
       let res = null;
       if (!this.v$.$invalid) {
-        if (!this.form.email.incldes("@edu.atec.pt")) {
+        if (!this.form.email.includes("@edu.atec.pt")) {
           this.form.email += "@edu.atec.pt";
         }
 

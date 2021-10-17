@@ -1,5 +1,6 @@
 import axios from "axios";
 import User from "../models/user";
+import UserType from "../models/userType";
 
 export default new (class UserService {
   constructor() {
@@ -19,7 +20,20 @@ export default new (class UserService {
   }
 
   async changePassword(changePasswordRequest) {
-    return await axios.post(`${this.apiUrl}/api/change-password`, changePasswordRequest);
+    return await axios.post(
+      `${this.apiUrl}/api/change-password`,
+      changePasswordRequest
+    );
+  }
+
+  async getUsers() {
+    let res = await axios.get(`${this.apiUrl}/api/users`);
+
+    if (res.data) {
+      return res.data.data.map((u) => new User(u));
+    }
+
+    return [];
   }
 
   async getUserById(id) {
@@ -32,6 +46,16 @@ export default new (class UserService {
     return new User(null);
   }
 
+  async getUserTypes() {
+    const res = await axios.get(`${this.apiUrl}/api/user-types`);
+
+    if (res.data) {
+      return res.data.data.map((ut) => new UserType(ut));
+    }
+
+    return [];
+  }
+
   async updateLikedPosts(userId, likedPosts) {
     return await axios.put(`${this.apiUrl}/api/user/${userId}`, {
       liked_posts: likedPosts,
@@ -40,5 +64,9 @@ export default new (class UserService {
 
   async update(user) {
     return await axios.put(`${this.apiUrl}/api/users/${user.id}`, user);
+  }
+
+  async delete(id) {
+    return await axios.delete(`${this.apiUrl}/api/users/${id}`);
   }
 })();

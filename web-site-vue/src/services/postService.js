@@ -43,20 +43,8 @@ export default new (class PostService {
     return [];
   }
 
-  async insertPost(form) {
+  async create(form) {
     return await axios.post(`${this.apiUrl}/api/posts`, form);
-  }
-
-  async changeLikePost(postId, userLikes) {
-    return await axios.put(`${this.apiUrl}/api/posts/${postId}`, {
-      likes: userLikes,
-    });
-  }
-
-  async changeSavedPost(postId, postSaved) {
-    return await axios.put(`${this.apiUrl}/api/posts/${postId}`, {
-      users_saved: postSaved,
-    });
   }
 
   async updatePost(post) {

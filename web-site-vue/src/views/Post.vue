@@ -37,32 +37,71 @@
                 >
                   <b-form-select
                     id="postType"
-                    v-model="form.post_type_id"
+                    v-model="form.postTypeId"
                     :options="postTypesSelect"
                     required
                   ></b-form-select>
                 </b-form-group>
 
                 <b-form-group
-                  label="Insira as tags do post:"
-                  label-for="postTags"
+                  label="Tagged input using select"
+                  label-for="tags-component-select"
                 >
+                  <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
                   <b-form-tags
-                    id="postTags"
-                    v-model="postTags.tag_id"
-                    separator=" "
-                    required
-                  ></b-form-tags>
-
-                  <template #invalid-feedback>
-                    Tem de introduzir pelo menos 1 tag e no máximo 6.
-                  </template>
-
-                  <template #description>
-                    <div id="tags-validation-help">
-                      Os posts têm de ter pelo menos 1 tag e no máximo 6.
-                    </div>
-                  </template>
+                    id="tags-component-select"
+                    v-model="form.tags"
+                    size="lg"
+                    class="mb-2"
+                    :limit="limitTag"
+                    add-on-change
+                    no-outer-focus
+                  >
+                    <template
+                      v-slot="{
+                        tags,
+                        inputAttrs,
+                        inputHandlers,
+                        disabled,
+                        removeTag,
+                      }"
+                    >
+                      <ul
+                        v-if="tags.length > 0"
+                        class="list-inline d-inline-block mb-2"
+                      >
+                        <li
+                          v-for="tag in tags"
+                          :key="tag"
+                          class="list-inline-item"
+                        >
+                          <b-form-tag
+                            @remove="removeTag(tag)"
+                            :title="tag"
+                            :disabled="disabled"
+                            variant="primary"
+                            class="text-white"
+                            >{{ tag }}</b-form-tag
+                          >
+                        </li>
+                      </ul>
+                      <b-form-select
+                        v-bind="inputAttrs"
+                        v-on="inputHandlers"
+                        :disabled="
+                          disabled ||
+                          availableOptions.length === 0 ||
+                          form.tags.length >= 6
+                        "
+                        :options="availableOptions"
+                      >
+                        <template #first>
+                          <!-- This is required to prevent bugs with Safari -->
+                          <option disabled value="">Escolha uma tag...</option>
+                        </template>
+                      </b-form-select>
+                    </template>
+                  </b-form-tags>
                 </b-form-group>
               </b-form>
             </b-modal>
@@ -93,14 +132,6 @@
       </b-row>
       <b-row class="w-100">
         <b-col sm="9">
-          <!-- <div v-for="post in posts" :key="post.id">
-            <post-component
-              @on-post-deleted="onPostDeleted"
-              @on-comment-deleted="onCommentDeleted"
-              :post="post"
-            ></post-component>
-          </div> -->
-
           <transition-group name="fade" tag="div">
             <div v-for="post in posts" :key="post.id">
               <post-component
@@ -121,17 +152,23 @@
 </template>
 
 <script>
-import PostComponent from "../components/PostComponent.vue";
+import PostRequest from "../models/requests/postRequest";
 
+import PostComponent from "../components/PostComponent.vue";
 import PopularTagsComponent from "../components/PopularTagsComponent.vue";
 import TopPostsComponent from "../components/TopPostsComponent.vue";
 
 import postService from "../services/postService";
+import tagService from "../services/tagService";
+
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
+import Post from '../models/post';
 
 export default {
   name: "Post",
   components: { PostComponent, PopularTagsComponent, TopPostsComponent },
-  async created() {
+  async mounted() {
     this.posts = await postService
       .getPosts()
       .catch((err) => console.log(err.response));
@@ -147,34 +184,85 @@ export default {
     }));
 
     this.postTypesSelect = this.postTypesSelect.concat(selectOptions);
+
+    let tags = await tagService.getTags();
+    this.tags = tags;
+    this.tagOptions = tags.map((t) => t.name).sort();
+  },
+  computed: {
+    availableOptions() {
+      return this.tagOptions.filter(
+        (opt) => this.form.tags.indexOf(opt) === -1
+      );
+    },
+  },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      form: {
+        title: { required },
+        description: { required },
+        postTypeId: { required },
+        userId: { required },
+        suspended: { required },
+        tags: { required },
+      },
+    };
   },
   data() {
     return {
       filterSelected: "Filtro",
       originalPosts: [],
       posts: [],
+      tags: [],
+      tagOptions: [],
       dismissSecs: 5,
       dismissCountDown: 0,
       postTypes: [],
       postTypesSelect: [],
+      limitTag: 6,
       form: {
         title: "",
         description: "",
-        post_type_id: null,
-        user_id: this.$store.getters["auth/user"].id,
+        postTypeId: null,
+        userId: this.$store.getters["auth/user"].id,
         suspended: 0,
+        tags: [],
       },
       filterMode: false,
-      postTags: [
-        {
-          tag_id: "",
-        },
-      ],
     };
   },
   methods: {
-    createPost() {
-      console.log(this.form);
+    async createPost() {
+      let tagIds = this.tags.filter(t => this.form.tags.includes(t.name)).map(t => t.id);
+
+      let request = new PostRequest(
+        null,
+        this.form.title,
+        this.form.description,
+        this.form.suspended,
+        this.form.userId,
+        this.form.postTypeId,
+        null,
+        tagIds
+      );
+
+      let res = await postService.create(request).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+          variant: "danger",
+        });
+      });
+
+      let newPost = new Post(res.data.data);
+
+      if (res.status === 201) {
+        this.posts.unshift(newPost);
+        this.$root.$emit("show-alert", {
+          alertMessage: "Post criado com sucesso!",
+          variant: "success",
+        });
+      }
     },
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);

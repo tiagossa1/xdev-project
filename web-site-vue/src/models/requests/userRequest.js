@@ -1,4 +1,4 @@
-export default class User {
+export default class UserRequest {
   constructor(
     id,
     email,
@@ -17,6 +17,7 @@ export default class User {
     tags,
     liked_posts,
     comments,
+    suspended
     
   ) {
     this.id = id;
@@ -37,5 +38,6 @@ export default class User {
     this.tags = tags;
     this.liked_posts = liked_posts;
     this.comments = comments;
+    this.suspended = suspended;
   }
 }
