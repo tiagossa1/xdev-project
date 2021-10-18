@@ -24,7 +24,7 @@ class CreateUserTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:user_types'],
+            'name' => ['required', 'unique:user_types', 'max:20', 'min:2'],
             'hexColorCode' => ['required']
         ];
     }

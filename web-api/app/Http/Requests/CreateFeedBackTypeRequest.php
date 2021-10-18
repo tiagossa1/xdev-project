@@ -24,7 +24,7 @@ class CreateFeedBackTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:feedback_types'],
+            'name' => ['required', 'unique:feedback_types', 'max:50', 'min:2'],
         ];
     }
 }

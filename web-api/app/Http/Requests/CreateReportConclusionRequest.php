@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateSchoolRequest extends FormRequest
+class CreateReportConclusionRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,8 +24,7 @@ class CreateSchoolRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:schools', 'max:20', 'min:2'],
+            'name' => ['required', 'unique:report_conclusions', 'max:20', 'min:2'],
         ];
     }
 }
-

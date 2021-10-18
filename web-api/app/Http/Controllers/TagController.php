@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateTagRequest;
 use App\Tag;
 use Exception;
 use Illuminate\Http\Request;
@@ -38,7 +39,7 @@ class TagController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateTagRequest $request)
     {
         try {
             $tag = Tag::create($request->all());

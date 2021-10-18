@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReportConclusionRequest;
+use App\Http\Requests\CreateReportRequest;
 use App\ReportConclusion;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,7 +33,7 @@ class ReportConclusionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreateReportConclusionRequest $request)
     {
         try {
             $reportConclusion = ReportConclusion::create($request->all());

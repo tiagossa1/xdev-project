@@ -15,10 +15,10 @@ class RegisterAuthRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email|unique:users,email|ends_with:@edu.atec.pt',
             'birth_date' => 'required',
             'password' => 'required|string|min:6',
-            'district_id' => 'nullable|exists:districts,id',
+            'district_id' => 'required|exists:districts,id',
             'user_type_id' => 'required|exists:user_types,id',
             'school_class_id' => 'required|exists:school_classes,id'
         ];

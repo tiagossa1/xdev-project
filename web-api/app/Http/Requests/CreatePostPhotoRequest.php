@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CreateFeedBackRequest extends FormRequest
+class CreatePostPhotoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,22 +25,21 @@ class CreateFeedBackRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => [
+            'url' => [
                 'required',
-                Rule::unique('feedback')->where(function ($query) {
-                    $query->where('description', $this->description)
-                        ->where('user_id', $this->user_id);
+                Rule::unique('post_photos')->where(function ($query) {
+                    $query->where('url', $this->url)
+                        ->where('post_id', $this->post_id);
                 }),
-                'max:20', 'min:7'
+                'max:20', 'min:2'
             ],
-            'user_id' => ['required', 'exists:users,id'],
-            'feedback_type_id' => ['required', 'exists:feedback_types,id']
+            'post_id' => ['required', 'exists:posts,id']
         ];
     }
 
     public function messages() {
         return [
-            'description.unique' => 'Combination of description & user_id is not unique',
+            'url.unique' => 'Combination of url & post_id is not unique',
         ];
     }
 }

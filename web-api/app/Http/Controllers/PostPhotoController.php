@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostPhotoRequest;
 use App\PostPhoto;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class PostPhotoController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreatePostPhotoRequest $request)
     {
         try {
             $postPhoto = PostPhoto::create($request->all());

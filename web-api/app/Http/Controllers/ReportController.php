@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\ReportRequest;
 use App\Notifications\NewReport;
 use App\Report;
@@ -50,7 +51,7 @@ class ReportController extends Controller
                 $report->comments()->sync($request->input('comments'));
 
             $mods = User::whereIn('user_type_id', [2,4])->get();
-            
+
             if(!is_null($mods))
                 Notification::send($mods, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Notifications\NewPost;
 use App\Post;
 use App\User;
@@ -39,7 +40,7 @@ class PostController extends Controller
             }
 
             $posts = $query->latest()->get();
-    
+
             return response()->json([
                 'message' => 'Success',
                 'data' => $posts
@@ -55,7 +56,7 @@ class PostController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
         try {
             $post = Post::create($request->all());
@@ -117,7 +118,7 @@ class PostController extends Controller
                 $post->suspended = $request->suspended;
                 $post->user_id = $request->user_id;
                 $post->post_type_id = $request->post_type_id;
-                
+
                 $post->save();
             }
 

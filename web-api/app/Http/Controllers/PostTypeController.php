@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostTypeRequest;
 use App\PostType;
 use Exception;
 use Illuminate\Http\Request;
@@ -31,7 +32,7 @@ class PostTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request)
+    public function store(CreatePostTypeRequest $request)
     {
         try {
             $postType = PostType::create($request->all());
