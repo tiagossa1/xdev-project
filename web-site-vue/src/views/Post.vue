@@ -132,6 +132,7 @@
       </b-row>
       <b-row class="w-100">
         <b-col sm="9">
+          <template v-if="posts.length > 0">
           <transition-group name="fade" tag="div">
             <div v-for="post in posts" :key="post.id">
               <post-component
@@ -141,6 +142,10 @@
               ></post-component>
             </div>
           </transition-group>
+          </template>
+          <template v-else>
+            <h5>Não há posts para mostrar.</h5>
+          </template>
         </b-col>
         <b-col class="ml-4">
           <topPosts-component></topPosts-component>
@@ -163,7 +168,7 @@ import tagService from "../services/tagService";
 
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import Post from '../models/post';
+import Post from "../models/post";
 
 export default {
   name: "Post",
@@ -188,6 +193,14 @@ export default {
     let tags = await tagService.getTags();
     this.tags = tags;
     this.tagOptions = tags.map((t) => t.name).sort();
+
+    this.$root.$on("tag-search-navbar", (tagIds) => {
+      if (tagIds.length > 0) {
+        this.posts = this.originalPosts.filter(p => p.tags.some(t => tagIds.includes(t.id)));
+      } else {
+        this.posts = this.originalPosts;
+      }
+    });
   },
   computed: {
     availableOptions() {
@@ -234,7 +247,9 @@ export default {
   },
   methods: {
     async createPost() {
-      let tagIds = this.tags.filter(t => this.form.tags.includes(t.name)).map(t => t.id);
+      let tagIds = this.tags
+        .filter((t) => this.form.tags.includes(t.name))
+        .map((t) => t.id);
 
       let request = new PostRequest(
         null,

@@ -8,6 +8,8 @@ use App\Post;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 
 class PostController extends Controller
@@ -17,25 +19,12 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $posts = Post::latest()->get();
-
-            return response()->json([
-                'data' => $posts,
-                'message' => 'Success',
-            ], 200);
-        } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
-        }
-    }
-
-    public function filter(Request $request) {
         try {
             $query = Post::query();
 
-            if($request->user_id) {
+            if ($request->user_id) {
                 $query->where('user_id', $request->user_id);
             }
 
@@ -43,7 +32,39 @@ class PostController extends Controller
 
             return response()->json([
                 'message' => 'Success',
-                'data' => $posts
+                'data' => $posts,
+            ], 200);
+        } catch (Exception $ex) {
+            return response()->json(['error' => $ex->getMessage()], 500);
+        }
+    }
+
+    public function getPostsByTags(Request $request)
+    {
+        try {
+            // estás aí, André?
+            $rules = array(
+                'tags' => 'required'
+            );
+
+            $messages = array(
+                'tags.required' => 'Tag is required.'
+            );
+
+            $validator = Validator::make($request->all(), $rules, $messages);
+
+            if($validator->fails()) {
+                return response()->json(['message' => $validator->errors()->first()], 400);
+            }
+
+            $result = DB::table('post_tag')->whereIn('tag_id', $request->tags)->select('post_id')->get();
+            $postIds = collect($result)->pluck('post_id')->toArray();
+
+            $posts = Post::whereIn('id', $postIds)->latest()->get();
+
+            return response()->json([
+                'message' => 'Success',
+                'data' => $posts,
             ], 200);
         } catch (Exception $ex) {
             return response()->json(['error' => $ex->getMessage()], 500);
@@ -112,7 +133,7 @@ class PostController extends Controller
         try {
             $post = Post::find($post->id);
 
-            if(!is_null($post)) {
+            if (!is_null($post)) {
                 $post->title = $request->title;
                 $post->description = $request->description;
                 $post->suspended = $request->suspended;

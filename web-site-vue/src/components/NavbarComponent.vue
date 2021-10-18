@@ -10,60 +10,77 @@
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav class="ml-auto">
-        <template v-if="authenticated">
-          <b-nav-form>
-            <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
-            <b-form-tags
-              id="tags-component-select"
-              v-model="value"
-              size="lg"
-              class="mb-2"
-              style="width: 30rem"
-              add-on-change
-              no-outer-focus
-            >
-              <template
-                v-slot="{
-                  tags,
-                  inputAttrs,
-                  inputHandlers,
-                  disabled,
-                  removeTag,
-                }"
+        <template v-if="authenticated && isHome">
+          <b-form-tags
+            id="tags-with-dropdown"
+            v-model="value"
+            no-outer-focus
+            class="mb-2"
+            style="width: 30rem"
+          >
+            <template v-slot="{ tags, disabled, addTag, removeTag }">
+              <ul
+                v-if="tags.length > 0"
+                class="list-inline d-inline-block mb-2"
               >
-                <ul
-                  v-if="tags.length > 0"
-                  class="list-inline d-inline-block mb-2"
+                <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                  <b-form-tag
+                    @remove="
+                      removeTag(tag);
+                      onRemove(tag);
+                    "
+                    :title="tag"
+                    :disabled="disabled"
+                    variant="primary"
+                    class="text-white"
+                    >{{ tag }}</b-form-tag
+                  >
+                </li>
+              </ul>
+
+              <b-dropdown
+                size="sm"
+                variant="outline-secondary"
+                block
+                menu-class="w-100"
+                class="my-class"
+              >
+                <template #button-content>
+                  <b-icon icon="tag-fill"></b-icon> Filtrar por tags
+                </template>
+                <b-dropdown-form @submit.stop.prevent="() => {}">
+                  <b-form-group
+                    label="Procurar tag"
+                    label-for="tag-search-input"
+                    label-cols-md="auto"
+                    class="mb-0"
+                    label-size="sm"
+                    :description="searchDesc"
+                    :disabled="disabled"
+                  >
+                    <b-form-input
+                      v-model="search"
+                      id="tag-search-input"
+                      type="search"
+                      size="sm"
+                      autocomplete="off"
+                    ></b-form-input>
+                  </b-form-group>
+                </b-dropdown-form>
+                <b-dropdown-divider></b-dropdown-divider>
+                <b-dropdown-item-button
+                  v-for="option in availableOptions"
+                  :key="option"
+                  @click="onOptionClick({ option, addTag })"
                 >
-                  <li v-for="tag in tags" :key="tag" class="list-inline-item">
-                    <b-form-tag
-                      @remove="removeTag(tag)"
-                      class="text-white"
-                      :title="tag"
-                      :disabled="disabled"
-                      variant="primary"
-                      >{{ tag }}</b-form-tag
-                    >
-                  </li>
-                </ul>
-                <b-form-select
-                  v-bind="inputAttrs"
-                  v-on="inputHandlers"
-                  :disabled="disabled || availableOptions.length === 0"
-                  :options="availableOptions"
-                  style="width: 28rem"
-                >
-                  <template #first>
-                    <!-- This is required to prevent bugs with Safari -->
-                    <option disabled value="">Escolha uma tag...</option>
-                  </template>
-                </b-form-select>
-              </template>
-            </b-form-tags>
-            <b-button size="md" class="ml-2" variant="light" type="submit"
-              >Procurar</b-button
-            >
-          </b-nav-form>
+                  {{ option }}
+                </b-dropdown-item-button>
+                <b-dropdown-text v-if="availableOptions.length === 0">
+                  Não existem tags para selecionar
+                </b-dropdown-text>
+              </b-dropdown>
+            </template>
+          </b-form-tags>
         </template>
       </b-navbar-nav>
 
@@ -119,11 +136,14 @@ export default {
     return {
       value: [],
       options: [],
+      tags: [],
+      search: "",
     };
   },
   async created() {
     if (this.authenticated) {
       let tags = await tagService.getTags();
+      this.tags = tags;
       this.options = tags.map((t) => t.name).sort();
     }
   },
@@ -133,10 +153,33 @@ export default {
       user: "auth/user",
     }),
     availableOptions() {
-      return this.options.filter((opt) => this.value.indexOf(opt) === -1);
+      const criteria = this.criteria;
+      const options = this.options.filter(
+        (opt) => this.value.indexOf(opt) === -1
+      );
+
+      if (criteria) {
+        return options.filter(
+          (opt) => opt.toLowerCase().indexOf(criteria) > -1
+        );
+      }
+
+      return options;
+    },
+    searchDesc() {
+      if (this.criteria && this.availableOptions.length === 0) {
+        return "Não foram encontradas tags.";
+      }
+      return "";
     },
     isModerator() {
       return this.user.user_type.id === 2 || this.user.user_type.id === 4;
+    },
+    criteria() {
+      return this.search.trim().toLowerCase();
+    },
+    isHome() {
+      return this.$route.name === 'Home';
     },
   },
   methods: {
@@ -153,6 +196,41 @@ export default {
     showModal() {
       this.$refs.modalComponent.show();
     },
+    onOptionClick({ option, addTag }) {
+      addTag(option);
+      this.value.push(option);
+      this.search = "";
+
+      this.emitEventToSearchByTags();
+    },
+    emitEventToSearchByTags() {
+      if (this.value.length == 0) {
+        this.$root.$emit("tag-search-navbar", []);
+      } else {
+        let tagIds = this.tags
+          .filter((t) => this.value.includes(t.name))
+          .map((t) => t.id);
+        this.$root.$emit("tag-search-navbar", tagIds);
+      }
+    },
+    // onChangeTags() {
+    //   this.emitEventToSearchByTags();
+    // },
+    onRemove(tag) {
+      const index = this.value.indexOf(tag);
+      if (index > -1) {
+        this.value.splice(index, 1);
+      }
+
+      this.emitEventToSearchByTags();
+    },
   },
 };
 </script>
+
+<style>
+.my-class .dropdown-menu {
+  max-height: 15rem;
+  overflow-y: auto;
+}
+</style>

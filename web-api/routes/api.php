@@ -40,9 +40,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('schools', 'SchoolController');
     Route::apiResource('user-types', 'UserTypeController');
     Route::apiResource('comments', 'CommentController');
-    Route::apiResource('posts', 'PostController');
 
-    Route::get('/posts', 'PostController@filter');
+    // posts
+    Route::apiResource('posts', 'PostController');
+    Route::post('posts/get-by-tags', 'PostController@getPostsByTags');
 
     Route::apiResource('post-types', 'PostTypeController');
 

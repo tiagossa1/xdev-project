@@ -14,13 +14,24 @@
           </a>
         </template>
         <template #cell(postTitle)="data">
-          <a
-            v-b-modal.post-modal
-            :ref="data.item.report.post.title"
-            href=""
-            @click.prevent="setPost(data.item.report.post)"
-            >{{ data.item.report.post.title }}</a
-          >
+          <template v-if="data.item.report.post">
+            <a
+              v-b-modal.post-modal
+              :ref="data.item.report.post.title"
+              href=""
+              @click.prevent="setPost(data.item.report.post)"
+              >{{ data.item.report.post.title }}</a
+            >
+          </template>
+          <template v-else> Não foi reportado um post. </template>
+        </template>
+        <template #cell(commentTitle)="data">
+          <template v-if="data.item.report.postComment">
+            <span class="font-italic">{{
+              data.item.report.postComment.description
+            }}</span>
+          </template>
+          <template v-else> Não foi reportado um comentário. </template>
         </template>
         <template #cell(reason)="data">
           {{ data.item.report.reason }}
@@ -30,8 +41,10 @@
             <b-button @click="onSuspendedPost(data.item)" variant="warning"
               >Suspender Post</b-button
             >
-            <b-button @click="onDelete(data.item.post.id)" variant="danger"
-              >Eliminar Report</b-button
+            <b-button
+              @click="onDeleteComment(data.item)"
+              variant="danger"
+              >Eliminar Comentário</b-button
             >
           </b-button-group>
         </template>
@@ -54,11 +67,12 @@ import { mapGetters } from "vuex";
 
 import PostRequest from "../../models/requests/postRequest";
 import ReportRequest from "../../models/requests/reportRequest";
-import notificationService from "../../services/notificationService";
 
 import postService from "../../services/postService";
 import reportConclusionService from "../../services/reportConclusionService";
 import reportService from "../../services/reportService";
+import notificationService from "../../services/notificationService";
+import commentService from "../../services/commentService";
 
 import PostComponent from "../PostComponent.vue";
 
@@ -75,6 +89,10 @@ export default {
         {
           key: "postTitle",
           label: "Post reportado",
+        },
+        {
+          key: "commentTitle",
+          label: "Comentário reportado",
         },
         {
           key: "reason",
@@ -163,8 +181,37 @@ export default {
         });
       }
     },
-    onDelete(postId) {
-      console.log(postId);
+    async onDeleteComment(item) {      
+      let res = await commentService.deleteComment(item.report.postComment.id).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.message + ".",
+          variant: "danger",
+        });
+      });
+
+      if (res.status === 200) {
+        let notificationRes = await notificationService
+          .markAsRead(item.id)
+          .catch((err) => {
+            this.$root.$emit("show-alert", {
+              alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+              variant: "danger",
+            });
+          });
+
+        if (notificationRes.status === 200) {
+          const index = this.notifications.findIndex((n) => n.id === item.id);
+
+          if (index >= 0) {
+            this.notifications.splice(index, 1);
+            this.$refs.notificationTable.refresh();
+          }
+          this.$root.$emit("show-alert", {
+            alertMessage: "Comentário eliminado com sucesso.",
+            variant: "success",
+          });
+        }
+      }
     },
   },
 };

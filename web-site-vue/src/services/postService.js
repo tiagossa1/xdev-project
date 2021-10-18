@@ -33,6 +33,20 @@ export default new (class PostService {
     return [];
   }
 
+  async getPostsByTagIds(tags) {
+    let res = await axios.post(`${this.apiUrl}/api/posts/get-by-tags`, {
+      tags: tags,
+    });
+
+    if (res.data.data) {
+      return res.data.data.map((p) => {
+        return new Post(p);
+      });
+    }
+
+    return [];
+  }
+
   async getPostTypes() {
     let response = await axios.get(`${this.apiUrl}/api/post-types`);
 

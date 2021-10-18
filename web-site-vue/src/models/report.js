@@ -10,7 +10,7 @@ export default class Report {
     this.post = report?.post ? new Post(report?.post) : null;
     this.moderator = report?.moderator ? new User(report?.moderator) : null;
     this.reportConclusion = report?.reportConclusion ? new ReportConclusion(report?.reportConclusion) : null;
-    this.postComment = report?.postComment ? new Comment(report?.postComment) : null;
+    this.postComment = report?.comment ? new Comment(report?.comment) : null;
     this.closed = Boolean(report?.closed);
     this.reason = report?.reason;
     this.createdAt = report?.created_at;

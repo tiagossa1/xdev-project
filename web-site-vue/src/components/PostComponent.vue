@@ -256,7 +256,6 @@ export default {
 
       this.liked = !this.liked;
     },
-
     async onSave() {
       if (this.saved) {
         const indexToRemove = this.post.usersSaved.indexOf(
@@ -288,7 +287,6 @@ export default {
 
       this.saved = !this.saved;
     },
-
     async onSubmit() {
       if (this.comment) {
         const request = new CommentRequest(
@@ -307,7 +305,6 @@ export default {
         }
       }
     },
-
     onDeleted(deleteOptions) {
       if (deleteOptions.isPost) {
         this.$emit("on-post-deleted", deleteOptions.id);
@@ -315,11 +312,9 @@ export default {
         this.$emit("on-comment-deleted", deleteOptions.id);
       }
     },
-
     onEdit(toEdit) {
       this.toEdit = toEdit;
     },
-
     async onEdited() {
       let postTypeId = this.postTypes.find(
         (pt) => pt.name === this.post.postType.name
