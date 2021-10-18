@@ -253,6 +253,11 @@ export default {
       }
     },
     async updateSocial() {
+      //var facebookRegex = /(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w]*\/)*([\w]*)/;
+      //var githubRegex = /https:\/\/github\.com\/[A-Za-z0-9]([A-Za-z0-9]|-(?!-))*[A-Za-z0-9]\/?$/;
+      // var githubRegex = /(?:https?:\/\/)?(?:www\.)(?:instagram.com\/)[A-Za-z0-9_.]+/; //incorreto
+      //console.log(facebookRegex.test('link_para_testar')) //return true or false
+
       let request = new UserRequest(
         this.userInfo.id,
         this.userInfo.email,
@@ -270,13 +275,14 @@ export default {
         null,
         null,
         null,
-        null,
-        this.userInfo.suspended
+        null
       );
 
-      await userService
+      let res = await userService
         .update(request)
         .catch((err) => console.log(err.response));
+
+      console.log(res);
     },
   },
 };
