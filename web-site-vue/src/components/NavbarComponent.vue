@@ -2,7 +2,7 @@
   <b-navbar
     toggleable="lg"
     type="dark"
-    style="background-color: rgb(0, 174, 239)"
+    class="bg-primary"
   >
     <b-navbar-brand class="font-weight-bold" to="/home">xDev</b-navbar-brand>
 

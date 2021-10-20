@@ -17,7 +17,7 @@ class ReportRequest extends FormRequest
             'user_id' => 'required',
             'post_id' => 'required_without:comment_id',
             'comment_id' => 'required_without:post_id',
-            'closed' => 'required',
+            'closed' => 'required|boolean',
             'reason' => 'required',
         ];
     }

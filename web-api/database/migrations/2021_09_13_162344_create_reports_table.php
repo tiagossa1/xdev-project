@@ -17,10 +17,11 @@ class CreateReportsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('post_id')->nullable();
-            $table->foreignId('moderator_id')->nullable();
+            $table->unsignedBigInteger('moderator_id')->nullable();
+            $table->foreign('moderator_id')->nullable()->constrained()->references('id')->on('users');
             $table->foreignId('report_conclusion_id')->nullable()->constrained();
             $table->foreignId('comment_id')->nullable();
-            $table->boolean('closed')->default(0);
+            $table->boolean('closed')->default(0)->nullable();
             $table->string('reason');
             $table->timestamps();
         });

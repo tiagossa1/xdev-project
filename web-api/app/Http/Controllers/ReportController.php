@@ -92,15 +92,7 @@ class ReportController extends Controller
     public function update(Request $request, Report $report)
     {
         try {
-            $report = Report::find($report->id);
-
-            if(!is_null($report)) {
-                $report->moderator_id = $request->moderator_id;
-                $report->report_conclusion_id = $request->report_conclusion_id;
-                $report->closed = $request->closed;
-
-                $report->save();
-            }
+            $report->update($request->all());
 
             if ($request->input('users') != null)
                 $report->users()->sync($request->input('users'));
