@@ -107,7 +107,7 @@ class ReportController extends Controller
                 $report->reportConclusions()->sync($request->input('reportConclusions'));
 
             return response()->json([
-                'data' => $report,
+                'data' => $report->fresh(),
                 'message' => 'Success'
             ], 200);
 

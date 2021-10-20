@@ -79,7 +79,7 @@ class PostController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        try {            
+        try {
             $request->validate($request->rules());
 
             $post = Post::create($request->all());
@@ -134,7 +134,7 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         try {
-            $post = Post::find($post->id);
+            /*$post = Post::find($post->id);
 
             if (!is_null($post)) {
                 $post->title = $request->title;
@@ -144,7 +144,9 @@ class PostController extends Controller
                 $post->post_type_id = $request->post_type_id;
 
                 $post->save();
-            }
+            }*/
+
+            $post->update($request->all());
 
             if (!is_null($request->input('tags'))) {
                 $post->tags()->sync($request->input('tags'));
@@ -159,7 +161,7 @@ class PostController extends Controller
             }
 
             return response()->json([
-                'data' => $post,
+                'data' => $post->fresh(),
                 'message' => 'Success',
             ], 200);
 
