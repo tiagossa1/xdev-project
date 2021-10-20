@@ -79,17 +79,19 @@ class PostController extends Controller
      */
     public function store(CreatePostRequest $request)
     {
-        try {
+        try {            
+            $request->validate($request->rules());
+
             $post = Post::create($request->all());
 
             $post->tags()->attach($request->input('tags'));
-
-            $users = User::where('id', '=', function ($query) use ($post) {
-                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->get());
+            // 
+            $users = User::whereIn('id', function ($query) use ($post) {
+                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray());
             })->get();
 
-            if (!is_null($users)) {
-                Notification::send($users, new NewPost($post));
+            if (!is_null($users) || $users->length > 0) {
+                Notification::send($users, new NewPost(Post::find($post->id)));
             }
 
             return response()->json([
