@@ -85,9 +85,10 @@ class PostController extends Controller
             $post = Post::create($request->all());
 
             $post->tags()->attach($request->input('tags'));
-            // 
+            
+            // TODO: Test.
             $users = User::whereIn('id', function ($query) use ($post) {
-                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray());
+                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $request->user_id);
             })->get();
 
             if (!is_null($users) || $users->length > 0) {

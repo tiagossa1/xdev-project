@@ -1,9 +1,5 @@
 <template>
-  <b-navbar
-    toggleable="lg"
-    type="dark"
-    class="bg-primary"
-  >
+  <b-navbar toggleable="lg" type="dark" class="bg-primary">
     <b-navbar-brand class="font-weight-bold" to="/home">xDev</b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -87,7 +83,7 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <template v-if="authenticated">
-          <b-nav-item-dropdown right>
+          <b-nav-item-dropdown left>
             <template #button-content>
               <b-badge
                 class="mr-2 p-1"
@@ -98,15 +94,13 @@
                 {{ user.name }}
               </b-badge>
               <b-avatar
-                :badge="notificationCount"
                 :src="'data:image/jpeg;base64,' + user.profile_picture"
                 :style="{ border: '3px solid ' + user.user_type.hexColorCode }"
-                badge-variant="primary"
               >
               </b-avatar>
             </template>
-            <b-dropdown-item v-if="notificationCount > 0" disabled
-              >Tem {{ notificationCount }} notificações.
+            <b-dropdown-item v-if="notifications.length > 0" disabled
+              >Tem {{ notifications.length }} notificações.
             </b-dropdown-item>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
             <b-dropdown-item to="/moderation" v-if="this.isModerator"
@@ -117,6 +111,55 @@
             >
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
+          <b-icon
+            class="text-white m-auto"
+            style="cursor: pointer"
+            icon="bell"
+            font-scale="2"
+            v-b-toggle.sidebar-1
+          ></b-icon>
+          <b-badge v-b-toggle.sidebar-1 class="m-auto" pill variant="light">
+            {{ notifications.length }}
+          </b-badge>
+          <!-- <span class="text-white m-auto ml-2">6</span> -->
+          <b-sidebar
+            id="sidebar-1"
+            title="Notificações"
+            backdrop-variant="dark"
+            backdrop
+            right
+            shadow
+          >
+            <template v-if="notifications.length > 0">
+              <div v-for="notification in notifications" :key="notification.id">
+                <b-card no-body class="text-center p-4">
+                  <b-card-text>
+                    <span
+                      :style="{
+                        color: notification.post.user.userType.hexColorCode,
+                      }"
+                      >{{ notification.post.user.name }}</span
+                    >
+                    criou um novo post sobre
+                    {{ notification.post.tags.map((t) => t.name).join(", ") }}!
+                    <br />
+                    <b-link @click="markAsRead(notification.id)" href="#"
+                      >Marcar como lida</b-link
+                    >
+                  </b-card-text>
+                </b-card>
+              </div>
+            </template>
+            <template v-else>
+              <table class="h-100 w-100">
+                <tbody>
+                  <tr>
+                    <td class="text-center align-middle">Sem notificações.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </template>
+          </b-sidebar>
         </template>
 
         <template v-else>
@@ -153,15 +196,17 @@ export default {
       options: [],
       tags: [],
       search: "",
-      notificationCount: "0",
+      notifications: [],
     };
   },
   async mounted() {
     if (this.authenticated) {
-      this.notificationCount = await this.getNotificationsCount();
+      this.notifications = await this.getPostNotifications();
+      // this.notificationCount = await this.getNotificationsCount();
 
       window.setInterval(async () => {
-        this.notificationCount = await this.getNotificationsCount();
+        this.notifications = await this.getPostNotifications();
+        // this.notificationCount = await this.getNotificationsCount();
       }, 10000);
     }
   },
@@ -222,9 +267,11 @@ export default {
         this.$router.push("Login").catch(() => {});
       });
     },
-    async getNotificationsCount() {
+    async getPostNotifications() {
+      // TODO: Create a filter on PostController.
+
       let notifications = await notificationService.getNotifications();
-      return notifications.length.toString();
+      return notifications.filter((n) => n.type.toLowerCase() === "newpost");
     },
     showModal() {
       this.$refs.modalComponent.show();
@@ -253,6 +300,21 @@ export default {
       }
 
       this.emitEventToSearchByTags();
+    },
+    async markAsRead(notificationId) {
+      let res = await notificationService
+        .markAsRead(notificationId)
+        .catch((err) => console.log(err.response.data));
+
+      if (res.status === 200) {
+        let indexToRemove = this.notifications.findIndex(
+          (n) => n.id === notificationId
+        );
+
+        if (indexToRemove > -1) {
+          this.notifications.splice(indexToRemove, 1);
+        }
+      }
     },
   },
 };
