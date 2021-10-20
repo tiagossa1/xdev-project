@@ -14,7 +14,7 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $with = ["district", 'school_class', "user_type", 'tags'];
 
     protected $fillable = [
-        'email', 'name', 'birth_date', 'password', 'github_url', 'linkedin_url', 'facebook_url', 'instagram_url', 'district_id', 'user_type_id', 'school_class_id'
+        'suspended', 'email', 'name', 'birth_date', 'password', 'github_url', 'linkedin_url', 'facebook_url', 'instagram_url', 'district_id', 'user_type_id', 'school_class_id'
     ];
 
     protected $hidden = [

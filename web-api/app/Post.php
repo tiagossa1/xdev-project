@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Post extends Model
 {
     use softDeletes;
-    
+
     protected $fillable = [
         'title',
         'description',
         'user_id',
-        'post_type_id'
+        'post_type_id',
+        'suspended'
     ];
 
     protected $hidden = [
