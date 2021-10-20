@@ -2,6 +2,9 @@
   <b-modal id="modal2" ref="modal2" hide-footer title="Editar perfil">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar Password" active>
+        <b-alert v-model="AlertPasswordMessage" variant="danger" dismissible>
+          Erro ao atualizar a password
+        </b-alert>
         <b-form @submit.prevent="updatePassword">
           <b-row>
             <b-col>
@@ -88,7 +91,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white" type="submit" variant="primary"
+              <b-button type="submit" block variant="success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -97,6 +100,9 @@
       </b-tab>
 
       <b-tab title="Editar Redes Sociais">
+        <b-alert v-model="AlertMessage" :variant="updateSucces? 'success' : 'danger'" dismissible>
+          {{updateSucces ? messageSucces : messageFail}}
+        </b-alert>
         <b-form @submit.prevent="updateSocial">
           <b-row>
             <b-col>
@@ -184,6 +190,16 @@ export default {
   name: "user-settings",
   data() {
     return {
+      dismissSecs: 5,
+      dismissCountDown: 0,
+      AlertMessage: false,
+
+      updateSucces: false,
+      messageSucces : 'Redes Sociais atualizadas com sucesso',
+      messageFail : 'Erro ao atualizar as redes sociais',
+
+      AlertPasswordMessage: false,
+
       userInfo: {},
       showPassword: false,
       showNewPassword: false,
@@ -241,22 +257,32 @@ export default {
       );
       let res = await userService
         .changePassword(request)
-        .catch((err) => console.log(err.response));
+        .catch((err) => {
+          this.showPasswordAlert(err)
+          });
 
+      
       if (res.status === 200) {
         this.closeModel();
         this.signOut();
-        // this.$root.$emit("show-alert", {
-        //   alertMessage: "Password alterada com sucesso!",
-        //   variant: "success",
-        // });
       }
+      
+      
+      
+      
+      
+
     },
     async updateSocial() {
-      //var facebookRegex = /(?:https?:\/\/)?(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w]*\/)*([\w]*)/;
-      //var githubRegex = /https:\/\/github\.com\/[A-Za-z0-9]([A-Za-z0-9]|-(?!-))*[A-Za-z0-9]\/?$/;
-      // var githubRegex = /(?:https?:\/\/)?(?:www\.)(?:instagram.com\/)[A-Za-z0-9_.]+/; //incorreto
-      //console.log(facebookRegex.test('link_para_testar')) //return true or false
+      var facebookRegex = /(?:https?:\/\/)?(?:www\.)?facebook\.com\//;
+      var githubRegex = /(?:https?:\/\/)?(?:www\.)?github\.com\//;
+      var instagramRegex = /(?:https?:\/\/)?(?:www\.)(?:instagram.com\/)/; 
+      var linkedinRegex = /(?:https?:\/\/)?(?:www\.)(?:linkedin.com\/)/;
+
+      if(facebookRegex.test(this.userInfo.facebook_url) 
+      && githubRegex.test(this.userInfo.github_url)
+      && instagramRegex.test(this.userInfo.instagram_url)
+      && linkedinRegex.test(this.userInfo.linkedin_url)){
 
       let request = new UserRequest(
         this.userInfo.id,
@@ -275,15 +301,37 @@ export default {
         null,
         null,
         null,
-        null
+        null,
+        this.userInfo.suspended
       );
 
       let res = await userService
         .update(request)
         .catch((err) => console.log(err.response));
+      console.log(res)
 
-      console.log(res);
+      this.updateSucces = true
+      this.showSocialMediaAlert()
+      
+      }
+      else{
+        this.updateSucces = false
+        this.showSocialMediaAlert()
+      }
     },
+    showSocialMediaAlert(){
+      this.AlertMessage = true;
+      setTimeout(() => {
+        this.AlertMessage = false;
+      },3000);
+    },
+    showPasswordAlert(error){
+      console.log(error)
+      this.AlertPasswordMessage = true;
+      setTimeout(() => {
+        this.AlertPasswordMessage = false;
+      },3000);
+    }
   },
 };
 </script>
