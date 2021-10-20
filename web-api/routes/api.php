@@ -52,11 +52,15 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('notifications', 'NotificationController@index');
     Route::post('mark-notification', 'NotificationController@markNotification');
+
+    Route::get('email/resend','VerificationController@resend')->name('verification.resend');
 });
 
 // Users
 Route::post('register', 'AuthController@register');
 Route::post('login', 'AuthController@login');
+
+Route::get('email/verify/{id}/{hash}','VerificationController@verify')->name('verification.verify');
 
 /*
 // Districts

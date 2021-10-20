@@ -6,6 +6,7 @@ use App\Http\Requests\LoginAuthRequest;
 use App\Http\Requests\RegisterAuthRequest;
 use App\User;
 use Exception;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,16 +33,9 @@ class AuthController extends Controller
                         'district_id' => $request['district_id'],
                         'user_type_id' => $request['user_type_id'],
                         'school_class_id' => $request['school_class_id'],
-                    ]);
+                    ])->sendEmailVerificationNotification();
 
-                    $token = $user->createToken('xdevToken')->plainTextToken;
-
-                    $response = [
-                        'user' => $user,
-                        'token' => $token,
-                    ];
-
-                    return response($response, 201);
+                    return response()->json(['message' => 'User created, verification email sent'], 201);
                 } else {
                     return response(['message' => 'A user cannot be created with higher privileges.'], 400);
                 }
@@ -109,7 +103,7 @@ class AuthController extends Controller
                 if (!Hash::check(request('old_password'), Auth::user()->password)) {
                     return response([
                         'message' => "Old password is wrong.",
-                    ], 400); 
+                    ], 400);
                 } else if ((Hash::check($request['new_password'], Auth::user()->password)) == true) {
                     return response([
                         'message' => "Please enter a password which is not similar then current password.",
