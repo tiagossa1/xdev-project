@@ -37,14 +37,6 @@
       >
         O campo password é obrigatório.
         <br />
-        <br />
-      </div>
-      <div
-        class="text-danger font-weight-bold float-left small mt-1"
-        v-if="v$.form.password.minLength.$invalid"
-      >
-        A password tem de ter 6 caracteres.
-        <br />
       </div>
       <br />
 
@@ -75,10 +67,12 @@
 </template>
 
 <script>
+import LoginRequest from '../models/requests/loginRequest';
+
 import { mapActions } from "vuex";
 
 import useVuelidate from "@vuelidate/core";
-import { required, minLength } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
 
 export default {
   name: "login-component",
@@ -90,7 +84,7 @@ export default {
     return {
       form: {
         email: { required },
-        password: { required, minLength: minLength(6) },
+        password: { required },
       },
     };
   },
@@ -110,7 +104,10 @@ export default {
 
     onSubmit() {
       if (!this.v$.$invalid) {
-        this.signIn(this.form);
+        const email = this.form.email + "@edu.atec.pt"
+        let request = new LoginRequest(email, this.form.password);
+
+        this.signIn(request);
       } else {
         this.showErrorAlert = true;
         this.showAlert();

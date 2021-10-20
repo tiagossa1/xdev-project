@@ -89,11 +89,25 @@
         <template v-if="authenticated">
           <b-nav-item-dropdown right>
             <template #button-content>
-              <span class="mr-2"> {{ user.name }} </span>
+              <b-badge
+                class="mr-2 p-1"
+                :style="{
+                  backgroundColor: user.user_type.hexColorCode,
+                }"
+              >
+                {{ user.name }}
+              </b-badge>
               <b-avatar
+                :badge="notificationCount"
                 :src="'data:image/jpeg;base64,' + user.profile_picture"
-              ></b-avatar>
+                :style="{ border: '3px solid ' + user.user_type.hexColorCode }"
+                badge-variant="primary"
+              >
+              </b-avatar>
             </template>
+            <b-dropdown-item v-if="notificationCount > 0" disabled
+              >Tem {{ notificationCount }} notificações.
+            </b-dropdown-item>
             <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
             <b-dropdown-item to="/moderation" v-if="this.isModerator"
               >Moderação</b-dropdown-item
@@ -124,6 +138,7 @@
 
 <script>
 import tagService from "../services/tagService.js";
+import notificationService from "../services/notificationService";
 
 import { mapGetters, mapActions } from "vuex";
 import UserSettings from "./UserSettingsComponent.vue";
@@ -138,7 +153,17 @@ export default {
       options: [],
       tags: [],
       search: "",
+      notificationCount: "0",
     };
+  },
+  async mounted() {
+    if (this.authenticated) {
+      this.notificationCount = await this.getNotificationsCount();
+
+      window.setInterval(async () => {
+        this.notificationCount = await this.getNotificationsCount();
+      }, 10000);
+    }
   },
   async created() {
     if (this.authenticated) {
@@ -179,20 +204,28 @@ export default {
       return this.search.trim().toLowerCase();
     },
     isHome() {
-      return this.$route.name === 'Home';
+      return this.$route.name === "Home";
     },
   },
   methods: {
     ...mapActions({
       signOutAction: "auth/signOut",
     }),
-
+    getBadgeStyle() {
+      return {
+        color: "white",
+        backgroundColor: this.user.user_type.hexColorCode,
+      };
+    },
     signOut() {
       this.signOutAction().then(() => {
         this.$router.push("Login").catch(() => {});
       });
     },
-
+    async getNotificationsCount() {
+      let notifications = await notificationService.getNotifications();
+      return notifications.length.toString();
+    },
     showModal() {
       this.$refs.modalComponent.show();
     },
@@ -213,9 +246,6 @@ export default {
         this.$root.$emit("tag-search-navbar", tagIds);
       }
     },
-    // onChangeTags() {
-    //   this.emitEventToSearchByTags();
-    // },
     onRemove(tag) {
       const index = this.value.indexOf(tag);
       if (index > -1) {
@@ -233,4 +263,3 @@ export default {
   max-height: 15rem;
   overflow-y: auto;
 }
-</style>

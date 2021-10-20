@@ -1,5 +1,6 @@
 <template>
   <b-container fluid>
+    <user-notifications-component></user-notifications-component>
     <b-row>
       <b-col class="p-5" sm="3">
         <user-card-component :userInfo="userInfo"></user-card-component>
@@ -24,20 +25,31 @@ import postService from "../services/postService";
 
 import UserCardComponent from "../components/UserCardComponent.vue";
 import PostComponent from "../components/PostComponent.vue";
-import RecentFeed from "../components/RecentFeedComponent.vue"
+import RecentFeed from "../components/RecentFeedComponent.vue";
+import UserNotificationsComponent from "../components/UserNotificationsComponent.vue";
 
-import User from "../models/user";
+// import User from "../models/user";
 import Post from "../models/post";
 export default {
   name: "Profile",
-  components: { UserCardComponent, PostComponent, RecentFeed },
+  components: {
+    UserCardComponent,
+    PostComponent,
+    RecentFeed,
+    UserNotificationsComponent,
+  },
   data() {
     return {
-      userInfo: User,
+      userInfo: {
+        userType: {},
+        schoolClass: { school: {} },
+        posts: {},
+        tags: {},
+      },
       posts: Post,
     };
   },
-  async mounted() {
+  async created() {
     const paramId = this.$route.params.id;
 
     if (paramId) {

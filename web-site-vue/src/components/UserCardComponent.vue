@@ -116,11 +116,9 @@
 </template>
 
 <script>
-import User from '../models/user';
-
 export default {
   name: "user-card-component",
-  props: { userInfo: User},
+  props: { userInfo: {} }
 };
 </script>
 

@@ -40,7 +40,7 @@ export default class Post {
 
     if (post.comments?.length > 0) {
       this.comments = post.comments.map((c) => {
-        return new Comment(c);
+        return new Comment(c, post.id);
       });
     } else {
       this.comments = [];

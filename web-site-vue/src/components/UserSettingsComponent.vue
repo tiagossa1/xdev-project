@@ -88,7 +88,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white" type="submit" variant="primary"
+              <b-button class="text-white w-100" type="submit" variant="success"
                 >Atualizar</b-button
               >
             </b-col>

@@ -62,7 +62,11 @@
                   required
                 ></b-form-input>
               </b-col>
-              <b-col class="align-self-center" style="cursor: pointer" @click="onEdited">
+              <b-col
+                class="align-self-center"
+                style="cursor: pointer"
+                @click="onEdited"
+              >
                 <b-icon-pencil></b-icon-pencil>
               </b-col>
             </b-row>
@@ -155,7 +159,8 @@ export default {
       let request = new CommentRequest(
         this.comment.id,
         this.comment.description,
-        this.comment.user.id
+        this.comment.user.id,
+        this.comment.postId
       );
 
       let res = await commentService.edit(request).catch((err) => {
