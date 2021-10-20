@@ -1,7 +1,7 @@
 <template>
   <b-container
-    :style="{ border: '2px solid gray', 'border-radius': '25px' }"
-    class="bv-example-row p-3 ml-4 mb-4"
+    :style="{ border: '2px solid gray','border-radius': '25px', 'backgroundColor': '#dee2e6' }"
+    class="bv-example-row p-3 ml-4 mb-4 x"
   >
     <b-row class="ml-2 mb-3">
       <b-col>
@@ -116,7 +116,7 @@
           <span class="small"> {{ liked ? "Gosto" : "Gostar" }} </span>
         </p>
       </b-col>
-      <b-col cols="2" style="cursor: pointer" @click="onSave">
+      <b-col cols="3" style="cursor: pointer" @click="onSave">
         <p class="h5">
           <b-icon
             :variant="saved ? 'danger' : ''"
@@ -138,19 +138,35 @@
         </p>
       </b-col>
     </b-row>
-
+  <hr >
     <b-row class="ml-2 mt-2 mr-2">
       <b-col>
-        <b-button
+        <!-- <b-button
           v-if="post.comments.length > 0"
           class="text-white mt-2 mb-2"
           :aria-expanded="modalVisible ? 'true' : 'false'"
           :aria-controls="collapseId"
           @click="modalVisible = !modalVisible"
           variant="primary"
-          >Mostrar {{ post.comments.length }} comentários
-          <b-icon-arrow-down></b-icon-arrow-down
-        ></b-button>
+        > 
+          Mostrar {{ post.comments.length }} comentários
+           <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
+          </b-button> -->
+          <a href="" onclick="return false;">
+          <h5
+          v-if="post.comments.length > 0"
+          class="text-primary mt-2 mb-2 "
+          :aria-expanded="modalVisible ? 'true' : 'false'"
+          :aria-controls="collapseId"
+          @click="modalVisible = !modalVisible"
+          variant="primary"
+          > 
+          Mostrar {{ post.comments.length }} comentários
+           <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
+          <!-- <b-icon-arrow-down></b-icon-arrow-down --></h5>
+          </a>
+
+
         <b-collapse :id="collapseId" class="mt-2" v-model="modalVisible">
           <transition-group name="fade" tag="div">
             <div v-for="comment in post.comments" :key="comment.id">
@@ -168,6 +184,7 @@
         <b-form v-if="!viewOnly" @submit.prevent="onSubmit">
           <b-form-input
             v-model="comment"
+            class="commentInput"
             placeholder="Escreva o seu comentário aqui..."
           ></b-form-input>
         </b-form>
@@ -357,5 +374,17 @@ export default {
 img {
   width: 100%;
   height: 100%;
+}
+.x{
+  -webkit-box-shadow: 0 10px 6px -6px #777;
+  -moz-box-shadow: 0 10px 6px -6px #777;
+  box-shadow: 0 10px 6px -6px #777;
+}
+hr{
+  width: 90%;
+
+}
+.commentInput{
+  box-shadow: 0 0 3px gray;
 }
 </style>
