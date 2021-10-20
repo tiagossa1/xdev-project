@@ -46,7 +46,7 @@
                 class="my-class"
               >
                 <template #button-content>
-                  <b-icon icon="tag-fill"></b-icon> Filtrar por tags
+                  <b-icon icon="search"></b-icon> Filtrar por tags
                 </template>
                 <b-dropdown-form @submit.stop.prevent="() => {}">
                   <b-form-group

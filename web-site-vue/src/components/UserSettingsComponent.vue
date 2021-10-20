@@ -169,6 +169,35 @@
           </b-row>
         </b-form>
       </b-tab>
+
+      <b-tab title="Editar Tags">
+        <!-- <b-alert v-model="AlertMessage" :variant="updateSucces? 'success' : 'danger'" dismissible>
+          {{updateSucces ? messageSucces : messageFail}}
+        </b-alert> -->
+        <b-table 
+        hover 
+        :items="userInfo" 
+        :fields="fields">
+
+        <template #cell(actions)="data">
+        <b-button-group>
+          <b-button variant="success"
+            >Detalhes {{data.item}}</b-button
+          >
+          <b-button  variant="warning"
+            >Editar</b-button
+          >
+        </b-button-group>
+      </template>
+
+
+        <!-- <template #cell(userInfo.name)="data">
+        <span>{{data.item.userInfo.name}}</span>
+      </template> -->
+
+        </b-table>
+      </b-tab>
+
     </b-tabs>
     <b-button class="mt-3" variant="outline-danger" block @click="closeModel"
       >Sair</b-button
@@ -199,8 +228,13 @@ export default {
       messageFail : 'Erro ao atualizar as redes sociais',
 
       AlertPasswordMessage: false,
+      
+      fields: [
+        {key: "userInfo.name", label: "Nome"},
+        {key: "actions", label: "Ações"}
+      ],
 
-      userInfo: {},
+      userInfo: { },
       showPassword: false,
       showNewPassword: false,
       old_password: "",
@@ -213,7 +247,9 @@ export default {
 
     if (userId) {
       this.userInfo = await userService.getUserById(userId);
+      console.log(this.userInfo)
     }
+    
   },
   setup: () => ({ v$: useVuelidate() }),
   validations() {
@@ -266,12 +302,6 @@ export default {
         this.closeModel();
         this.signOut();
       }
-      
-      
-      
-      
-      
-
     },
     async updateSocial() {
       var facebookRegex = /(?:https?:\/\/)?(?:www\.)?facebook\.com\//;
