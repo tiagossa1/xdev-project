@@ -37,16 +37,19 @@
           {{ data.item.report.reason }}
         </template>
         <template #cell(actions)="data">
-          <b-button-group>
+          <template v-if="data.item.report.post !== null">
             <b-button @click="onSuspendedPost(data.item)" variant="warning"
               >Suspender Post</b-button
             >
-            <b-button
-              @click="onDeleteComment(data.item)"
-              variant="danger"
+          </template>
+          <template v-if="data.item.report.postComment !== null">
+            <b-button @click="onDeleteComment(data.item)" variant="danger"
               >Eliminar Comentário</b-button
             >
-          </b-button-group>
+          </template>
+          <b-button class="ml-2 text-white" variant="primary"
+            >Não fazer nada</b-button
+          >
         </template>
       </b-table>
 
@@ -181,13 +184,15 @@ export default {
         });
       }
     },
-    async onDeleteComment(item) {      
-      let res = await commentService.deleteComment(item.report.postComment.id).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.message + ".",
-          variant: "danger",
+    async onDeleteComment(item) {
+      let res = await commentService
+        .deleteComment(item.report.postComment.id)
+        .catch((err) => {
+          this.$root.$emit("show-alert", {
+            alertMessage: "Ocorreu um erro: " + err.response.message + ".",
+            variant: "danger",
+          });
         });
-      });
 
       if (res.status === 200) {
         let notificationRes = await notificationService

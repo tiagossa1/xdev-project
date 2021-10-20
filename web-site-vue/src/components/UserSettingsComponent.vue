@@ -91,7 +91,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button type="submit" block variant="success"
+              <b-button class="text-white w-100" type="submit" variant="success"
                 >Atualizar</b-button
               >
             </b-col>

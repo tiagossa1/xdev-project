@@ -56,24 +56,26 @@ class UserController extends Controller
     {
         try {
                 $user = User::find($request->id);
-                $user->name = $request->name;
-                // $user->user_type_id = $request->user_type_id;
-    
-                $user->github_url = $request->github_url;
-                $user->linkedin_url = $request->linkedin_url;
-                $user->facebook_url = $request->facebook_url;
-                $user->instagram_url = $request->instagram_url; 
-                $user->suspended = $request->suspended;
-    
-                $user->password = bcrypt($request->password);
+
+                $user->name = $request->name ?? $user->name;
+                $user->github_url = $request->github_url ?? $user->github_url;
+                $user->linkedin_url = $request->linkedin_url ?? $user->linkedin_url;
+                $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
+                $user->instagram_url = $request->instagram_url ?? $user->instagram_url;
+                $user->suspended = $request->suspended ?? $user->suspended;
+
+                if(!is_null($request->password)){
+                    $user->password = bcrypt($request->password);
+                }
+
                 $user->save();
-    
+
                 $user->tags()->sync($request->input('tags'));
                 $user->favorite_posts()->sync($request->input('favorite_posts'));
                 $user->liked_posts()->sync($request->input('liked_posts'));
-    
+
                 return response()->json([
-                    'data' => $user,
+                    'data' => $user->fresh(),
                     'message' => 'Sucess'
                 ], 200);
         } catch (Exception $exception) {

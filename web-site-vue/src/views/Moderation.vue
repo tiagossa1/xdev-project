@@ -1,6 +1,8 @@
 <template>
-  <div style="margin-bottom: 55px" class="container">
-    <h5 class="mb-3 mt-4 font-weight-bold">{{ getGrettingsByTime }}, {{ this.user.name }}!</h5>
+  <div class="w-75 m-auto" style="margin-bottom: 55px">
+    <h5 class="mb-3 mt-4 font-weight-bold">
+      {{ getGrettingsByTime }}, {{ this.user.name }}!
+    </h5>
     <notifications-component
       :notifications="notifications"
     ></notifications-component>
@@ -51,7 +53,10 @@ export default {
     };
   },
   async mounted() {
-    this.notifications = await notificationService.getNotifications();
+    let notifications = await notificationService.getNotifications();
+    this.notifications = notifications.filter(
+      (n) => n.type.toLowerCase() === "newreport"
+    );
   },
 };
 </script>

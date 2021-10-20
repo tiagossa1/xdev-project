@@ -264,7 +264,7 @@ export default {
 
       let res = await postService.create(request).catch((err) => {
         this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
+          alertMessage: "Ocorreu um erro: " + err.response + ".",
           variant: "danger",
         });
       });

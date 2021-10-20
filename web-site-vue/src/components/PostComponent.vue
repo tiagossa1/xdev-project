@@ -307,6 +307,7 @@ export default {
     async onSubmit() {
       if (this.comment) {
         const request = new CommentRequest(
+          null,
           this.comment,
           this.$store.getters["auth/user"].id,
           this.post.id
