@@ -30,8 +30,7 @@ class CreatePostPhotoRequest extends FormRequest
                 Rule::unique('post_photos')->where(function ($query) {
                     $query->where('url', $this->url)
                         ->where('post_id', $this->post_id);
-                }),
-                'max:20', 'min:2'
+                })
             ],
             'post_id' => ['required', 'exists:posts,id']
         ];

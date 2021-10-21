@@ -24,7 +24,7 @@ class CreateCommentRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => ['required', 'max:255', 'min:2'],
+            'description' => ['required', 'max:255'],
             'user_id' => ['required', 'exists:users,id'],
             'post_id' => ['required', 'exists:posts,id'],
         ];

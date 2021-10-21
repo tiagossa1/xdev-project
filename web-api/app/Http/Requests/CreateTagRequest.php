@@ -24,7 +24,7 @@ class CreateTagRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:tags', 'max:30'],
+            'name' => ['required', 'unique:tags'],
         ];
     }
 }

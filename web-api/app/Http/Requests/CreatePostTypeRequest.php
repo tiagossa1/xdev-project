@@ -24,7 +24,7 @@ class CreatePostTypeRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:post_types', 'max:20', 'min:2'],
+            'name' => ['required', 'unique:post_types'],
             'iconName' => ['required']
         ];
     }

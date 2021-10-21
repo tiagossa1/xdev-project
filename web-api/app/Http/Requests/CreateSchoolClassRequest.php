@@ -29,8 +29,7 @@ class CreateSchoolClassRequest extends FormRequest
                 Rule::unique('school_classes')->where(function ($query) {
                     $query->where('name', $this->name)
                         ->where('school_id', $this->school_id);
-                }),
-                'max:20', 'min:2'
+                })
             ],
             'school_id' => ['required', 'exists:schools,id']
         ];

@@ -24,7 +24,7 @@ class CreateReportConclusionRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:report_conclusions', 'max:20', 'min:2'],
+            'name' => ['required', 'unique:report_conclusions'],
         ];
     }
 }

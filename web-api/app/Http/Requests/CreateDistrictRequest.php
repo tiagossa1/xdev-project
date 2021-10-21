@@ -24,7 +24,7 @@ class CreateDistrictRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'unique:districts', 'max:30', 'min:2'],
+            'name' => ['required', 'unique:districts'],
         ];
     }
 }

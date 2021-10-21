@@ -25,14 +25,15 @@ class CreateFeedBackRequest extends FormRequest
     public function rules()
     {
         return [
-            'description' => [
+            /*'description' => [
                 'required',
                 Rule::unique('feedback')->where(function ($query) {
                     $query->where('description', $this->description)
                         ->where('user_id', $this->user_id);
                 }),
-                'max:20', 'min:7'
-            ],
+                'max:255'
+            ],*/
+            'description' => ['required', 'max:255'],
             'user_id' => ['required', 'exists:users,id'],
             'feedback_type_id' => ['required', 'exists:feedback_types,id']
         ];
