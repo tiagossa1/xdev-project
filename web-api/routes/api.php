@@ -20,11 +20,21 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', 'AuthController@logout');
     Route::post('change-password', 'AuthController@changePassword');
 
-    Route::apiResource('feedbacks', 'FeedbackController');
+    Route::get('feedbacks', 'FeedbackController@index')->middleware('ismoderator');
+    Route::get('feedbacks/{id}', 'FeedbackController@show')->middleware('ismoderator');
+    Route::post('feedbacks', 'FeedbackController@store')->middleware('throttle:1,1');
+    Route::put('feedbacks/{id}', 'FeedbackController@update')->middleware('ismoderator');
+    Route::delete('feedbacks/{id}', 'FeedbackController@destroy')->middleware('ismoderator');
 
     Route::apiResource('post-photos', 'PostPhotoController');
 
-    Route::apiResource('reports', 'ReportController');
+    Route::get('reports', 'ReportController@index')->middleware('ismoderator');
+    Route::get('reports/{id}', 'ReportController@show')->middleware('ismoderator');
+    Route::post('reports', 'ReportController@store')->middleware('throttle:1,1');
+    Route::put('reports/{id}', 'ReportController@update')->middleware('ismoderator');
+    Route::delete('reports/{id}', 'ReportController@destroy')->middleware('ismoderator');
+
+    // Route::apiResource('reports', 'ReportController');
     Route::apiResource('tags', 'TagController');
     // Route::apiResource('users', 'UserController');
 
@@ -41,8 +51,18 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::apiResource('user-types', 'UserTypeController');
     Route::apiResource('comments', 'CommentController');
 
+    Route::get('comments', 'CommentController@index');
+    Route::get('comments/{id}', 'CommentController@show');
+    Route::post('comments', 'CommentController@store')->middleware('throttle:1,1');
+    Route::put('comments/{id}', 'CommentController@update')->middleware('ismoderator');
+    Route::delete('comments/{id}', 'CommentController@destroy')->middleware('ismoderator');
+
     // posts
-    Route::apiResource('posts', 'PostController');
+    Route::get('posts', 'PostController@index');
+    Route::get('posts/{id}', 'PostController@show');
+    Route::post('posts', 'PostController@store')->middleware('throttle:1,1');
+    Route::put('posts/{id}', 'PostController@update');
+    Route::delete('posts/{id}', 'PostController@destroy');
     Route::post('posts/get-by-tags', 'PostController@getPostsByTags');
 
     Route::apiResource('post-types', 'PostTypeController');
@@ -52,9 +72,10 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('notifications', 'NotificationController@index');
     Route::post('mark-notification', 'NotificationController@markNotification');
-
-    Route::get('email/resend','VerificationController@resend')->name('verification.resend');
 });
+
+Route::get('email/resend','VerificationController@resend')->name('verification.resend');
+Route::get('email/is-verified', 'VerificationController@isUserVerified');
 
 // Users
 Route::post('register', 'AuthController@register');
@@ -62,33 +83,8 @@ Route::post('login', 'AuthController@login');
 
 Route::get('email/verify/{id}/{hash}','VerificationController@verify')->name('verification.verify');
 
-/*
-// Districts
-    Route::get('districts', 'DistrictController@index');
-    Route::get('districts/{id}', 'DistrictController@show');
-    // Feedback Types
-    Route::get('feedback-types', 'FeedbackTypeController@index');
-    Route::get('feedback-types/{id}', 'FeedbackTypeController@show');
-    // Report Conclusions
-    Route::get('report-conclusions', 'ReportConclusionController@index');
-    Route::get('report-conclusions/{id}', 'ReportConclusionController@show');
-    // School Classes
-    Route::get('school-classes', 'SchoolClassController@index');
-    Route::get('school-classes/{id}', 'SchoolClassController@show');
-    // Schools
-    Route::get('schools', 'SchoolController@index');
-    Route::get('schools/{id}', 'SchoolController@show');
-    // User Types
-    Route::get('user-types', 'UserTypeController@index');
-    Route::get('user-types/{id}', 'UserTypeController@show');
-*/
-
 Route::get('districts', 'DistrictController@index');
 Route::get('districts/{id}', 'DistrictController@show');
 
 Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
-
-// Route::post('getTotalPostsByUserId', 'PostController@getTotalPostsByUserId');
-
-

@@ -18,22 +18,31 @@ class VerificationController extends Controller
         $user = User::findOrFail($user_id);
 
         if ($user->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified'],400);
+            return response()->json(['message' => 'O email já foi verificado.'],400);
         }
         else{
             $user->markEmailAsVerified();
             event(new Verified($request->user()));
         }
-        return response()->json(['message' => 'Successfully verified'],200);
+        return response()->json(['message' => 'User verificado com sucesso!'],200);
+    }
+
+    public function isUserVerified(Request $request) {
+        $user = User::where('email', $request->email)->firstOrFail();
+        return response()->json(['isVerified' => $user->hasVerifiedEmail()], 200);
     }
 
     public function resend(Request $request)
     {
-        if ($request->user()->hasVerifiedEmail()) {
-            return response()->json(['message' => 'Email already verified'],200);
-        }
+        $user = User::where('email', $request->email)->firstOrFail();
 
-        $request->user()->sendEmailVerificationNotification();
-        return response()->json(['message' => 'Email Sent'],200);
+        if(!is_null($user)) {
+            if ($user->hasVerifiedEmail()) {
+                return response()->json(['message' => 'O email já foi verificado.'], 400);
+            }
+    
+            $user->sendEmailVerificationNotification();
+            return response()->json(['message' => 'Email reenviado com sucesso!'],200);
+        }
     }
 }

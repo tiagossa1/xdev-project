@@ -101,7 +101,6 @@
           >
             Confirme a password.
           </div>
-          <br />
           <div
             class="text-danger font-weight-bold float-left small mt-1"
             v-if="v$.confirmPassword.sameAs.$invalid"
@@ -120,7 +119,15 @@
             v-model="form.district_id"
             name="district_id"
             :options="districts"
+            :state="!v$.form.district_id.$invalid"
+            @blur="v$.form.district_id.$touch"
           ></b-form-select>
+          <div
+            class="text-danger font-weight-bold float-left small mt-1"
+            v-if="v$.form.district_id.required.$invalid"
+          >
+            O campo do distrito é obrigatório.
+          </div>
         </div>
         <div class="col-6">
           <label class="float-left font-weight-bold">Turma *</label>
@@ -197,11 +204,11 @@
 import { mapActions } from "vuex";
 
 import userService from "../services/userService";
-import imageUploadService from "../services/imageUploadService";
+// import imageUploadService from "../services/imageUploadService";
 import districtService from "../services/districtService";
 import schoolClassService from "../services/schoolClassService";
 
-import ImageUploadRequest from "../models/requests/imageUploadRequest";
+// import ImageUploadRequest from "../models/requests/imageUploadRequest";
 
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
@@ -242,6 +249,7 @@ export default {
         name: { required },
         email: { required },
         password: { required, minLength: minLength(6) },
+        district_id: { required },
         school_class_id: { required },
         birth_date: { required },
       },
@@ -272,23 +280,31 @@ export default {
         });
 
         if (res.status === 201) {
-          this.signIn({
-            email: this.form.email,
-            password: this.form.password,
-          });
-
-          const config = {
-            headers: { Authorization: `Bearer ${res.data.token}` },
-          };
-
-          let request = new ImageUploadRequest(res.data.user.id, this.photo);
-
-          res = await imageUploadService
-            .createImageUpload(config, request)
-            .catch((err) => {
-              console.log(err.response);
-            });
+          window.localStorage.setItem(
+            "registerRequest",
+            JSON.stringify(this.form)
+          );
+          window.location.href = "/verification";
         }
+
+        // if (res.status === 201) {
+        //   this.signIn({
+        //     email: this.form.email,
+        //     password: this.form.password,
+        //   });
+
+        //   const config = {
+        //     headers: { Authorization: `Bearer ${res.data.token}` },
+        //   };
+
+        //   let request = new ImageUploadRequest(res.data.user.id, this.photo);
+
+        //   res = await imageUploadService
+        //     .createImageUpload(config, request)
+        //     .catch((err) => {
+        //       console.log(err.response);
+        //     });
+        // }
       } else {
         this.showErrorAlert = true;
         this.formStatus =

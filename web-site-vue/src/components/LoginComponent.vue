@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import LoginRequest from '../models/requests/loginRequest';
+import LoginRequest from "../models/requests/loginRequest";
 
 import { mapActions } from "vuex";
 
@@ -104,7 +104,7 @@ export default {
 
     onSubmit() {
       if (!this.v$.$invalid) {
-        const email = this.form.email + "@edu.atec.pt"
+        const email = this.form.email + "@edu.atec.pt";
         let request = new LoginRequest(email, this.form.password);
 
         this.signIn(request);

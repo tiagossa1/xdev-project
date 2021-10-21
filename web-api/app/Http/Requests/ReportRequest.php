@@ -18,8 +18,8 @@ class ReportRequest extends FormRequest
             'user_id' => 'required',
             //'post_id' => 'required_without:comment_id',
             //'comment_id' => 'required_without:post_id',
-            'closed' => 'required|boolean',
-            'reason' => ['required', 'max:255'],
+            'closed' => 'boolean',
+            'reason' => 'required',
             'post_id' => [
                 'bail',
                 function ($attribute, $value, $fail) {

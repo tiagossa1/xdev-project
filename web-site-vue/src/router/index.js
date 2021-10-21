@@ -6,6 +6,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import Moderation from "../views/Moderation.vue";
+import Verification from '../views/Verification.vue';
 
 import store from "@/store";
 
@@ -36,6 +37,11 @@ const routes = [
     path: "/moderation",
     name: "Moderation",
     component: Moderation,
+  },
+  {
+    path: '/verification',
+    name: "Verification",
+    component: Verification
   },
   {
     path: "*",

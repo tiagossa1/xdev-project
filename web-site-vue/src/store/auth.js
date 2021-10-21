@@ -31,10 +31,21 @@ export default {
 
   actions: {
     signIn({ dispatch }, credentials) {
-      userService.login(credentials).then((res) => {
-        dispatch("attempt", res.data);
-        router.push('Home');
-      });
+      userService
+        .login(credentials)
+        .then((res) => {
+          dispatch("attempt", res.data);
+          router.push("Home");
+        })
+        .catch((err) => {
+          if (
+            err.response.status === 401 &&
+            err.response?.data?.type === "UserDidNotVerifiedEmail"
+          ) {
+            window.localStorage.setItem("loginRequest", JSON.stringify(credentials));
+            router.push("Verification");
+          }
+        });
     },
 
     async attempt({ commit, state }, data) {
@@ -56,12 +67,12 @@ export default {
 
     async signOut({ commit }) {
       userService.logout().then(() => {
-        commit('SET_TOKEN', null);
-        commit('SET_USER', null);
+        commit("SET_TOKEN", null);
+        commit("SET_USER", null);
 
-        router.push('Login');
+        router.push("Login");
       });
-    }
+    },
   },
 
   modules: {},

@@ -15,6 +15,14 @@ export default new (class UserService {
     return await axios.post(`${this.apiUrl}/api/register`, form);
   }
 
+  async resend(email) {
+    return await axios.get(`${this.apiUrl}/api/email/resend?email=${email}`);
+  }
+
+  async isUserVerified(email) {
+    return await axios.get(`${this.apiUrl}/api/email/is-verified?email=${email}`);
+  }
+
   async logout() {
     return await axios.post(`${this.apiUrl}/api/logout`);
   }

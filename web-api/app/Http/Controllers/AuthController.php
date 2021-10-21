@@ -35,7 +35,7 @@ class AuthController extends Controller
                         'school_class_id' => $request['school_class_id'],
                     ])->sendEmailVerificationNotification();
 
-                    return response()->json(['message' => 'User created, verification email sent'], 201);
+                    return response()->json(['message' => 'User created, verification email has been sent.'], 201);
                 } else {
                     return response(['message' => 'A user cannot be created with higher privileges.'], 400);
                 }
@@ -64,7 +64,16 @@ class AuthController extends Controller
 
         $user = User::where('email', $request['email'])->first();
 
-        // When login in, we don't need these entities loaded.
+        // JSON_UNESCAPED_UNICODE is used due to UTF-8 characters in Portuguese language.
+
+        if(!$user->hasVerifiedEmail()) {
+            return response()->json([
+                'message' => 'O utilizador não verificou o email.',
+                'type' => 'UserDidNotVerifiedEmail'
+            ], 401, [], JSON_UNESCAPED_UNICODE);
+        }
+
+        // When login in, it's not needed to load the following entities:
         unset($user->tags);
         unset($user->favorite_posts);
         unset($user->liked_posts);
