@@ -74,7 +74,7 @@ class PostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\CreatePostRequest $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(CreatePostRequest $request)
@@ -83,12 +83,12 @@ class PostController extends Controller
             $request->validate($request->rules());
 
             $post = Post::create($request->all());
-
             $post->tags()->attach($request->input('tags'));
+
+            $user_id = $request->user_id;
             
-            // TODO: Test.
-            $users = User::whereIn('id', function ($query) use ($post) {
-                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $request->user_id);
+            $users = User::whereIn('id', function ($query) use ($post, $user_id) {
+                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $user_id);
             })->get();
 
             if (!is_null($users) || $users->length > 0) {

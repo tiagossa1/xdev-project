@@ -6,7 +6,7 @@ import Register from "../views/Register.vue";
 import Login from "../views/Login.vue";
 import Profile from "../views/Profile.vue";
 import Moderation from "../views/Moderation.vue";
-import Verification from '../views/Verification.vue';
+import Verification from "../views/Verification.vue";
 
 import store from "@/store";
 
@@ -39,9 +39,9 @@ const routes = [
     component: Moderation,
   },
   {
-    path: '/verification',
+    path: "/verification",
     name: "Verification",
-    component: Verification
+    component: Verification,
   },
   {
     path: "*",
@@ -55,15 +55,9 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach((to, __, next) => {
-  const user = store.getters["auth/user"];
+router.beforeEach(async (to, __, next) => {
   const isAuthenticated = store.getters["auth/authenticated"];
-  const moderatorIds = [2, 4];
-  let isModerator = false;
-
-  if (user) {
-    isModerator = moderatorIds.includes(user.user_type.id);
-  }
+  const isModerator = await store.getters["auth/isModerator"];
 
   if (to.name === "Moderation" && !isModerator) {
     next({ name: "Home" });

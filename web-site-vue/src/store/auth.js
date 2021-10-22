@@ -15,6 +15,9 @@ export default {
 
       return false;
     },
+    async isModerator() {
+      return await userService.isModerator();
+    },
     user(state) {
       return state.user;
     },
@@ -42,7 +45,10 @@ export default {
             err.response.status === 401 &&
             err.response?.data?.type === "UserDidNotVerifiedEmail"
           ) {
-            window.localStorage.setItem("loginRequest", JSON.stringify(credentials));
+            window.localStorage.setItem(
+              "loginRequest",
+              JSON.stringify(credentials)
+            );
             router.push("Verification");
           }
         });

@@ -7,6 +7,7 @@ export default class Notification {
 
     this.id = notification?.id;
     this.type = type[type.length - 1];
+    this.readAt = notification?.read_at;
 
     if (this.type.toLowerCase() === "newreport") {
       this.report = new Report(notification?.data[0]);

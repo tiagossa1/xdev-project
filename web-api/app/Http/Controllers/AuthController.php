@@ -6,7 +6,6 @@ use App\Http\Requests\LoginAuthRequest;
 use App\Http\Requests\RegisterAuthRequest;
 use App\User;
 use Exception;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -58,6 +57,17 @@ class AuthController extends Controller
         ];
     }
 
+    public function isModerator()
+    {
+        $moderatorIds = [2, 4];
+
+        if (in_array(Auth::user()->user_type->id, $moderatorIds)) {
+            return response()->json([], 200);
+        }
+
+        return response()->json([], 401);
+    }
+
     public function login(LoginAuthRequest $request)
     {
         $request->validate($request->rules());
@@ -66,10 +76,10 @@ class AuthController extends Controller
 
         // JSON_UNESCAPED_UNICODE is used due to UTF-8 characters in Portuguese language.
 
-        if(!$user->hasVerifiedEmail()) {
+        if (!$user->hasVerifiedEmail()) {
             return response()->json([
                 'message' => 'O utilizador não verificou o email.',
-                'type' => 'UserDidNotVerifiedEmail'
+                'type' => 'UserDidNotVerifiedEmail',
             ], 401, [], JSON_UNESCAPED_UNICODE);
         }
 
@@ -94,7 +104,8 @@ class AuthController extends Controller
         return response($response, 200);
     }
 
-    public function changePassword(Request $request) {
+    public function changePassword(Request $request)
+    {
         $input = $request->all();
         $userId = Auth::user()->id;
         $rules = array(

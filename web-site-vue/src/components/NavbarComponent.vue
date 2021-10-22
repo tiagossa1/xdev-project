@@ -111,17 +111,17 @@
             >
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
-          <b-icon
-            class="text-white m-auto"
-            style="cursor: pointer"
-            icon="bell"
-            font-scale="2"
-            v-b-toggle.sidebar-1
-          ></b-icon>
-          <b-badge v-b-toggle.sidebar-1 class="m-auto" pill variant="light">
-            {{ notifications.length }}
-          </b-badge>
-          <!-- <span class="text-white m-auto ml-2">6</span> -->
+          <div class="align-self-center" v-b-toggle.sidebar-1>
+            <b-icon
+              class="text-white"
+              style="cursor: pointer"
+              icon="bell"
+              font-scale="2"
+            ></b-icon>
+            <b-badge class="ml-1" pill variant="light">
+              {{ notifications.length }}
+            </b-badge>
+          </div>
           <b-sidebar
             id="sidebar-1"
             title="Notificações"
@@ -185,6 +185,7 @@ import notificationService from "../services/notificationService";
 
 import { mapGetters, mapActions } from "vuex";
 import UserSettings from "./UserSettingsComponent.vue";
+import userService from "../services/userService.js";
 export default {
   name: "navbar-component",
   components: {
@@ -197,17 +198,21 @@ export default {
       tags: [],
       search: "",
       notifications: [],
+      isModerator: false,
     };
   },
   async mounted() {
     if (this.authenticated) {
+      this.isModerator = await userService.isModerator();
       this.notifications = await this.getPostNotifications();
-      // this.notificationCount = await this.getNotificationsCount();
+    }
 
-      window.setInterval(async () => {
-        this.notifications = await this.getPostNotifications();
-        // this.notificationCount = await this.getNotificationsCount();
-      }, 10000);
+    const id = window.setInterval(async () => {
+      this.notifications = await this.getPostNotifications();
+    }, 10000);
+
+    if (!this.authenticated) {
+      window.clearInterval(id);
     }
   },
   async created() {
@@ -241,9 +246,6 @@ export default {
         return "Não foram encontradas tags.";
       }
       return "";
-    },
-    isModerator() {
-      return this.user.user_type.id === 2 || this.user.user_type.id === 4;
     },
     criteria() {
       return this.search.trim().toLowerCase();

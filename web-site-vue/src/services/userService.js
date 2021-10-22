@@ -20,7 +20,23 @@ export default new (class UserService {
   }
 
   async isUserVerified(email) {
-    return await axios.get(`${this.apiUrl}/api/email/is-verified?email=${email}`);
+    return await axios.get(
+      `${this.apiUrl}/api/email/is-verified?email=${email}`
+    );
+  }
+
+  async isModerator() {
+    let res = await axios
+      .get(`${this.apiUrl}/api/is-moderator`)
+      .catch(() => {
+        return false;
+      });
+
+    if (res.status === 200) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   async logout() {

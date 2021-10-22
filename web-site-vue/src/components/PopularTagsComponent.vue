@@ -7,11 +7,14 @@
           @click="clearFilter"
           v-if="showClearButton"
           style="cursor: pointer"
-          class="text-danger"
+          class="text-danger align-middle"
         ></b-icon-x>
       </template>
       <b-card-text>
-        <div v-for="(filteringTag, i) in filteringBy" :key="'filteringTag, ' + i">
+        <div
+          v-for="(filteringTag, i) in filteringBy"
+          :key="'filteringTag, ' + i"
+        >
           {{ filteringTag }}
         </div>
         <b-badge

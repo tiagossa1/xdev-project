@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class CreatePostRequest extends FormRequest
 {
@@ -25,14 +24,6 @@ class CreatePostRequest extends FormRequest
     public function rules()
     {
         return [
-            /*'title' => [
-                'required',
-                Rule::unique('posts')->where(function ($query) {
-                    $query->where('title', $this->title)
-                        ->where('user_id', $this->user_id);
-                }),
-                'max:255'
-            ],*/
             'title' => ['required', 'max:255'],
             'description' => ['required', 'max:255'],
             'user_id' => ['required', 'exists:users,id'],
