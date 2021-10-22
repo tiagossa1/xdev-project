@@ -1,5 +1,5 @@
 <template>
-  <b-modal id="modal2" ref="modal2" hide-footer title="Editar perfil">
+  <b-modal id="modal2" size="lg" ref="modal2" hide-footer title="Editar perfil">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar Password" active>
         <b-alert v-model="AlertPasswordMessage" variant="danger" dismissible>
@@ -125,7 +125,6 @@
                 </b-col>
                 <b-col>
                   <b-form-input
-                    id="input-linkedin"
                     type="text"
                     v-model="userInfo.linkedin_url"
                   ></b-form-input>
@@ -175,25 +174,31 @@
           {{updateSucces ? messageSucces : messageFail}}
         </b-alert> -->
         <b-table 
-        hover 
-        :items="userInfo" 
-        :fields="fields">
+        hover
+        sticky-header="500px"
+        :tbody-tr-class="rowClass"
+        :items="allTags" 
+        :fields="tagsFields">
+        <!-- eslint-disable-next-line -->
+        <template #cell(allTags.name)="data">
+          <span>{{data.item.name}}</span>
+        </template>
 
-        <template #cell(actions)="data">
+
+        <template v-slot:cell(actions)="data">
         <b-button-group>
-          <b-button variant="success"
-            >Detalhes {{data.item}}</b-button
+          <!-- <b-button variant="success"
+            >Detalhes</b-button
           >
-          <b-button  variant="warning"
+          <b-button variant="warning"
             >Editar</b-button
-          >
+          > -->
+          <b-button @click="updateFavouriteTag(data.item)" :variant="!userInfo.tags.some(x => x.id === data.item.id) ? 'success' : 'danger'">
+            {{ !userInfo.tags.some(x => x.id === data.item.id) ? 'Adicionar' : 'Remover' }}
+          </b-button>
+          
         </b-button-group>
       </template>
-
-
-        <!-- <template #cell(userInfo.name)="data">
-        <span>{{data.item.userInfo.name}}</span>
-      </template> -->
 
         </b-table>
       </b-tab>
@@ -209,7 +214,9 @@
 import UserRequest from "../models/requests/userRequest";
 import ChangePasswordRequest from "../models/requests/changePasswordRequest";
 
+//import User from "../models/user";
 import userService from "../services/userService";
+import tagService from "../services/tagService";
 
 import { mapActions } from "vuex";
 import useVuelidate from "@vuelidate/core";
@@ -229,12 +236,16 @@ export default {
 
       AlertPasswordMessage: false,
       
-      fields: [
-        {key: "userInfo.name", label: "Nome"},
-        {key: "actions", label: "Ações"}
+      tagsFields: [
+        // {key: "name", label: "Nome"},
+        {key: "allTags.name", label: "Tags",sortable : true},
+        {key: "actions", label: "Ações",sortable : false}
       ],
 
-      userInfo: { },
+
+      favouriteTag: false,
+      userInfo: {},
+      allTags: {},
       showPassword: false,
       showNewPassword: false,
       old_password: "",
@@ -247,7 +258,8 @@ export default {
 
     if (userId) {
       this.userInfo = await userService.getUserById(userId);
-      console.log(this.userInfo)
+      this.allTags = await tagService.getTags();
+      // console.log(this.userInfo.tags)
     }
     
   },
@@ -361,6 +373,58 @@ export default {
       setTimeout(() => {
         this.AlertPasswordMessage = false;
       },3000);
+    },
+    rowClass(item, type) {
+      // console.log(this.userInfo.tags.some(x => x.name == item.name))
+      if (!item || type !== "row"){
+        return 
+      } 
+      if (this.userInfo.tags.some(x => x.name == item.name))
+      return "table-success";
+      
+    },
+    async updateFavouriteTag(value) {
+
+       if(!this.userInfo.tags.some(x => x.id === value.id)){
+       this.userInfo.tags.push(value);
+       this.favouriteTag = true
+       }
+       else{
+         let index = this.userInfo.tags.findIndex(x => x.id == value.id)
+
+         if(index > -1){
+           this.userInfo.tags.splice(index,1)
+           this.favouriteTag = false;
+         }
+       }
+
+      let request = new UserRequest(
+      this.userInfo.id,
+      this.userInfo.email,
+      this.userInfo.name,
+      this.userInfo.birth_date,
+      null,
+      this.userInfo.github_url,
+      this.userInfo.linkedin_url,
+      this.userInfo.facebook_url,
+      this.userInfo.instagram_url,
+      this.userInfo.createdAt,
+      this.userInfo.district.id,
+      this.userInfo.schoolClass.id,
+      this.userInfo.userType.id,
+      null,
+      this.userInfo.tags.map(x => x.id),
+      null,
+      null,
+      this.userInfo.suspended
+      );
+      
+
+      let res = await userService.update(request).catch((err) => console.log(err.response));
+      
+      console.log(res)
+      
+      
     }
   },
 };
