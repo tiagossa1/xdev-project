@@ -109,6 +109,9 @@
             <b-dropdown-item @click="showModal()"
               >Configurações</b-dropdown-item
             >
+            <b-dropdown-item @click="showFeedbackModal()"
+            >Feedback</b-dropdown-item
+            >
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
           <div class="align-self-center" v-b-toggle.sidebar-1>
@@ -175,6 +178,7 @@
       </b-navbar-nav>
 
       <user-settings ref="modalComponent" />
+      <feedback ref="feedbackComponent" />
     </b-collapse>
   </b-navbar>
 </template>
@@ -185,11 +189,12 @@ import notificationService from "../services/notificationService";
 
 import { mapGetters, mapActions } from "vuex";
 import UserSettings from "./UserSettingsComponent.vue";
+import Feedback from "./FeedbackComponent.vue";
 import userService from "../services/userService.js";
 export default {
   name: "navbar-component",
   components: {
-    UserSettings,
+    UserSettings, Feedback
   },
   data() {
     return {
@@ -277,6 +282,9 @@ export default {
     },
     showModal() {
       this.$refs.modalComponent.show();
+    },
+    showFeedbackModal() {
+      this.$refs.feedbackComponent.show();
     },
     onOptionClick({ option, addTag }) {
       addTag(option);

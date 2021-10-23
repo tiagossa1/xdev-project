@@ -72,13 +72,14 @@ class UserTypeController extends Controller
      * @param \App\UserType $userType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, UserType $userType)
+    public function update(Request $request, $id)
     {
         try {
+            $userType = UserType::find($id);
             $userType->update($request->all());
 
             return response()->json([
-                'data' => $userType,
+                'data' => $userType->fresh(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

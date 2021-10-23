@@ -15,6 +15,9 @@ export default new (class FeedbackService {
     return [];
   }
 
+  async create(post) {
+    return await axios.post(`${this.apiUrl}/api/feedbacks/`,post);
+  }
   async update(post) {
     return await axios.put(`${this.apiUrl}/api/feedbacks/${post.id}`, post);
   }

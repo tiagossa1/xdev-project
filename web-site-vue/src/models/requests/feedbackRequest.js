@@ -1,8 +1,7 @@
 export default class FeedbackRequest {
-  constructor(description, userId, feedbackTypeId, createdAt) {
+  constructor(description, userId, feedbackTypeId) {
     this.description = description;
-    this.userId = userId;
-    this.feedbackTypeId = feedbackTypeId;
-    this.createdAt = createdAt;
+    this.user_id = userId;
+    this.feedback_type_id = feedbackTypeId;
   }
 }
