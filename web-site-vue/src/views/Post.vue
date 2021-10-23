@@ -175,6 +175,8 @@ export default {
     this.posts = await postService
       .getPosts()
       .catch((err) => console.log(err.response));
+
+    this.posts = this.posts.filter(x => !x.suspended)
     this.originalPosts = this.posts;
     let postTypes = await postService.getPostTypes();
 

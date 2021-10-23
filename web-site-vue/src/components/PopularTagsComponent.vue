@@ -1,7 +1,7 @@
 <template>
   <b-card-group deck class="mb-3 text-center">
-    <b-card border-variant="light">
-      <template #header>
+    <b-card :style="cardStyle">
+      <template #header >
         <span class="font-weight-bold text-primary">Tags Populares</span>
         <b-icon-x
           @click="clearFilter"
@@ -18,6 +18,7 @@
           {{ filteringTag }}
         </div>
         <b-badge
+        
           v-for="popularTag in popularTags"
           @click="emitEventForSearch(popularTag)"
           href="#"
@@ -39,6 +40,9 @@ export default {
   name: "popularTags-component",
   data() {
     return {
+      cardStyle:{
+        backgroundColor: '#dee2e6'
+      },
       popularTags: null,
       filteringBy: [],
       showClearButton: false,

@@ -1,10 +1,6 @@
 <template>
-  <b-container
-    :style="{
-      border: '2px solid gray',
-      'border-radius': '25px',
-      backgroundColor: '#dee2e6',
-    }"
+  <b-container 
+    :style="!post.suspended ? {border: '2px solid gray','border-radius': '25px', 'backgroundColor': '#dee2e6' } : {border: '2px solid red ','border-radius': '25px', 'backgroundColor': '#dee2e6'}"
     class="bv-example-row p-3 ml-4 mb-4 x"
   >
     <b-row class="ml-2 mb-3">
@@ -13,6 +9,11 @@
           <b-badge class="p-2" pill variant="secondary">{{ tag.name }}</b-badge>
         </span>
       </b-col>
+      <span v-b-tooltip.right="'Post Suspenso'">
+        <b-icon v-if="post.suspended" icon="exclamation-triangle" class="mr-4 float-right" variant="danger" font-scale="2"></b-icon>
+      </span>
+      
+
     </b-row>
     <b-badge
       class="mb-4 ml-4 p-2 no-select"
@@ -22,7 +23,9 @@
       }"
     >
       <b-icon :icon="post.postType.iconName"></b-icon> {{ post.postType.name }}
+      
     </b-badge>
+    
     <b-row v-if="toEdit" class="mt-2 ml-2 mb-3">
       <b-col>
         <b-form-select
@@ -51,6 +54,7 @@
               :href="redirectProfile"
             ></b-avatar>
           </b-row>
+          
           <b-row class="justify-content-center mt-1">
             <b-badge
               :to="redirectProfile"
@@ -59,6 +63,7 @@
             >
               {{ post.user.userType.name }}
             </b-badge>
+            
           </b-row>
         </b-container>
       </b-col>
@@ -75,7 +80,10 @@
           {{ post.user.schoolClass.school.name }}</small
         ><br />
         <small>Adicionado {{ post.createdAt }}</small>
+        
       </b-col>
+        
+     
     </b-row>
 
     <b-row class="mt-2 ml-2">
@@ -109,7 +117,7 @@
       </b-col>
     </b-row>
 
-    <b-row v-if="!viewOnly" class="ml-2">
+    <b-row v-if="!viewOnly && !post.suspended" class="ml-2">
       <b-col cols="2" style="cursor: pointer" @click="onLike">
         <p class="h5">
           <b-icon
@@ -130,6 +138,7 @@
           <span class="small"> {{ saved ? "Guardado" : "Guardar" }} </span>
         </p>
       </b-col>
+      
       <b-col
         cols="3"
         v-if="toEdit && isUserPost"
@@ -137,13 +146,13 @@
         @click="onEdited"
       >
         <p class="h5">
-          <b-icon icon="pencil" class="mr-1"> </b-icon>
+          <b-icon icon="pencil" class="mr-1"></b-icon>
           <span class="small">Terminar edição</span>
         </p>
       </b-col>
     </b-row>
-    <hr />
-    <b-row class="ml-2 mt-2 mr-2">
+  <hr >
+    <b-row class="ml-2 mr-2">
       <b-col>
         <!-- <b-button
           v-if="post.comments.length > 0"
@@ -185,7 +194,7 @@
           </transition-group>
         </b-collapse>
 
-        <b-form v-if="!viewOnly" @submit.prevent="onSubmit">
+        <b-form v-if="!viewOnly && !post.suspended" @submit.prevent="onSubmit">
           <b-form-input
             v-model="comment"
             class="commentInput"
@@ -195,6 +204,7 @@
       </b-col>
     </b-row>
   </b-container>
+
 </template>
 
 <script>
@@ -220,7 +230,7 @@ export default {
   },
   async mounted() {
     this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
-
+    // console.log(this.isUserPost)
     if (this.isUserPost) {
       this.getPostTypes();
       this.redirectProfile = "/profile/";
@@ -230,6 +240,7 @@ export default {
   },
   data() {
     return {
+      paramId : null,
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
       comment: "",

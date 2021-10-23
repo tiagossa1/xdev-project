@@ -91,7 +91,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white w-100" type="submit" variant="success"
+              <b-button class="text-white w-20" type="submit" variant="success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -161,7 +161,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button type="submit" block variant="success"
+              <b-button class="text-white w-20" type="submit"  variant="success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -204,9 +204,13 @@
       </b-tab>
 
     </b-tabs>
-    <b-button class="mt-3" variant="outline-danger" block @click="closeModel"
-      >Sair</b-button
-    >
+    <b-row class="w-20 text-center mt-3">
+      <b-col>
+        <b-button variant="outline-danger" @click="closeModel"
+          >Sair</b-button
+        >
+      </b-col>
+    </b-row>
   </b-modal>
 </template>
 
@@ -238,8 +242,8 @@ export default {
       
       tagsFields: [
         // {key: "name", label: "Nome"},
-        {key: "allTags.name", label: "Tags",sortable : true},
-        {key: "actions", label: "Ações",sortable : false}
+        {key: "allTags.name", label: "Tags"},
+        {key: "actions", label: "Ações"}
       ],
 
 
@@ -387,14 +391,12 @@ export default {
 
        if(!this.userInfo.tags.some(x => x.id === value.id)){
        this.userInfo.tags.push(value);
-       this.favouriteTag = true
        }
        else{
          let index = this.userInfo.tags.findIndex(x => x.id == value.id)
 
          if(index > -1){
            this.userInfo.tags.splice(index,1)
-           this.favouriteTag = false;
          }
        }
 

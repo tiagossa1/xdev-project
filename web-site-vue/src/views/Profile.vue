@@ -6,10 +6,15 @@
         <user-card-component :userInfo="userInfo"></user-card-component>
       </b-col>
 
-      <b-col class="p-5" sm="6">
+      <b-col class="p-5" sm="6" v-if="posts.length > 0">
         <div v-for="post in posts" :key="post.id">
-          <post-component :post="post"></post-component>
+            <post-component :post="post"></post-component>
+          
         </div>
+      </b-col>
+
+      <b-col class="p-5" sm="6" v-else >
+        <span>Não tem posts</span>
       </b-col>
 
       <b-col class="p-5" sm="3">
@@ -40,6 +45,7 @@ export default {
   },
   data() {
     return {
+      getSuspendedPosts : {},
       userInfo: {
         userType: {},
         schoolClass: { school: {} },
@@ -51,10 +57,14 @@ export default {
   },
   async created() {
     const paramId = this.$route.params.id;
-
     if (paramId) {
       this.userInfo = await userService.getUserById(paramId);
       this.posts = await postService.getPostsByUser(paramId);
+
+      this.posts = this.posts.filter(x => 
+        !x.suspended
+      );
+      // console.log(this.getSuspendedPosts)
     } else {
       this.userInfo = await userService.getUserById(
         this.$store.getters["auth/user"].id
