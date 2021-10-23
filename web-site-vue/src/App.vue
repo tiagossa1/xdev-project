@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div style="margin-bottom: 55px" id="app">
     <navbar-component></navbar-component>
     <b-alert
       :show="dismissCountDown"

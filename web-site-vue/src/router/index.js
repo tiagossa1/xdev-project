@@ -57,10 +57,13 @@ const router = new VueRouter({
 
 router.beforeEach(async (to, __, next) => {
   const isAuthenticated = store.getters["auth/authenticated"];
-  const isModerator = await store.getters["auth/isModerator"];
 
-  if (to.name === "Moderation" && !isModerator) {
-    next({ name: "Home" });
+  if (to.name === "Moderation") {
+    const isModerator = await store.getters["auth/isModerator"];
+
+    if (!isModerator) {
+      next({ name: "Home" });
+    }
   }
 
   if (isAuthenticated) {

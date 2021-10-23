@@ -29,11 +29,11 @@ export default class UserRequest {
     this.linkedin_url = linkedin_url;
     this.facebook_url = facebook_url;
     this.instagram_url = instagram_url;
-    this.user_type = user_type;
-    this.school_class = school_class;
+    this.user_type_id = user_type;
+    this.school_class_id = school_class;
     this.created_at = created_at;
-    this.district = district;
-    this.school_class = school_class;
+    this.district_id = district;
+    this.school_class_id = school_class;
     this.posts = posts;
     this.tags = tags;
     this.liked_posts = liked_posts;

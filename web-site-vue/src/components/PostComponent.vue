@@ -1,6 +1,10 @@
 <template>
   <b-container
-    :style="{ border: '2px solid gray','border-radius': '25px', 'backgroundColor': '#dee2e6' }"
+    :style="{
+      border: '2px solid gray',
+      'border-radius': '25px',
+      backgroundColor: '#dee2e6',
+    }"
     class="bv-example-row p-3 ml-4 mb-4 x"
   >
     <b-row class="ml-2 mb-3">
@@ -138,7 +142,7 @@
         </p>
       </b-col>
     </b-row>
-  <hr >
+    <hr />
     <b-row class="ml-2 mt-2 mr-2">
       <b-col>
         <!-- <b-button
@@ -152,20 +156,20 @@
           Mostrar {{ post.comments.length }} comentários
            <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
           </b-button> -->
-          <a href="" onclick="return false;">
+        <a href="" onclick="return false;">
           <h5
-          v-if="post.comments.length > 0"
-          class="text-primary mt-2 mb-2 "
-          :aria-expanded="modalVisible ? 'true' : 'false'"
-          :aria-controls="collapseId"
-          @click="modalVisible = !modalVisible"
-          variant="primary"
-          > 
-          Mostrar {{ post.comments.length }} comentários
-           <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
-          <!-- <b-icon-arrow-down></b-icon-arrow-down --></h5>
-          </a>
-
+            v-if="post.comments.length > 0"
+            class="text-primary mt-2 mb-2"
+            :aria-expanded="modalVisible ? 'true' : 'false'"
+            :aria-controls="collapseId"
+            @click="modalVisible = !modalVisible"
+            variant="primary"
+          >
+            Mostrar {{ post.comments.length }} comentários
+            <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
+            <!-- <b-icon-arrow-down></b-icon-arrow-down -->
+          </h5>
+        </a>
 
         <b-collapse :id="collapseId" class="mt-2" v-model="modalVisible">
           <transition-group name="fade" tag="div">
@@ -219,6 +223,9 @@ export default {
 
     if (this.isUserPost) {
       this.getPostTypes();
+      this.redirectProfile = "/profile/";
+    } else {
+      this.redirectProfile = `/profile/${this.post.user.id}`;
     }
   },
   data() {
@@ -228,7 +235,7 @@ export default {
       comment: "",
       isUserPost: false,
       collapseId: "collapse-" + this.post.id,
-      redirectProfile: `/profile/${this.post.user.id}`,
+      redirectProfile: "",
       postTypes: [],
       postTypesSelect: [],
       toEdit: false,
@@ -376,16 +383,15 @@ img {
   width: 100%;
   height: 100%;
 }
-.x{
+.x {
   -webkit-box-shadow: 0 10px 6px -6px #777;
   -moz-box-shadow: 0 10px 6px -6px #777;
   box-shadow: 0 10px 6px -6px #777;
 }
-hr{
+hr {
   width: 90%;
-
 }
-.commentInput{
+.commentInput {
   box-shadow: 0 0 3px gray;
 }
 </style>

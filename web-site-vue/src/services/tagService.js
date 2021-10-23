@@ -25,4 +25,16 @@ export default new (class TagService {
 
     return [];
   }
+
+  async create(tag) {
+    return await axios.post(`${this.apiUrl}/api/tags`, tag);
+  }
+
+  async update(id, tag) {
+    return await axios.put(`${this.apiUrl}/api/tags/${id}`, tag);
+  }
+
+  async delete(id) {
+    return await axios.delete(`${this.apiUrl}/api/tags/${id}`);
+  }
 })();

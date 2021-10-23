@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-bottom: 55px" class="container">
+  <div class="container">
     <post></post>
   </div>
 </template>

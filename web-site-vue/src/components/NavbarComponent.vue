@@ -203,12 +203,12 @@ export default {
       tags: [],
       search: "",
       notifications: [],
-      isModerator: false,
+      // isModerator: false,
     };
   },
   async mounted() {
     if (this.authenticated) {
-      this.isModerator = await userService.isModerator();
+      // this.isModerator = await userService.isModerator();
       this.notifications = await this.getPostNotifications();
     }
 
@@ -231,6 +231,7 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
+      isModerator: "auth/isModerator"
     }),
     availableOptions() {
       const criteria = this.criteria;

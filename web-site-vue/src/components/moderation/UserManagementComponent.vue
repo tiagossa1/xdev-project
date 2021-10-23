@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h5 class="mb-3 font-weight-bold">Gestão de utilizadores</h5>
     <b-table
       ref="userTable"
       sticky-header="500px"
@@ -133,7 +134,7 @@ export default {
         null,
         null,
         null,
-        null,
+        this.userSelected.userType.id,
         null,
         null,
         null,
@@ -150,6 +151,14 @@ export default {
       });
 
       if (res.status === 200) {
+        const userEdited = new User(res.data.data);
+        const index = this.users.findIndex((u) => u.id === userEdited.id);
+
+        if (index > -1) {
+          this.users[index] = userEdited;
+          this.$refs.userTable.refresh();
+        }
+
         this.$refs["edit-modal"].hide();
         this.$root.$emit("show-alert", {
           alertMessage: "Utilizador editado com sucesso!",

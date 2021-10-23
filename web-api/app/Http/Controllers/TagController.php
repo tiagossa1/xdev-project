@@ -45,7 +45,7 @@ class TagController extends Controller
             $tag = Tag::create($request->all());
 
             return response()->json([
-                'data' => $tag,
+                'data' => Tag::find($tag->id),
                 'message' => 'Success'
             ], 201);
 
@@ -76,16 +76,16 @@ class TagController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Tag $tag
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, $id)
     {
         try {
+            $tag = Tag::find($id);
             $tag->update($request->all());
 
             return response()->json([
-                'data' => $tag,
+                'data' => $tag->fresh(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

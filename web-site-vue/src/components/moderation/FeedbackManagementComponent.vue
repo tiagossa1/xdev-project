@@ -1,10 +1,13 @@
 <template>
   <div>
+    <h5 class="mb-3 font-weight-bold">Gestão de feedbacks</h5>
     <b-table
       ref="feedbackTable"
       sticky-header="500px"
       striped
-      hover
+      bordered
+      borderless
+      outlined
       table-variant="light"
       :fields="fields"
       :items="feedbacks"

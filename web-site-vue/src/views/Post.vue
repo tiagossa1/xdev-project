@@ -148,7 +148,6 @@
           </template>
         </b-col>
         <b-col class="ml-4">
-          <topPosts-component></topPosts-component>
           <popularTags-component></popularTags-component>
         </b-col>
       </b-row>
@@ -161,7 +160,6 @@ import PostRequest from "../models/requests/postRequest";
 
 import PostComponent from "../components/PostComponent.vue";
 import PopularTagsComponent from "../components/PopularTagsComponent.vue";
-import TopPostsComponent from "../components/TopPostsComponent.vue";
 
 import postService from "../services/postService";
 import tagService from "../services/tagService";
@@ -172,7 +170,7 @@ import Post from "../models/post";
 
 export default {
   name: "Post",
-  components: { PostComponent, PopularTagsComponent, TopPostsComponent },
+  components: { PostComponent, PopularTagsComponent },
   async mounted() {
     this.posts = await postService
       .getPosts()

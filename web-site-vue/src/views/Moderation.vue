@@ -7,10 +7,9 @@
       :notifications="notifications"
     ></notifications-component>
     <hr />
-    <h5 class="mb-3 font-weight-bold">Gestão de utilizadores</h5>
     <user-management-component></user-management-component>
-    <h5 class="mb-3 font-weight-bold">Gestão de feedbacks</h5>
     <feedback-management-component></feedback-management-component>
+    <tags-management-component></tags-management-component>
   </div>
 </template>
 
@@ -20,6 +19,7 @@ import { mapGetters } from "vuex";
 import UserManagementComponent from "../components/moderation/UserManagementComponent.vue";
 import NotificationsComponent from "../components/moderation/NotificationsComponent.vue";
 import FeedbackManagementComponent from "../components/moderation/FeedbackManagementComponent.vue";
+import TagsManagementComponent from '../components/moderation/TagsManagementComponent.vue';
 
 import notificationService from "../services/notificationService";
 
@@ -29,6 +29,7 @@ export default {
     NotificationsComponent,
     UserManagementComponent,
     FeedbackManagementComponent,
+    TagsManagementComponent
   },
   computed: {
     ...mapGetters({

@@ -49,13 +49,12 @@ class UserController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\User $user
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
         try {
-                $user = User::find($request->id);
+                $user = User::find($id);
 
                 $user->name = $request->name ?? $user->name;
                 $user->github_url = $request->github_url ?? $user->github_url;
@@ -63,6 +62,7 @@ class UserController extends Controller
                 $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
                 $user->instagram_url = $request->instagram_url ?? $user->instagram_url;
                 $user->suspended = $request->suspended ?? $user->suspended;
+                $user->user_type_id = $request->user_type_id ?? $user->user_type_id;
 
                 if(!is_null($request->password)){
                     $user->password = bcrypt($request->password);
