@@ -21,7 +21,7 @@
           <b-button @click="onEditClick(data.item)" variant="warning"
             >Editar</b-button
           >
-          <b-button @click="onSuspended(data.item)" variant="danger">
+          <b-button v-if="data.item.id !== $store.getters['auth/user'].id" @click="onSuspended(data.item)" variant="danger">
             {{ data.item.suspended ? "Remover suspensão" : "Suspender" }}
           </b-button>
         </b-button-group>

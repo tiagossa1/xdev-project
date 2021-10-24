@@ -53,11 +53,11 @@ class FeedbackController extends Controller
      * @param \App\Feedback $feedback
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Feedback $feedback)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $feedback,
+                'data' => Feedback::find($id),
                 'message' => 'Success',
             ], 200);
 
@@ -70,12 +70,12 @@ class FeedbackController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Feedback $feedback
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Feedback $feedback)
+    public function update(Request $request, $id)
     {
         try {
+            $feedback = Feedback::find($id);
             $feedback->update($request->all());
 
             return response()->json([

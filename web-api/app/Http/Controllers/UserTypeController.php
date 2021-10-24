@@ -49,14 +49,13 @@ class UserTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\UserType $userType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(UserType $userType)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $userType,
+                'data' => UserType::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -69,7 +68,6 @@ class UserTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\UserType $userType
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)

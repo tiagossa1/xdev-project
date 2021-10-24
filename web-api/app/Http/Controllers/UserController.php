@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Exception;
+use App\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -103,5 +105,12 @@ class UserController extends Controller
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
+    }
+
+    public function getRecentActivity($id) {
+        $comment = Comment::where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+        $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+
+        return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
     }
 }

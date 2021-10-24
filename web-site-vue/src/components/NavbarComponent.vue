@@ -1,6 +1,13 @@
 <template>
   <b-navbar toggleable="lg" type="dark" class="bg-primary">
-    <b-navbar-brand class="font-weight-bold" to="/home">xDev</b-navbar-brand>
+    <b-navbar-brand to="/home">
+      <img
+        to="/home"
+        style="width: 6rem"
+        src="@/assets/logo.png"
+        alt="xDev Logo"
+      />
+    </b-navbar-brand>
 
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -110,7 +117,7 @@
               >Configurações</b-dropdown-item
             >
             <b-dropdown-item @click="showFeedbackModal()"
-            >Feedback</b-dropdown-item
+              >Feedback</b-dropdown-item
             >
             <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -190,11 +197,13 @@ import notificationService from "../services/notificationService";
 import { mapGetters, mapActions } from "vuex";
 import UserSettings from "./UserSettingsComponent.vue";
 import Feedback from "./FeedbackComponent.vue";
-import userService from "../services/userService.js";
+import userService from '../services/userService.js';
+
 export default {
   name: "navbar-component",
   components: {
-    UserSettings, Feedback
+    UserSettings,
+    Feedback,
   },
   data() {
     return {
@@ -203,25 +212,26 @@ export default {
       tags: [],
       search: "",
       notifications: [],
-      // isModerator: false,
+      isModerator: false,
     };
   },
   async mounted() {
-    if (this.authenticated) {
-      // this.isModerator = await userService.isModerator();
-      this.notifications = await this.getPostNotifications();
-    }
+    // if (this.authenticated) {
+    //   this.notifications = await this.getPostNotifications();
+    // }
 
-    const id = window.setInterval(async () => {
-      this.notifications = await this.getPostNotifications();
-    }, 10000);
+    // const id = window.setInterval(async () => {
+    //   this.notifications = await this.getPostNotifications();
+    // }, 10000);
 
-    if (!this.authenticated) {
-      window.clearInterval(id);
-    }
+    // if (!this.authenticated) {
+    //   window.clearInterval(id);
+    // }
   },
   async created() {
     if (this.authenticated) {
+      this.isModerator = await userService.isModerator();
+      
       let tags = await tagService.getTags();
       this.tags = tags;
       this.options = tags.map((t) => t.name).sort();
@@ -231,7 +241,6 @@ export default {
     ...mapGetters({
       authenticated: "auth/authenticated",
       user: "auth/user",
-      isModerator: "auth/isModerator"
     }),
     availableOptions() {
       const criteria = this.criteria;

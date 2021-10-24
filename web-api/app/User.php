@@ -2,10 +2,11 @@
 
 namespace App;
 
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -37,6 +38,19 @@ class User extends Authenticatable implements MustVerifyEmail
         $value = base64_encode(file_get_contents($path));
 
         $this->attributes['profile_picture'] = $value;
+    }
+
+    public function scopeIsModerator($query) {
+        return $query->where('user_type_id', 2);
+    }
+
+    public function scopeIsSheriff($query) {
+        return $query->where('user_type_id', 4);
+    }
+
+    public function scopeIsFromTheSameClass($query) {
+        $userSchoolClass = Auth::user()->school_class->id;
+        return $query->where('school_class_id', $userSchoolClass);
     }
 
     public function posts()

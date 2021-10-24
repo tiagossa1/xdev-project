@@ -15,7 +15,7 @@
       enter-active-class="animated fadeInRight"
       leave-active-class="animated fadeOutLeft"
     >
-      <router-view />
+      <router-view :key="$route.fullPath" />
     </transition>
     <footer-component></footer-component>
   </div>

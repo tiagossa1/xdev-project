@@ -26,17 +26,13 @@ export default new (class UserService {
   }
 
   async isModerator() {
-    let res = await axios
-      .get(`${this.apiUrl}/api/is-moderator`)
-      .catch(() => {
-        return false;
-      });
+    let res = await axios.get(`${this.apiUrl}/api/is-moderator`);
+    return Boolean(res.data.isModerator);
+  }
 
-    if (res.status === 200) {
-      return true;
-    } else {
-      return false;
-    }
+  async isxSheriff() {
+    let res = await axios.get(`${this.apiUrl}/api/is-sheriff`);
+    return Boolean(res.data.isxSheriff);
   }
 
   async logout() {
@@ -58,6 +54,10 @@ export default new (class UserService {
     }
 
     return [];
+  }
+
+  async getUserByToken() {
+    return await axios.get(`${this.apiUrl}/api/get-user`);
   }
 
   async getUserById(id) {

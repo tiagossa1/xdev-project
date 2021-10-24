@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CreatePostRequest;
-use App\Notifications\NewPost;
 use App\Post;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
+use App\Notifications\NewPost;
 use Illuminate\Support\Facades\DB;
+use App\Notifications\UpdateReport;
+use App\Http\Requests\CreatePostRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 
@@ -108,14 +109,13 @@ class PostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Post $post)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $post,
+                'data' => Post::find($id),
                 'message' => 'Success',
             ], 200);
 
@@ -128,23 +128,12 @@ class PostController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Post $post)
+    public function update(Request $request, $id)
     {
         try {
-            /*$post = Post::find($post->id);
-
-            if (!is_null($post)) {
-                $post->title = $request->title;
-                $post->description = $request->description;
-                $post->suspended = $request->suspended;
-                $post->user_id = $request->user_id;
-                $post->post_type_id = $request->post_type_id;
-
-                $post->save();
-            }*/
+            $post = Post::find($id);
 
             $post->update($request->all());
 
@@ -159,6 +148,15 @@ class PostController extends Controller
             if (!is_null($request->input('users_saved'))) {
                 $post->users_saved()->sync($request->input('users_saved'));
             }
+            
+            // $moderatorIds = [2, 4];
+
+            // if($post->suspended && !in_array(Auth::user()->user_type->id, $moderatorIds)) {
+            //     $mods = User::whereIn('user_type_id', $moderatorIds)->get();
+
+            //     if(!is_null($mods))
+            //         Notification::send($mods, new UpdateReport($post));
+            // }
 
             return response()->json([
                 'data' => $post->fresh(),
@@ -173,12 +171,13 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Post $post
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Post $post)
+    public function destroy($id)
     {
         try {
+            $post = Post::find($id);
+
             $post->post_photos()->delete();
             $post->comments()->delete();
             $post->likes()->delete();

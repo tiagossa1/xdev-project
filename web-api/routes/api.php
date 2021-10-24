@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('logout', 'AuthController@logout');
     Route::post('change-password', 'AuthController@changePassword');
     Route::get('is-moderator', 'AuthController@isModerator');
+    Route::get('is-sheriff', 'AuthController@isSheriff');
+    Route::get('get-user', 'AuthController@getUserByToken');
 
     Route::get('feedbacks', 'FeedbackController@index')->middleware('ismoderator');
     Route::get('feedbacks/{id}', 'FeedbackController@show')->middleware('ismoderator');
@@ -47,6 +49,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('users', 'UserController@index');
     Route::get('users/{id}', 'UserController@show');
+    Route::get('recent-activity/{id}', 'UserController@getRecentActivity');
     Route::put('users/{id}', 'UserController@update')->middleware('ismoderator');
     Route::delete('users/{id}', 'UserController@destroy')->middleware('ismoderator');
 

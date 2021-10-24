@@ -74,6 +74,9 @@ import { mapActions } from "vuex";
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 
+// custom validation
+const notContainsEduAtecPt = (value) => !value.toLowerCase().includes("@edu.atec.pt");
+
 export default {
   name: "login-component",
   mounted() {
@@ -83,7 +86,7 @@ export default {
   validations() {
     return {
       form: {
-        email: { required },
+        email: { required, notContainsEduAtecPt },
         password: { required },
       },
     };

@@ -7,16 +7,23 @@ export default {
   state: {
     token: null,
     user: null,
+    expiration_date: null,
   },
 
   getters: {
     authenticated(state) {
-      if (state.user && state.token) return true;
+      let currentDate = new Date();
+      let expiration_date = new Date(state.expiration_date);
+
+      if (expiration_date) {
+        if (currentDate < expiration_date && state.user && state.token) {
+          return true;
+        } else {
+          return false;
+        }
+      }
 
       return false;
-    },
-    async isModerator() {
-      return await userService.isModerator();
     },
     user(state) {
       return state.user;
@@ -29,6 +36,9 @@ export default {
     },
     SET_USER(state, user) {
       state.user = user;
+    },
+    SET_EXPIRATION_DATE(state, expDate) {
+      state.expiration_date = expDate;
     },
   },
 
@@ -54,6 +64,16 @@ export default {
         });
     },
 
+    async signOut({ commit }) {
+      userService.logout().then(() => {
+        commit("SET_TOKEN", null);
+        commit("SET_USER", null);
+        commit("SET_EXPIRATION_DATE", null);
+
+        router.push("Login");
+      });
+    },
+
     async attempt({ commit, state }, data) {
       if (data.token) {
         commit("SET_TOKEN", data.token);
@@ -69,15 +89,11 @@ export default {
 
       commit("SET_USER", data.user);
       commit("SET_TOKEN", data.token);
-    },
 
-    async signOut({ commit }) {
-      userService.logout().then(() => {
-        commit("SET_TOKEN", null);
-        commit("SET_USER", null);
+      let expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 5);
 
-        router.push("Login");
-      });
+      commit("SET_EXPIRATION_DATE", expirationDate);
     },
   },
 

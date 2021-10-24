@@ -57,14 +57,13 @@ class TagController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Tag $tag
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Tag $tag)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $tag,
+                'data' => Tag::find($id),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

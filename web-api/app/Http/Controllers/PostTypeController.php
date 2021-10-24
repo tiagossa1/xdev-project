@@ -50,14 +50,13 @@ class PostTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\PostType $postType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(PostType $postType)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $postType,
+                'data' => PostType::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -70,16 +69,15 @@ class PostTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\PostType $postType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, PostType $postType)
+    public function update(Request $request, $id)
     {
         try {
             $postType->update($request->all());
 
             return response()->json([
-                'data' => $postType,
+                'data' => PostType::find($id),
                 'message' => 'Success'
             ], 200);
 

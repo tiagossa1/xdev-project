@@ -7,9 +7,9 @@
       :notifications="notifications"
     ></notifications-component>
     <hr />
-    <user-management-component></user-management-component>
-    <feedback-management-component></feedback-management-component>
-    <tags-management-component></tags-management-component>
+    <user-management-component v-if="!isxSheriff"></user-management-component>
+    <feedback-management-component v-if="!isxSheriff"></feedback-management-component>
+    <tags-management-component v-if="!isxSheriff"></tags-management-component>
   </div>
 </template>
 
@@ -22,6 +22,7 @@ import FeedbackManagementComponent from "../components/moderation/FeedbackManage
 import TagsManagementComponent from '../components/moderation/TagsManagementComponent.vue';
 
 import notificationService from "../services/notificationService";
+import userService from '../services/userService';
 
 export default {
   name: "Moderation",
@@ -51,9 +52,12 @@ export default {
   data() {
     return {
       notifications: [],
+      isxSheriff: false
     };
   },
   async mounted() {
+    this.isxSheriff = await userService.isxSheriff();
+    
     let notifications = await notificationService.getNotifications();
     this.notifications = notifications.filter(
       (n) => n.type.toLowerCase() === "newreport"

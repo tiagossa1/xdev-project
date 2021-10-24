@@ -49,11 +49,23 @@ class ReportController extends Controller
 
             if ($request->input('comment') != null)
                 $report->comments()->sync($request->input('comments'));
+            
+            // isModerator, isSheriff and isFromTheSameClass are called scopes. They are declared on User.php (User model file).
+            $moderators = User::isModerator()->get();
+            $sheriffs = User::isSheriff()->isFromTheSameClass()->get();
 
-            $mods = User::whereIn('user_type_id', [2,4])->get();
+            if(!is_null($moderators)) {
+                Notification::send($moderators, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+            }
 
-            if(!is_null($mods))
-                Notification::send($mods, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+            if(!is_null($sheriffs)) {
+                Notification::send($sheriffs, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+            }
+
+            // $mods = User::whereIn('user_type_id', [2,4])->get();
+
+            // if(!is_null($mods))
+            //     Notification::send($mods, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
 
             return response()->json([
                 'data' => $report,
@@ -67,14 +79,13 @@ class ReportController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Report $report
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Report $report)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $report,
+                'data' => Report::find($id),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -86,12 +97,12 @@ class ReportController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\Report $report
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, Report $report)
+    public function update(Request $request, $id)
     {
         try {
+            $report = Report::find($id);
             $report->update($request->all());
 
             if ($request->input('users') != null)

@@ -50,14 +50,13 @@ class FeedbackTypeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\FeedbackType $feedbackType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(FeedbackType $feedbackType)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $feedbackType,
+                'data' => FeedbackType::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -70,12 +69,12 @@ class FeedbackTypeController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\FeedbackType $feedbackType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, FeedbackType $feedbackType)
+    public function update(Request $request, $id)
     {
         try {
+            $feedbackType = FeedbackType::find($id);
             $feedbackType->update($request->all());
 
             return response()->json([

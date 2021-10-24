@@ -8,11 +8,9 @@ store.subscribe((mutation) => {
         axios.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${mutation.payload}`;
-        //axios.defaults.headers.common["Accept"] = "application/json";
         localStorage.setItem("token", mutation.payload);
       } else {
         axios.defaults.headers.common["Authorization"] = null;
-        //axios.defaults.headers.common["Accept"] = "application/json";
         localStorage.removeItem("token");
       }
 
@@ -25,5 +23,14 @@ store.subscribe((mutation) => {
       }
 
       break;
+    case "auth/SET_EXPIRATION_DATE":
+      if (mutation.payload) {
+        localStorage.setItem(
+          "expiration_date",
+          JSON.stringify(mutation.payload)
+        );
+      } else {
+        localStorage.removeItem("expiration_date");
+      }
   }
 });

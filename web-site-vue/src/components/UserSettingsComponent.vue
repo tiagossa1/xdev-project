@@ -91,7 +91,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white w-20" type="submit" variant="success"
+              <b-button class="text-white" type="submit" variant="success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -100,8 +100,12 @@
       </b-tab>
 
       <b-tab title="Editar Redes Sociais">
-        <b-alert v-model="AlertMessage" :variant="updateSucces? 'success' : 'danger'" dismissible>
-          {{updateSucces ? messageSucces : messageFail}}
+        <b-alert
+          v-model="AlertMessage"
+          :variant="updateSucces ? 'success' : 'danger'"
+          dismissible
+        >
+          {{ updateSucces ? messageSucces : messageFail }}
         </b-alert>
         <b-form @submit.prevent="updateSocial">
           <b-row>
@@ -161,7 +165,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white w-20" type="submit"  variant="success"
+              <b-button class="text-white" type="submit" variant="success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -173,42 +177,42 @@
         <!-- <b-alert v-model="AlertMessage" :variant="updateSucces? 'success' : 'danger'" dismissible>
           {{updateSucces ? messageSucces : messageFail}}
         </b-alert> -->
-        <b-table 
-        hover
-        sticky-header="500px"
-        :tbody-tr-class="rowClass"
-        :items="allTags" 
-        :fields="tagsFields">
-        <!-- eslint-disable-next-line -->
-        <template #cell(allTags.name)="data">
-          <span>{{data.item.name}}</span>
-        </template>
+        <b-table
+          hover
+          sticky-header="500px"
+          :tbody-tr-class="rowClass"
+          :items="allTags"
+          :fields="tagsFields"
+        >
+          <!-- eslint-disable-next-line -->
+          <template #cell(allTags.name)="data">
+            <span>{{ data.item.name }}</span>
+          </template>
 
-
-        <template v-slot:cell(actions)="data">
-        <b-button-group>
-          <!-- <b-button variant="success"
-            >Detalhes</b-button
-          >
-          <b-button variant="warning"
-            >Editar</b-button
-          > -->
-          <b-button @click="updateFavouriteTag(data.item)" :variant="!userInfo.tags.some(x => x.id === data.item.id) ? 'success' : 'danger'">
-            {{ !userInfo.tags.some(x => x.id === data.item.id) ? 'Adicionar' : 'Remover' }}
-          </b-button>
-          
-        </b-button-group>
-      </template>
-
+          <template v-slot:cell(actions)="data">
+            <b-button-group>
+              <b-button
+                @click="updateFavouriteTag(data.item)"
+                :variant="
+                  !userInfo.tags.some((x) => x.id === data.item.id)
+                    ? 'success'
+                    : 'danger'
+                "
+              >
+                {{
+                  !userInfo.tags.some((x) => x.id === data.item.id)
+                    ? "Adicionar"
+                    : "Remover"
+                }}
+              </b-button>
+            </b-button-group>
+          </template>
         </b-table>
       </b-tab>
-
     </b-tabs>
-    <b-row class="w-20 text-center mt-3">
+    <b-row class="text-center mt-3">
       <b-col>
-        <b-button variant="outline-danger" @click="closeModel"
-          >Sair</b-button
-        >
+        <b-button variant="outline-danger" @click="closeModel">Sair</b-button>
       </b-col>
     </b-row>
   </b-modal>
@@ -235,17 +239,16 @@ export default {
       AlertMessage: false,
 
       updateSucces: false,
-      messageSucces : 'Redes Sociais atualizadas com sucesso',
-      messageFail : 'Erro ao atualizar as redes sociais',
+      messageSucces: "Redes Sociais atualizadas com sucesso",
+      messageFail: "Erro ao atualizar as redes sociais",
 
       AlertPasswordMessage: false,
-      
+
       tagsFields: [
         // {key: "name", label: "Nome"},
-        {key: "allTags.name", label: "Tags"},
-        {key: "actions", label: "Ações"}
+        { key: "allTags.name", label: "Tags" },
+        { key: "actions", label: "Ações" },
       ],
-
 
       favouriteTag: false,
       userInfo: {},
@@ -263,9 +266,7 @@ export default {
     if (userId) {
       this.userInfo = await userService.getUserById(userId);
       this.allTags = await tagService.getTags();
-      // console.log(this.userInfo.tags)
     }
-    
   },
   setup: () => ({ v$: useVuelidate() }),
   validations() {
@@ -307,13 +308,10 @@ export default {
         this.confirm_password,
         this.confirm_new_password
       );
-      let res = await userService
-        .changePassword(request)
-        .catch((err) => {
-          this.showPasswordAlert(err)
-          });
+      let res = await userService.changePassword(request).catch((err) => {
+        this.showPasswordAlert(err);
+      });
 
-      
       if (res.status === 200) {
         this.closeModel();
         this.signOut();
@@ -322,13 +320,78 @@ export default {
     async updateSocial() {
       var facebookRegex = /(?:https?:\/\/)?(?:www\.)?facebook\.com\//;
       var githubRegex = /(?:https?:\/\/)?(?:www\.)?github\.com\//;
-      var instagramRegex = /(?:https?:\/\/)?(?:www\.)(?:instagram.com\/)/; 
+      var instagramRegex = /(?:https?:\/\/)?(?:www\.)(?:instagram.com\/)/;
       var linkedinRegex = /(?:https?:\/\/)?(?:www\.)(?:linkedin.com\/)/;
 
-      if(facebookRegex.test(this.userInfo.facebook_url) 
-      && githubRegex.test(this.userInfo.github_url)
-      && instagramRegex.test(this.userInfo.instagram_url)
-      && linkedinRegex.test(this.userInfo.linkedin_url)){
+      if (
+        facebookRegex.test(this.userInfo.facebook_url) &&
+        githubRegex.test(this.userInfo.github_url) &&
+        instagramRegex.test(this.userInfo.instagram_url) &&
+        linkedinRegex.test(this.userInfo.linkedin_url)
+      ) {
+        let request = new UserRequest(
+          this.userInfo.id,
+          this.userInfo.email,
+          this.userInfo.name,
+          this.userInfo.birth_date,
+          null,
+          this.userInfo.github_url,
+          this.userInfo.linkedin_url,
+          this.userInfo.facebook_url,
+          this.userInfo.instagram_url,
+          this.userInfo.createdAt,
+          this.userInfo.district.id,
+          this.userInfo.schoolClass.id,
+          this.userInfo.userType.id,
+          null,
+          null,
+          null,
+          null,
+          this.userInfo.suspended
+        );
+
+        let res = await userService
+          .update(request)
+          .catch((err) => console.log(err.response));
+        console.log(res);
+
+        this.updateSucces = true;
+        this.showSocialMediaAlert();
+      } else {
+        this.updateSucces = false;
+        this.showSocialMediaAlert();
+      }
+    },
+    showSocialMediaAlert() {
+      this.AlertMessage = true;
+      setTimeout(() => {
+        this.AlertMessage = false;
+      }, 3000);
+    },
+    showPasswordAlert(error) {
+      console.log(error);
+      this.AlertPasswordMessage = true;
+      setTimeout(() => {
+        this.AlertPasswordMessage = false;
+      }, 3000);
+    },
+    rowClass(item, type) {
+      if (!item || type !== "row") {
+        return;
+      }
+      if (this.userInfo.tags.some((x) => x.name == item.name))
+        return "table-success";
+    },
+    async updateFavouriteTag(value) {
+      if (!this.userInfo.tags.some((x) => x.id === value.id)) {
+        this.userInfo.tags.push(value);
+      } else {
+        let index = this.userInfo.tags.findIndex((x) => x.id == value.id);
+
+        if (index > -1) {
+          this.userInfo.tags.splice(index, 1);
+        }
+      }
 
       let request = new UserRequest(
         this.userInfo.id,
@@ -345,7 +408,7 @@ export default {
         this.userInfo.schoolClass.id,
         this.userInfo.userType.id,
         null,
-        null,
+        this.userInfo.tags.map((x) => x.id),
         null,
         null,
         this.userInfo.suspended
@@ -354,80 +417,9 @@ export default {
       let res = await userService
         .update(request)
         .catch((err) => console.log(err.response));
-      console.log(res)
 
-      this.updateSucces = true
-      this.showSocialMediaAlert()
-      
-      }
-      else{
-        this.updateSucces = false
-        this.showSocialMediaAlert()
-      }
+      console.log(res);
     },
-    showSocialMediaAlert(){
-      this.AlertMessage = true;
-      setTimeout(() => {
-        this.AlertMessage = false;
-      },3000);
-    },
-    showPasswordAlert(error){
-      console.log(error)
-      this.AlertPasswordMessage = true;
-      setTimeout(() => {
-        this.AlertPasswordMessage = false;
-      },3000);
-    },
-    rowClass(item, type) {
-      // console.log(this.userInfo.tags.some(x => x.name == item.name))
-      if (!item || type !== "row"){
-        return 
-      } 
-      if (this.userInfo.tags.some(x => x.name == item.name))
-      return "table-success";
-      
-    },
-    async updateFavouriteTag(value) {
-
-       if(!this.userInfo.tags.some(x => x.id === value.id)){
-       this.userInfo.tags.push(value);
-       }
-       else{
-         let index = this.userInfo.tags.findIndex(x => x.id == value.id)
-
-         if(index > -1){
-           this.userInfo.tags.splice(index,1)
-         }
-       }
-
-      let request = new UserRequest(
-      this.userInfo.id,
-      this.userInfo.email,
-      this.userInfo.name,
-      this.userInfo.birth_date,
-      null,
-      this.userInfo.github_url,
-      this.userInfo.linkedin_url,
-      this.userInfo.facebook_url,
-      this.userInfo.instagram_url,
-      this.userInfo.createdAt,
-      this.userInfo.district.id,
-      this.userInfo.schoolClass.id,
-      this.userInfo.userType.id,
-      null,
-      this.userInfo.tags.map(x => x.id),
-      null,
-      null,
-      this.userInfo.suspended
-      );
-      
-
-      let res = await userService.update(request).catch((err) => console.log(err.response));
-      
-      console.log(res)
-      
-      
-    }
   },
 };
 </script>

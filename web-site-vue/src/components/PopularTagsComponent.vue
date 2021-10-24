@@ -2,7 +2,7 @@
   <b-card-group deck class="mb-3 text-center">
     <b-card :style="cardStyle">
       <template #header >
-        <span class="font-weight-bold text-primary">Tags Populares</span>
+        <span class="font-weight-bold">Tags Populares</span>
         <b-icon-x
           @click="clearFilter"
           v-if="showClearButton"
@@ -24,7 +24,7 @@
           href="#"
           class="m-2 text-white p-2"
           pill
-          variant="primary"
+          variant="secondary"
           :key="popularTag.name"
         >
           {{ popularTag.name }}

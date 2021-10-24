@@ -19,6 +19,16 @@ export default new (class PostService {
     return [];
   }
 
+  async getPostById(id) {
+    let res = await axios.get(`${this.apiUrl}/api/posts/${id}`);
+
+    if (res.data.data) {
+      return new Post(res.data.data);
+    }
+
+    return null;
+  }
+
   async getPostsByUser(userId) {
     let response = await axios.get(
       `${this.apiUrl}/api/posts?user_id=${userId}`

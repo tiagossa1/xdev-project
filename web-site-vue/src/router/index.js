@@ -8,6 +8,8 @@ import Profile from "../views/Profile.vue";
 import Moderation from "../views/Moderation.vue";
 import Verification from "../views/Verification.vue";
 
+import userService from "../services/userService";
+
 import store from "@/store";
 
 Vue.use(VueRouter);
@@ -59,7 +61,7 @@ router.beforeEach(async (to, __, next) => {
   const isAuthenticated = store.getters["auth/authenticated"];
 
   if (to.name === "Moderation") {
-    const isModerator = await store.getters["auth/isModerator"];
+    const isModerator = await userService.isModerator();
 
     if (!isModerator) {
       next({ name: "Home" });

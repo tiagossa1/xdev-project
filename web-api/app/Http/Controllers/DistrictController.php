@@ -50,13 +50,13 @@ class DistrictController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\District $district
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(District $district)
+    public function show($id)
     {
         try {
-            return response()->json(['data' => $district,
+            return response()->json([
+                'data' => District::find($id),
                 'message' => 'Success'], 201);
 
         } catch (Exception $exception) {
@@ -68,12 +68,12 @@ class DistrictController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\District $district
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, District $district)
+    public function update(Request $request, $id)
     {
         try {
+            $district = District::find($id);
             $district->update($request->all());
 
             return response()->json([

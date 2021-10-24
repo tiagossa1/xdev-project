@@ -2,18 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginAuthRequest;
-use App\Http\Requests\RegisterAuthRequest;
 use App\User;
 use Exception;
+use App\UserType;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\LoginAuthRequest;
 use \Illuminate\Support\Facades\Validator;
+use App\Http\Requests\RegisterAuthRequest;
 
 class AuthController extends Controller
 {
     protected $table = 'users';
+
+    public function getUserByToken() {
+        return Auth::user();
+    }
 
     public function register(RegisterAuthRequest $request)
     {
@@ -59,13 +64,25 @@ class AuthController extends Controller
 
     public function isModerator()
     {
-        $moderatorIds = [2, 4];
+        $moderatorIds = [2, 3, 4];
 
         if (in_array(Auth::user()->user_type->id, $moderatorIds)) {
-            return response()->json([], 200);
+            return response()->json(['isModerator' => true], 200);
+        } else {
+            return response()->json(['isModerator' => false], 200);
+        }
+    }
+
+    public function isSheriff() {
+        $xSheriff = UserType::where('name', 'LIKE', '%sheriff%')->first();
+
+        if(Auth::user()->user_type->id == $xSheriff->id) {
+            return response()->json(['isxSheriff' => true], 200);
+        } else {
+            return response()->json(['isxSheriff' => false], 200);
         }
 
-        return response()->json([], 401);
+        // return response()->json([], 401);
     }
 
     public function login(LoginAuthRequest $request)

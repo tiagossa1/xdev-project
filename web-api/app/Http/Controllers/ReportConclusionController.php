@@ -51,14 +51,13 @@ class ReportConclusionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\ReportConclusion $reportConclusion
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(ReportConclusion $reportConclusion)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $reportConclusion,
+                'data' => ReportConclusion::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -71,16 +70,15 @@ class ReportConclusionController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\ReportConclusion $reportConclusion
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, ReportConclusion $reportConclusion)
+    public function update(Request $request, $id)
     {
         try {
             $reportConclusion->update($request->all());
 
             return response()->json([
-                'data' => $reportConclusion,
+                'data' => ReportConclusion::find($id),
                 'message' => 'Success'
             ], 200);
 

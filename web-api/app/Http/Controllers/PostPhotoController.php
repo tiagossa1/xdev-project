@@ -49,14 +49,13 @@ class PostPhotoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\PostPhoto $postPhoto
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(PostPhoto $postPhoto)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $postPhoto,
+                'data' => PostPhoto::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -69,12 +68,12 @@ class PostPhotoController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\PostPhoto $postPhoto
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, PostPhoto $postPhoto)
+    public function update(Request $request, $id)
     {
         try {
+            $postPhoto = PostPhoto::find($id);
             $postPhoto->update($request->all());
 
             return response()->json([

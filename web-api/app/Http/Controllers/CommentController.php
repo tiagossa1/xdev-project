@@ -49,14 +49,13 @@ class CommentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function show(Comment $comment)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $comment,
+                'data' => Comment::find($id),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -68,12 +67,12 @@ class CommentController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comment  $comment
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
         try {
+            $comment = Comment::find($id);
             $comment->update($request->all());
 
             return response()->json([

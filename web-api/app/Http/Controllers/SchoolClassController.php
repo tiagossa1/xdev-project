@@ -50,14 +50,13 @@ class SchoolClassController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\SchoolClass $schoolClass
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(SchoolClass $schoolClass)
+    public function show($id)
     {
         try {
             return response()->json([
-                'data' => $schoolClass,
+                'data' => SchoolClass::find($id),
                 'message' => 'Success'
             ], 200);
 
@@ -70,12 +69,12 @@ class SchoolClassController extends Controller
      * Update the specified resource in storage.
      *
      * @param \Illuminate\Http\Request $request
-     * @param \App\SchoolClass $schoolClass
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, SchoolClass $schoolClass)
+    public function update(Request $request, $id)
     {
         try {
+            $schoolClass = SchoolClass::find($id);
             $schoolClass->update($request->all());
 
             return response()->json([
