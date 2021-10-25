@@ -15,7 +15,7 @@
               size="lg"
               @ok="createPost"
             >
-              <b-form>
+              <b-form ref="postInput">
                 <b-form-group label="Insira o titulo:" label-for="textTitle">
                   <b-form-input
                     id="textTitle"
@@ -278,6 +278,9 @@ export default {
           variant: "success",
         });
       }
+
+      
+
     },
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);

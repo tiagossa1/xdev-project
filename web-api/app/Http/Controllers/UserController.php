@@ -108,8 +108,10 @@ class UserController extends Controller
     }
 
     public function getRecentActivity($id) {
-        $comment = Comment::where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+        $comment = Comment::with('post')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
         $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+
+        // unsetRelation('comments');
 
         return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
     }

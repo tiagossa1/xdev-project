@@ -87,7 +87,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('comments', 'CommentController@index');
     Route::get('comments/{id}', 'CommentController@show');
-    Route::post('comments', 'CommentController@store')->middleware('throttle:1,1');
+    Route::post('comments', 'CommentController@store')->middleware('throttle:2,1');
     Route::put('comments/{id}', 'CommentController@update')->middleware('ismoderator');
     Route::delete('comments/{id}', 'CommentController@destroy')->middleware('ismoderator');
 

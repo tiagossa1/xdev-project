@@ -93,4 +93,12 @@ export default new (class UserService {
   async delete(id) {
     return await axios.delete(`${this.apiUrl}/api/users/${id}`);
   }
+
+  async getRecentFeed(id){
+    //TODO fazer mapeamento
+    const res = await axios.get(`${this.apiUrl}/api/recent-activity/${id}`);
+    console.log(res.data)
+    return res.data;
+  }
+
 })();

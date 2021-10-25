@@ -18,7 +18,7 @@
       </b-col>
 
       <b-col class="p-5" sm="3">
-        <recent-feed></recent-feed>
+        <recent-feed :recentFeed="recentFeed"></recent-feed>
       </b-col>
     </b-row>
   </b-container>
@@ -51,13 +51,19 @@ export default {
         schoolClass: { school: {} },
         posts: {},
         tags: {},
+        recentFeed: {},
       },
       posts: Post,
     };
   },
   async created() {
     const paramId = this.$route.params.id;
+    
+    
+    // console.log(this.recentFeed.comments);
     if (paramId) {
+      this.recentFeed = await userService.getRecentFeed(paramId);
+      
       this.userInfo = await userService.getUserById(paramId);
       this.posts = await postService.getPostsByUser(paramId);
 
@@ -66,6 +72,9 @@ export default {
       );
       // console.log(this.getSuspendedPosts)
     } else {
+      this.recentFeed = await userService.getRecentFeed(
+        this.$store.getters["auth/user"].id
+      );
       this.userInfo = await userService.getUserById(
         this.$store.getters["auth/user"].id
       );
