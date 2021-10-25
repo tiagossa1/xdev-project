@@ -16,12 +16,11 @@ import router from "./router";
 require("@/store/subscriber");
 
 import "./styles/app.scss";
+
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuelidate);
-
 Vue.use(VueAxios, axios);
-
 Vue.use(VueCompositionAPI);
 
 import "quill/dist/quill.core.css";

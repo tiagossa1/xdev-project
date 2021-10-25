@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PostCreated;
 use App\Post;
 use App\User;
 use Exception;
@@ -87,13 +88,14 @@ class PostController extends Controller
             $post->tags()->attach($request->input('tags'));
 
             $user_id = $request->user_id;
-            
+
             $users = User::whereIn('id', function ($query) use ($post, $user_id) {
                 $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $user_id);
             })->get();
 
             if (!is_null($users) || $users->length > 0) {
                 Notification::send($users, new NewPost(Post::find($post->id)));
+                event(new PostCreated($post));
             }
 
             return response()->json([
@@ -148,7 +150,7 @@ class PostController extends Controller
             if (!is_null($request->input('users_saved'))) {
                 $post->users_saved()->sync($request->input('users_saved'));
             }
-            
+
             // $moderatorIds = [2, 4];
 
             // if($post->suspended && !in_array(Auth::user()->user_type->id, $moderatorIds)) {

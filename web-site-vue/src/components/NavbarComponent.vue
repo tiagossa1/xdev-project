@@ -194,10 +194,13 @@
 import tagService from "../services/tagService.js";
 import notificationService from "../services/notificationService";
 
-import { mapGetters, mapActions } from "vuex";
+import userService from '../services/userService.js';
+
 import UserSettings from "./UserSettingsComponent.vue";
 import Feedback from "./FeedbackComponent.vue";
-import userService from '../services/userService.js';
+
+import { mapGetters, mapActions } from "vuex";
+import Pusher from 'pusher-js';
 
 export default {
   name: "navbar-component",
@@ -216,6 +219,17 @@ export default {
     };
   },
   async mounted() {
+    Pusher.logToConsole = true;
+
+    const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
+      cluster: "eu"
+    })
+
+    const channel = pusher.subscribe(process.env.VUE_APP_PUSHER_CHANNEL_NAME);
+    channel.bind('post-created', function(data) {
+      console.log(data);
+    })
+
     // if (this.authenticated) {
     //   this.notifications = await this.getPostNotifications();
     // }

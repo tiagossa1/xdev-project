@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\ReportCreated;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\ReportRequest;
 use App\Notifications\NewReport;
@@ -49,7 +50,7 @@ class ReportController extends Controller
 
             if ($request->input('comment') != null)
                 $report->comments()->sync($request->input('comments'));
-            
+
             // isModerator, isSheriff and isFromTheSameClass are called scopes. They are declared on User.php (User model file).
             $moderators = User::isModerator()->get();
             $sheriffs = User::isSheriff()->isFromTheSameClass()->get();
@@ -61,6 +62,9 @@ class ReportController extends Controller
             if(!is_null($sheriffs)) {
                 Notification::send($sheriffs, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
             }
+
+            event(new ReportCreated($report));
+            // broadcast(new ReportCreated($report));
 
             // $mods = User::whereIn('user_type_id', [2,4])->get();
 
