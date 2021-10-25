@@ -129,7 +129,7 @@
               font-scale="2"
             ></b-icon>
             <b-badge class="ml-1" pill variant="light">
-              {{ notificationCounter }}
+              {{ notifications.length }}
             </b-badge>
           </div>
           <b-sidebar
@@ -141,24 +141,43 @@
             shadow
           >
             <template v-if="notifications.length > 0">
-              <div v-for="notification in notifications" :key="notification.id">
-                <b-card no-body class="text-center p-4">
-                  <b-card-text>
-                    <span
-                      :style="{
-                        color: notification.post.user.userType.hexColorCode,
-                      }"
-                      >{{ notification.post.user.name }}</span
-                    >
-                    criou um novo post sobre
-                    {{ notification.post.tags.map((t) => t.name).join(", ") }}!
-                    <br />
-                    <b-link @click="markAsRead(notification.id)" href="#"
-                      >Marcar como lida</b-link
-                    >
-                  </b-card-text>
-                </b-card>
-              </div>
+              <transition-group name="fade" tag="div">
+                <div
+                  v-for="(notification, index) in notifications"
+                  :key="notification.id"
+                >
+                  <b-card no-body class="text-center p-4">
+                    <b-card-text>
+                      <span
+                        :style="{
+                          color: notification.user.userType.hexColorCode,
+                        }"
+                        >{{ notification.user.name }}</span
+                      >
+                      criou um novo post sobre
+                      {{ notification.tags.map((t) => t.name).join(", ") }}!
+                      <br />
+                      <!-- <b-button v-b-modal.modal-post-notification>Show Modal</b-button> -->
+                      <b-link v-b-modal.modal-post-notification href=""
+                        >Ver</b-link
+                      >
+                      <b-modal
+                        id="modal-post-notification"
+                        ok-only
+                        @ok="removeNotification(index)"
+                        @close="removeNotification(index)"
+                        size="xl"
+                        title="Novo Post"
+                      >
+                        <post-component
+                          class="w-75 m-auto"
+                          :post="notification"
+                        ></post-component>
+                      </b-modal>
+                    </b-card-text>
+                  </b-card>
+                </div>
+              </transition-group>
             </template>
             <template v-else>
               <table class="h-100 w-100">
@@ -193,20 +212,22 @@
 <script>
 import tagService from "../services/tagService.js";
 import notificationService from "../services/notificationService";
-
 import userService from "../services/userService.js";
 
+import Post from "../models/post";
+
+import PostComponent from "./PostComponent.vue";
 import UserSettings from "./UserSettingsComponent.vue";
 import Feedback from "./FeedbackComponent.vue";
 
 import { mapGetters, mapActions } from "vuex";
-import Pusher from "pusher-js";
 
 export default {
   name: "navbar-component",
   components: {
     UserSettings,
     Feedback,
+    PostComponent,
   },
   data() {
     return {
@@ -219,42 +240,6 @@ export default {
       isModerator: false,
     };
   },
-  async mounted() {
-    Pusher.logToConsole = true;
-
-    const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
-      cluster: "eu",
-    });
-
-    const channel = pusher.subscribe(process.env.VUE_APP_PUSHER_CHANNEL_NAME);
-
-    channel.bind("report-created", function (data) {
-      console.log(data);
-    });
-
-    channel.bind("post-created", function (data) {
-      console.log(data);
-
-      if (this.notifications === undefined) {
-        this.notifications = [];
-      }
-
-      this.notifications.push(data);
-      this.notificationCounter++;
-
-      console.log(this.notifications);
-    });
-
-    // if (this.authenticated) {
-    //   this.notifications = await this.getPostNotifications();
-    // }
-    // const id = window.setInterval(async () => {
-    //   this.notifications = await this.getPostNotifications();
-    // }, 10000);
-    // if (!this.authenticated) {
-    //   window.clearInterval(id);
-    // }
-  },
   async created() {
     if (this.authenticated) {
       this.isModerator = await userService.isModerator();
@@ -262,6 +247,25 @@ export default {
       let tags = await tagService.getTags();
       this.tags = tags;
       this.options = tags.map((t) => t.name).sort();
+
+      var channel = this.$pusher.subscribe("xdev");
+
+      channel.bind("post-created", ({ post }) => {
+        const userTagIds = this.$store.getters["auth/user"].tags.map(
+          (ut) => ut.id
+        );
+        const postTagIds = post.tags.map((t) => t.id);
+
+        if (
+          post.user.id !== this.$store.getters["auth/user"].id &&
+          postTagIds.some((pt) => userTagIds.includes(pt))
+        ) {
+          const postCreated = new Post(post);
+
+          this.notifications.push(postCreated);
+          this.notificationCounter++;
+        }
+      });
     }
   },
   computed: {
@@ -347,6 +351,9 @@ export default {
       }
 
       this.emitEventToSearchByTags();
+    },
+    removeNotification(index) {
+      this.notifications.splice(index, 1);
     },
     async markAsRead(notificationId) {
       let res = await notificationService

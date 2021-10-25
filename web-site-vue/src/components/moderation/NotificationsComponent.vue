@@ -150,7 +150,7 @@ export default {
         suspendedConclusion?.id ?? null,
         item.report?.comment?.id ?? null,
         true,
-        null,
+        item.report.reason,
         null
       );
 

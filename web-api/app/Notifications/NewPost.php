@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class NewPost extends Notification
+class NewPost extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -43,6 +43,17 @@ class NewPost extends Notification
     {
         return [
             $this->post
+        ];
+    }
+
+    public function toDatabase($notifiable)
+    {
+        info("This is the current notification ID, it's generated right here before inserting to database");
+        info($this->id);
+        return [
+            'id'     =>  $this->id,
+            'message' => 'Notification message',
+
         ];
     }
 }

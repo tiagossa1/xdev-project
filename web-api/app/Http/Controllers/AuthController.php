@@ -101,7 +101,7 @@ class AuthController extends Controller
         }
 
         // When login in, it's not needed to load the following entities:
-        unset($user->tags);
+        // unset($user->tags);
         unset($user->favorite_posts);
         unset($user->liked_posts);
 

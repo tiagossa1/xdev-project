@@ -22,12 +22,18 @@ Vue.use(IconsPlugin);
 Vue.use(Vuelidate);
 Vue.use(VueAxios, axios);
 Vue.use(VueCompositionAPI);
+Vue.use(require('vue-pusher'), {
+  api_key: process.env.VUE_APP_PUSHER_APP_KEY,
+  options: {
+    cluster: 'eu'
+  }
+})
 
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";
 Vue.use(VueQuillEditor);
 
-var filter = function(text, length, clamp) {
+var filter = function (text, length, clamp) {
   clamp = clamp || "...";
   var node = document.createElement("div");
   node.innerHTML = text;

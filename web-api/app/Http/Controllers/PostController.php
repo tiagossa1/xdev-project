@@ -95,8 +95,10 @@ class PostController extends Controller
             })->get();
 
             if (!is_null($users) || $users->length > 0) {
-                Notification::send($users, new NewPost(Post::find($post->id)));
-                event(new PostCreated($post));
+                $newPostNotification = new NewPost(Post::find($post->id));
+                Notification::send($users, $newPostNotification);
+
+                event(new PostCreated(Post::find($post->id)));
             }
 
             return response()->json([
