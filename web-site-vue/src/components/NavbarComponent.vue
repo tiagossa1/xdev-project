@@ -129,7 +129,7 @@
               font-scale="2"
             ></b-icon>
             <b-badge class="ml-1" pill variant="light">
-              {{ notifications.length }}
+              {{ notificationCounter }}
             </b-badge>
           </div>
           <b-sidebar
@@ -194,13 +194,13 @@
 import tagService from "../services/tagService.js";
 import notificationService from "../services/notificationService";
 
-import userService from '../services/userService.js';
+import userService from "../services/userService.js";
 
 import UserSettings from "./UserSettingsComponent.vue";
 import Feedback from "./FeedbackComponent.vue";
 
 import { mapGetters, mapActions } from "vuex";
-import Pusher from 'pusher-js';
+import Pusher from "pusher-js";
 
 export default {
   name: "navbar-component",
@@ -215,6 +215,7 @@ export default {
       tags: [],
       search: "",
       notifications: [],
+      notificationCounter: 0,
       isModerator: false,
     };
   },
@@ -222,22 +223,34 @@ export default {
     Pusher.logToConsole = true;
 
     const pusher = new Pusher(process.env.VUE_APP_PUSHER_APP_KEY, {
-      cluster: "eu"
-    })
+      cluster: "eu",
+    });
 
     const channel = pusher.subscribe(process.env.VUE_APP_PUSHER_CHANNEL_NAME);
-    channel.bind('post-created', function(data) {
+
+    channel.bind("report-created", function (data) {
       console.log(data);
-    })
+    });
+
+    channel.bind("post-created", function (data) {
+      console.log(data);
+
+      if (this.notifications === undefined) {
+        this.notifications = [];
+      }
+
+      this.notifications.push(data);
+      this.notificationCounter++;
+
+      console.log(this.notifications);
+    });
 
     // if (this.authenticated) {
     //   this.notifications = await this.getPostNotifications();
     // }
-
     // const id = window.setInterval(async () => {
     //   this.notifications = await this.getPostNotifications();
     // }, 10000);
-
     // if (!this.authenticated) {
     //   window.clearInterval(id);
     // }
@@ -245,7 +258,7 @@ export default {
   async created() {
     if (this.authenticated) {
       this.isModerator = await userService.isModerator();
-      
+
       let tags = await tagService.getTags();
       this.tags = tags;
       this.options = tags.map((t) => t.name).sort();

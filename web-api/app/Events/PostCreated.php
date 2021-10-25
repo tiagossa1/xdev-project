@@ -33,7 +33,11 @@ class PostCreated implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        $channelName = env('PUSHER_APP_NAME');
-        return $channelName;
+        return ['xdev'];
+    }
+
+    public function broadcastAs()
+    {
+        return 'post-created';
     }
 }
