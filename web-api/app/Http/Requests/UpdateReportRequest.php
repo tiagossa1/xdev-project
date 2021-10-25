@@ -4,8 +4,18 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class ReportRequest extends FormRequest
+class UpdateReportRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     *
+     * @return bool
+     */
+    public function authorize()
+    {
+        return true;
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,11 +24,9 @@ class ReportRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required',
-            //'post_id' => 'required_without:comment_id',
-            //'comment_id' => 'required_without:post_id',
+            'user_id' => 'exists:users,id',
             'closed' => 'boolean',
-            'reason' => ['required', 'max:255'],
+            'reason' => 'max:255',
             'post_id' => [
                 'bail',
                 function ($attribute, $value, $fail) {

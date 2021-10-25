@@ -6,6 +6,7 @@ use App\Events\ReportCreated;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\ReportRequest;
 use App\Notifications\NewReport;
+use App\Notifications\UpdateReport;
 use App\Report;
 use App\User;
 use Exception;
@@ -103,7 +104,7 @@ class ReportController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateReport $request, $id)
     {
         try {
             $report = Report::find($id);

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\FeedbackType;
 use App\Http\Requests\CreateFeedBackTypeRequest;
+use App\Http\Requests\UpdateFeedBackTypeRequest;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class FeedbackTypeController extends Controller
 {
@@ -38,7 +40,9 @@ class FeedbackTypeController extends Controller
             $feedbackType = FeedbackType::create($request->all());
 
             return response()->json([
-                'data' => $feedbackType,
+                'data' => Cache::remember('feedback-types',60*60*24, function (){
+                    return FeedbackType::all();
+                }),
                 'message' => 'Success'
             ], 201);
 
@@ -71,7 +75,7 @@ class FeedbackTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateFeedBackTypeRequest $request, $id)
     {
         try {
             $feedbackType = FeedbackType::find($id);

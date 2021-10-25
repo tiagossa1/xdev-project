@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateUserTypeRequest;
+use App\Http\Requests\UpdateUserTypeRequest;
 use App\UserType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class UserTypeController extends Controller
 {
@@ -18,7 +20,9 @@ class UserTypeController extends Controller
     {
         try {
             return response()->json([
-                'data' => UserType::all(),
+                'data' => Cache::remember('user-types',60*60*24, function (){
+                    return UserType::all();
+                }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -70,7 +74,7 @@ class UserTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserTypeRequest $request, $id)
     {
         try {
             $userType = UserType::find($id);

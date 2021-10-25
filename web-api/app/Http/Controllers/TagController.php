@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateTagRequest;
+use App\Http\Requests\UpdateTagRequest;
 use App\Tag;
 use Exception;
 use Illuminate\Http\Request;
@@ -77,7 +78,7 @@ class TagController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateTagRequest $request, $id)
     {
         try {
             $tag = Tag::find($id);

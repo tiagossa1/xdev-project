@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Feedback;
 use App\Http\Requests\CreateFeedBackRequest;
+use App\Http\Requests\UpdateFeedBackRequest;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -72,7 +73,7 @@ class FeedbackController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateFeedBackRequest $request, $id)
     {
         try {
             $feedback = Feedback::find($id);

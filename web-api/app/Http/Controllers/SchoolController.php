@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateSchoolRequest;
+use App\Http\Requests\UpdateSchoolRequest;
 use App\School;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class SchoolController extends Controller
 {
@@ -18,7 +20,9 @@ class SchoolController extends Controller
     {
         try {
             return response()->json([
-                'data' => School::all(),
+                'data' => Cache::remember('schools',60*60*24, function (){
+                    return School::all();
+                }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -70,7 +74,7 @@ class SchoolController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateSchoolRequest $request, $id)
     {
         try {
             $school = School::find($id);

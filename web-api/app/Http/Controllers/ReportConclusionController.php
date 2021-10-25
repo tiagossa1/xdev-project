@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReportConclusionRequest;
 use App\Http\Requests\CreateReportRequest;
+use App\Http\Requests\UpdateReportConclusionRequest;
 use App\ReportConclusion;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class ReportConclusionController extends Controller
 {
@@ -19,7 +21,9 @@ class ReportConclusionController extends Controller
     {
         try {
             return response()->json([
-                'data' => ReportConclusion::all(),
+                'data' => Cache::remember('report-conclusions',60*60*24, function (){
+                    return ReportConclusion::all();
+                }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -72,13 +76,14 @@ class ReportConclusionController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateReportConclusionRequest $request, $id)
     {
         try {
+            $reportConclusion = ReportConclusion::find($id);
             $reportConclusion->update($request->all());
 
             return response()->json([
-                'data' => ReportConclusion::find($id),
+                'data' => $reportConclusion,
                 'message' => 'Success'
             ], 200);
 

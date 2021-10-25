@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreatePostTypeRequest;
+use App\Http\Requests\UpdatePostTypeRequest;
 use App\PostType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PostTypeController extends Controller
 {
@@ -18,7 +20,9 @@ class PostTypeController extends Controller
     {
         try {
             return response()->json([
-                'data' => PostType::all(),
+                'data' => Cache::remember('post-types',60*60*24, function (){
+                    return PostType::all();
+                }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
@@ -71,13 +75,14 @@ class PostTypeController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdatePostTypeRequest $request, $id)
     {
         try {
+            $postType = PostType::find($id);
             $postType->update($request->all());
 
             return response()->json([
-                'data' => PostType::find($id),
+                'data' => $postType,
                 'message' => 'Success'
             ], 200);
 

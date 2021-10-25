@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\District;
 use App\Http\Requests\CreateDistrictRequest;
+use App\Http\Requests\UpdateDistrictRequest;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class DistrictController extends Controller
 {
@@ -18,7 +20,9 @@ class DistrictController extends Controller
     {
         try {
             return response()->json([
-                'data' => District::all(),
+                'data' => Cache::remember('districts',60*60*24, function (){
+                    return District::all();
+                }),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
@@ -70,7 +74,7 @@ class DistrictController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id)
+    public function update(UpdateDistrictRequest $request, $id)
     {
         try {
             $district = District::find($id);
