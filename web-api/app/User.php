@@ -41,16 +41,16 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function scopeIsModerator($query) {
-        return $query->where('user_type_id', 2);
+        return $query->whereIn('user_type_id', [2,4]);
     }
 
     public function scopeIsSheriff($query) {
-        return $query->where('user_type_id', 4);
+        return $query->where('user_type_id', 3);
     }
 
-    public function scopeIsFromTheSameClass($query) {
-        $userSchoolClass = Auth::user()->school_class->id;
-        return $query->where('school_class_id', $userSchoolClass);
+    public function scopeIsFromTheSameClass($query, $schoolClassId) {
+        //$userSchoolClass = Auth::user()->school_class->id;
+        return $query->where('school_class_id', $schoolClassId);
     }
 
     public function posts()

@@ -246,7 +246,7 @@ export default {
 
       let tags = await tagService.getTags();
       this.tags = tags;
-      this.options = tags.map((t) => t.name).sort();
+      this.options = tags.map((t) => t.name);
 
       var channel = this.$pusher.subscribe("xdev");
 

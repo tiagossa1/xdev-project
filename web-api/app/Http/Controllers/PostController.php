@@ -45,7 +45,6 @@ class PostController extends Controller
     public function getPostsByTags(Request $request)
     {
         try {
-            // estás aí, André?
             $rules = array(
                 'tags' => 'required'
             );
