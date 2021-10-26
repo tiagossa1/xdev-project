@@ -182,11 +182,10 @@
         <a href="" onclick="return false;">
           <p
             v-if="post.comments.length > 0"
-            class="text-primary mt-2 mb-2"
+            class="mt-2 mb-2 text-dark"
             :aria-expanded="modalVisible ? 'true' : 'false'"
             :aria-controls="collapseId"
             @click="modalVisible = !modalVisible"
-            variant="primary"
           >
             Mostrar {{ post.comments.length }} comentários
             <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
@@ -230,6 +229,7 @@ import commentService from "../services/commentService";
 import Post from "../models/post";
 import PostRequest from "../models/requests/postRequest";
 import CommentRequest from "../models/requests/commentRequest";
+import Comment from "../models/comment";
 
 export default {
   name: "post-component",
@@ -329,9 +329,12 @@ export default {
         this.post.usersSaved
       );
 
-      await postService
-        .updatePost(request)
-        .catch((err) => console.log(err.response));
+      await postService.update(request).catch((err) => {
+        this.$root.$emit("show-alert", {
+          alertMessage: "Ocorreu um erro: " + err.response.data,
+          variant: "danger",
+        });
+      });
 
       this.saved = !this.saved;
     },
@@ -344,10 +347,17 @@ export default {
           this.post.id
         );
 
-        let res = await commentService.createComment(request);
+        let res = await commentService.create(request).catch((err) => {
+          this.$root.$emit("show-alert", {
+            alertMessage: "Ocorreu um erro: " + err.response.data.message,
+            variant: "danger",
+          });
+        });
 
-        if (res) {
-          this.post.comments.push(res);
+        if (res.data.data) {
+          let comment = new Comment(res.data.data);
+
+          this.post.comments.push(comment);
           this.comment = "";
 
           this.modalVisible = true;
@@ -389,7 +399,7 @@ export default {
           null
         );
 
-        let res = await postService.updatePost(request).catch((err) => {
+        let res = await postService.update(request).catch((err) => {
           this.$root.$emit("show-alert", {
             alertMessage: "Ocorreu um erro: " + err.response.data,
             variant: "danger",

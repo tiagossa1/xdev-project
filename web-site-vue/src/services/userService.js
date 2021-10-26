@@ -1,6 +1,9 @@
 import axios from "axios";
 import User from "../models/user";
 import UserType from "../models/userType";
+import Comment from "../models/comment";
+
+import postService from "./postService";
 
 export default new (class UserService {
   constructor() {
@@ -30,7 +33,7 @@ export default new (class UserService {
     return Boolean(res.data.isModerator);
   }
 
-  async isxSheriff() {
+  async isSheriff() {
     let res = await axios.get(`${this.apiUrl}/api/is-sheriff`);
     return Boolean(res.data.isxSheriff);
   }
@@ -94,11 +97,21 @@ export default new (class UserService {
     return await axios.delete(`${this.apiUrl}/api/users/${id}`);
   }
 
-  async getRecentFeed(id){
-    //TODO fazer mapeamento
+  async getRecentFeed(id) {
     const res = await axios.get(`${this.apiUrl}/api/recent-activity/${id}`);
-    console.log(res.data)
-    return res.data;
+
+    if (res.data) {
+      let posts = [];
+
+      if (res.data.post_likes) {
+        res.data.post_likes.forEach(async postLike => {
+          let post = await postService.getPostById(postLike.post_id);
+          posts.push(post);
+        });
+      }
+
+      return { comments: res.data.comments.map(c => new Comment(c)), likes: posts };
+    }
   }
 
 })();

@@ -135,7 +135,7 @@ export default {
         item.report.post.postType.id
       );
 
-      await postService.updatePost(postRequest).catch((err) => {
+      await postService.update(postRequest).catch((err) => {
         this.$root.$emit("show-alert", {
           alertMessage: "Ocorreu um erro: " + err.response.data + ".",
           variant: "danger",

@@ -89,13 +89,13 @@ export default {
       let eventBody = {};
 
       if (this.post) {
-        let res = await postService.deletePost(this.post.id);
+        let res = await postService.delete(this.post.id);
 
         if (res.status === 200) {
           eventBody = { isPost: true, id: this.post.id };
         }
       } else if (this.comment) {
-        let res = await commentService.deleteComment(this.comment.id);
+        let res = await commentService.delete(this.comment.id);
 
         if (res.status === 200) {
           eventBody = { isComment: true, id: this.comment.id };
@@ -138,7 +138,13 @@ export default {
           );
         }
 
-        let res = await reportService.createReport(request);
+        let res = await reportService.create(request).catch((err) => {
+          this.$root.$emit("show-alert", {
+            alertMessage: "Ocorreu um erro: " + err.response.data,
+            variant: "danger",
+          });
+        });
+        
         okRequest = res.status === 201;
 
         if (okRequest) {
