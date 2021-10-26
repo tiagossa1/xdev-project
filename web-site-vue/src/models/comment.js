@@ -1,3 +1,4 @@
+import Post from "./post";
 import User from "./user";
 
 export default class Comment {
@@ -5,11 +6,17 @@ export default class Comment {
     this.id = comment?.id;
     (this.user = new User(comment?.user)),
       (this.description = comment?.description);
+
     if (comment.post_id) {
       this.postId = comment?.postId ?? postId;
     }
-    if(comment?.user){
+
+    if (comment?.user) {
       this.user = new User(comment.user)
+    }
+
+    if (comment?.post) {
+      this.post = new Post(comment.post);
     }
 
     this.createdAt = comment?.created_at;

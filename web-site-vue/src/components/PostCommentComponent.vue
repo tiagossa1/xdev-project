@@ -140,7 +140,12 @@ export default {
           null
         );
 
-        let res = await reportService.createReport(request);
+        let res = await reportService.create(request).catch((err) => {
+          this.$root.$emit("show-alert", {
+            alertMessage: "Ocorreu um erro: " + err.response.data,
+            variant: "danger",
+          });
+        });
 
         if (res.status === 200) {
           this.$emit("on-reported", {
@@ -164,6 +169,7 @@ export default {
       );
 
       let res = await commentService.edit(request).catch((err) => {
+        this.reportComment = "";
         this.$root.$emit("show-alert", {
           alertMessage: "Ocorreu um erro: " + err.response.message + ".",
           variant: "danger",
@@ -171,6 +177,7 @@ export default {
       });
 
       if (res.status === 200) {
+        this.reportComment = "";
         this.$root.$emit("show-alert", {
           alertMessage: "Comentário editado com sucesso!",
           variant: "success",

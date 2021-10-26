@@ -71,11 +71,11 @@ export default new (class PostService {
     return await axios.post(`${this.apiUrl}/api/posts`, form);
   }
 
-  async updatePost(post) {
+  async update(post) {
     return await axios.put(`${this.apiUrl}/api/posts/${post.id}`, post);
   }
 
-  async deletePost(postId) {
+  async delete(postId) {
     return await axios.delete(`${this.apiUrl}/api/posts/${postId}`);
   }
 })();

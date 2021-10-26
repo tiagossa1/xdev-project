@@ -56,30 +56,30 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         try {
-                $user = User::find($id);
+            $user = User::find($id);
 
-                $user->name = $request->name ?? $user->name;
-                $user->github_url = $request->github_url ?? $user->github_url;
-                $user->linkedin_url = $request->linkedin_url ?? $user->linkedin_url;
-                $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
-                $user->instagram_url = $request->instagram_url ?? $user->instagram_url;
-                $user->suspended = $request->suspended ?? $user->suspended;
-                $user->user_type_id = $request->user_type_id ?? $user->user_type_id;
+            $user->name = $request->name ?? $user->name;
+            $user->github_url = $request->github_url ?? $user->github_url;
+            $user->linkedin_url = $request->linkedin_url ?? $user->linkedin_url;
+            $user->facebook_url = $request->facebook_url ?? $user->facebook_url;
+            $user->instagram_url = $request->instagram_url ?? $user->instagram_url;
+            $user->suspended = $request->suspended ?? $user->suspended;
+            $user->user_type_id = $request->user_type_id ?? $user->user_type_id;
 
-                if(!is_null($request->password)){
-                    $user->password = bcrypt($request->password);
-                }
+            if (!is_null($request->password)) {
+                $user->password = bcrypt($request->password);
+            }
 
-                $user->save();
+            $user->save();
 
-                $user->tags()->sync($request->input('tags'));
-                $user->favorite_posts()->sync($request->input('favorite_posts'));
-                $user->liked_posts()->sync($request->input('liked_posts'));
+            $user->tags()->sync($request->input('tags'));
+            $user->favorite_posts()->sync($request->input('favorite_posts'));
+            $user->liked_posts()->sync($request->input('liked_posts'));
 
-                return response()->json([
-                    'data' => $user->fresh(),
-                    'message' => 'Sucess'
-                ], 200);
+            return response()->json([
+                'data' => $user->fresh(),
+                'message' => 'Sucess'
+            ], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -96,23 +96,34 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            if(!is_null($user)) {
+            if (!is_null($user)) {
                 $user->delete();
             }
 
             return response()->json(['message' => 'Deleted'], 200);
-
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
 
-    public function getRecentActivity($id) {
-        $comment = Comment::with('post')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
-        $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+    public function getRecentActivity($id)
+    {
+        try {
+            $comment = Comment::with('post')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
+            $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
 
-        // unsetRelation('comments');
+            return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
+    }
 
-        return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
+    public function getFavoritePosts($id) {
+        try {
+            $posts = User::with('favorite_posts')->find($id)->favorite_posts;
+            return response()->json(['posts' => $posts]);
+        } catch (Exception $exception) {
+            return response()->json(['error' => $exception->getMessage()], 500);
+        }
     }
 }

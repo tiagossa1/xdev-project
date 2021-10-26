@@ -56,7 +56,7 @@ export default {
     };
   },
   async mounted() {
-    this.isxSheriff = await userService.isxSheriff();
+    this.isxSheriff = await userService.isSheriff();
     
     let notifications = await notificationService.getNotifications();
     this.notifications = notifications.filter(

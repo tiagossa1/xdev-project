@@ -9,22 +9,22 @@
       <b-col>
         <b-row align-v="center">
           <b-col sm>
-            <a class="text-white" href="https://www.youtube.com/user/ATECAcademiaFormacao">
+            <a target="_blank" class="text-white" href="https://www.youtube.com/user/ATECAcademiaFormacao">
               <b-icon-youtube></b-icon-youtube>
             </a>
           </b-col>
           <b-col sm>
-            <a class="text-white" href="https://www.facebook.com/ATEC.AcademiadeFormacao">
+            <a target="_blank" class="text-white" href="https://www.facebook.com/ATEC.AcademiadeFormacao">
               <b-icon-facebook></b-icon-facebook>
             </a>
           </b-col>
           <b-col sm>
-            <a class="text-white" href="https://www.linkedin.com/company/atec">
+            <a target="_blank" class="text-white" href="https://www.linkedin.com/company/atec">
               <b-icon-linkedin></b-icon-linkedin>
             </a>
           </b-col>
           <b-col sm>
-            <a class="text-white" href="https://www.instagram.com/atec_academiadeformacao/?hl=pt">
+            <a target="_blank" class="text-white" href="https://www.instagram.com/atec_academiadeformacao/?hl=pt">
               <b-icon-instagram></b-icon-instagram>
             </a>
           </b-col>
