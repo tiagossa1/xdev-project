@@ -169,6 +169,7 @@ export default {
       );
 
       let res = await commentService.edit(request).catch((err) => {
+        this.reportComment = "";
         this.$root.$emit("show-alert", {
           alertMessage: "Ocorreu um erro: " + err.response.message + ".",
           variant: "danger",
@@ -176,6 +177,7 @@ export default {
       });
 
       if (res.status === 200) {
+        this.reportComment = "";
         this.$root.$emit("show-alert", {
           alertMessage: "Comentário editado com sucesso!",
           variant: "success",
