@@ -130,3 +130,6 @@ Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
 
 Route::get('forbidden-words','ForbiddenWordController@index');
+
+Route::post('forgot-password', [ForgotPasswordController::class, 'forgot'])->name('password.email');
+Route::get('reset-password/{email}/{token}', [ForgotPasswordController::class, 'reset'])->name('password.reset');
