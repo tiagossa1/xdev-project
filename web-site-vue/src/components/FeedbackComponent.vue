@@ -8,6 +8,7 @@
       <b-form-select
         v-model="selected"
         :options="feedbackTypesSelect"
+        :state="!v$.selected.$invalid"
       ></b-form-select>
     </b-form-group>
     <b-form-group id="input-group-1" label="Descrição" label-for="input-1">
@@ -16,6 +17,7 @@
         v-model="description"
         rows="4"
         max-rows="6"
+        :state="!v$.description.$invalid"
       ></b-form-textarea>
     </b-form-group>
   </b-modal>
@@ -23,6 +25,9 @@
 
 <script>
 import { mapGetters } from "vuex";
+
+import useVuelidate from "@vuelidate/core";
+import { required } from "@vuelidate/validators";
 
 import FeedbackRequest from "../models/requests/feedbackRequest";
 
@@ -35,9 +40,16 @@ export default {
     return {
       feedbackTypes: [],
       feedbackTypesSelect: [],
-      selected: "",
+      selected: null,
       description: "",
       modalShow: false,
+    };
+  },
+  setup: () => ({ v$: useVuelidate() }),
+  validations() {
+    return {
+      selected: { required },
+      description: { required },
     };
   },
   async created() {
@@ -48,6 +60,12 @@ export default {
         value: x.id,
         text: x.name,
       }));
+
+      this.feedbackTypesSelect.unshift({
+        value: null,
+        text: "Selecione uma opção...",
+        disabled: true,
+      });
     }
   },
   computed: {
@@ -59,21 +77,29 @@ export default {
     show() {
       this.$refs.feedback.show();
     },
-    async onSubmit() {
-      const request = new FeedbackRequest(
-        this.description,
-        this.$store.getters["auth/user"].id,
-        this.selected
-      );
-      const res = await feedbackService.create(request);
+    async onSubmit(bvModalEvt) {
+      if (!this.v$.$invalid) {
+        const request = new FeedbackRequest(
+          this.description,
+          this.$store.getters["auth/user"].id,
+          this.selected
+        );
+        const res = await feedbackService.create(request);
 
-      if (res.status === 201) {
-        this.description = "";
-        this.selected = "";
-        this.$root.$emit("show-alert", {
-          alertMessage: "Feedback criado com sucesso!",
-          variant: "success",
+        if (res.status === 201) {
+          this.description = "";
+          this.selected = "";
+          this.$root.$emit("show-alert", {
+            alertMessage: "Feedback criado com sucesso!",
+            variant: "success",
+          });
+        }
+
+        this.$nextTick(() => {
+          this.$bvModal.hide("modal-prevent-closing");
         });
+      } else {
+        bvModalEvt.preventDefault();
       }
     },
   },

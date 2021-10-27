@@ -212,7 +212,6 @@
 <script>
 import tagService from "../services/tagService.js";
 import notificationService from "../services/notificationService";
-import userService from "../services/userService.js";
 
 import Post from "../models/post";
 
@@ -242,7 +241,9 @@ export default {
   },
   async created() {
     if (this.authenticated) {
-      this.isModerator = await userService.isModerator();
+      const moderators = [2, 3, 4];
+      const userTypeId = this.$store.getters["auth/user"].user_type.id
+      this.isModerator = moderators.includes(userTypeId);
 
       let tags = await tagService.getTags();
       this.tags = tags;

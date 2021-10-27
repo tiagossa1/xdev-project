@@ -5,6 +5,9 @@
         ref="notificationTable"
         table-variant="light"
         striped
+        bordered
+        borderless
+        outlined
         :fields="fields"
         :items="notifications"
       >

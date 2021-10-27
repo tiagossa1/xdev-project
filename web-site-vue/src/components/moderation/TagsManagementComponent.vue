@@ -1,9 +1,12 @@
 <template>
   <div>
-    <p class="h5 font-weight-bold mb-3">Gestão de Tags <b-icon class="text-primary cursor-pointer" icon="plus"></b-icon></p>
+    <p class="h5 font-weight-bold mb-3">
+      Gestão de Tags
+      <b-icon class="text-primary cursor-pointer" icon="plus"></b-icon>
+    </p>
     <b-table
       sticky-header="500px"
-      table-variant="light" 
+      table-variant="light"
       striped
       bordered
       borderless
@@ -15,14 +18,16 @@
         <b-badge class="p-1" variant="secondary"> {{ data.value }} </b-badge>
       </template>
       <template #cell(actions)="data">
-        <b-button-group>
-          <b-button class="m-1" @click="onEditTag(data.item)" variant="warning"
-            >Editar</b-button
-          >
-          <b-button class="m-1" @click="onDeleteTag(data.item.id)" variant="danger">
-            Eliminar
-          </b-button>
-        </b-button-group>
+        <b-button class="m-1" @click="onEditTag(data.item)" variant="warning"
+          >Editar</b-button
+        >
+        <b-button
+          class="m-1"
+          @click="onDeleteTag(data.item.id)"
+          variant="danger"
+        >
+          Eliminar
+        </b-button>
       </template>
     </b-table>
 

@@ -17,21 +17,22 @@
           {{ data.item.user.name }} ({{ data.item.user.email }})</b-link
         >
       </template>
-      <template #cell(description)="data">
-        {{ data.item.description | truncate(30, "...") }}
-      </template>
       <template #cell(feedbackType)="data">
         {{ data.item.feedbackType.name }}
       </template>
+      <template #cell(description)="data">
+        {{ data.item.description | truncate(30, "...") }}
+      </template>
       <template #cell(actions)="data">
-        <b-button-group>
-          <b-button class="m-1" @click="onDetails(data.item)" variant="info"
-            >Detalhes</b-button
-          >
-          <b-button class="m-1" @click="onDelete(data.item)" variant="danger">
-            Eliminar
-          </b-button>
-        </b-button-group>
+        <b-button
+          class="m-1 text-white"
+          @click="onDetails(data.item)"
+          variant="primary"
+          >Detalhes</b-button
+        >
+        <b-button class="m-1" @click="onDelete(data.item)" variant="danger">
+          Eliminar
+        </b-button>
       </template>
     </b-table>
 
@@ -62,8 +63,8 @@ export default {
     return {
       feedbacks: [],
       fields: [
-        { key: "description", label: "Descrição" },
         { key: "user", label: "Utilizador" },
+        { key: "description", label: "Descrição" },
         { key: "feedbackType", label: "Tipo" },
         { key: "createdAt", label: "Data de criação" },
         { key: "actions", label: "Ações" },

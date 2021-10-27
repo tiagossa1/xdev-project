@@ -14,18 +14,16 @@
       :tbody-tr-class="rowClass"
     >
       <template #cell(actions)="data">
-        <b-button-group>
-          <b-button class="m-1" @click="onDetailsClick(data.item)" variant="success"
+          <b-button class="m-1 text-white" @click="onDetailsClick(data.item)" variant="primary"
             >Detalhes</b-button
           >
           <b-button class="m-1" @click="onEditClick(data.item)" variant="warning"
             >Editar</b-button
           >
           <b-button class="m-1 text-white" v-if="data.item.id !== $store.getters['auth/user'].id" @click="onSuspended(data.item)" 
-          :variant="data.item.suspended ? 'primary' : 'danger'">
+          :variant="data.item.suspended ? 'success' : 'danger'">
             {{ data.item.suspended ? "Remover suspensão" : "Suspender" }}
           </b-button>
-        </b-button-group>
       </template>
       <!-- eslint-disable-next-line -->
       <template #cell(userType.name)="data">
