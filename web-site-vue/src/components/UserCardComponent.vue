@@ -1,6 +1,7 @@
 <template>
   <div class="w-75">
     <b-card
+    
       :img-alt="userInfo.name + ` photo`"
       img-top
       rounded="circle"
@@ -8,12 +9,15 @@
       tag="article"
       style="max-width: 20rem"
     >
+    
       <b-card-body class="text-center p-0">
         <b-card-title
           class="font-weight-bold"
           :style="{ color: userInfo.userType.hexColorCode }"
         >
-          {{ userInfo.name }}
+          {{ userInfo.name }} 
+          <b-icon v-if="!paramId" scale="0.9" variant="dark" icon="pencil" @click="showModal()"></b-icon>
+
           <b-badge :style="{ backgroundColor: userInfo.userType.hexColorCode }"
             >{{ userInfo.userType.name }}
           </b-badge>
@@ -70,7 +74,7 @@
               <b-container>
                 <b-row>
                   <b-col>
-                    <a class="text-dark" :href="userInfo.facebook_url">
+                    <a class="text-dark" target="_blank" :href="'http://'+userInfo.facebook_url">
                       <b-icon
                         class="w-22"
                         icon="facebook"
@@ -79,7 +83,7 @@
                     </a>
                   </b-col>
                   <b-col>
-                    <a class="text-dark" :href="userInfo.linkedin_url">
+                    <a class="text-dark" target="_blank" :href="'http://'+userInfo.linkedin_url">
                       <b-icon
                         class="w-22"
                         icon="linkedin"
@@ -88,7 +92,7 @@
                     </a>
                   </b-col>
                   <b-col>
-                    <a class="text-dark" :href="userInfo.github_url">
+                    <a class="text-dark" target="_blank" :href="'http://'+userInfo.github_url">
                       <b-icon
                         class="w-22"
                         icon="github"
@@ -97,7 +101,7 @@
                     </a>
                   </b-col>
                   <b-col>
-                    <a class="text-dark" :href="userInfo.instagram_url">
+                    <a class="text-dark" target="_blank" :href="'http://'+userInfo.instagram_url">
                       <b-icon
                         class="w-22"
                         icon="instagram"
@@ -112,15 +116,34 @@
         </b-card-group>
       </b-card-body>
     </b-card>
+    <user-settings ref="modalComponent" />
   </div>
+  
 </template>
 
 <script>
+import UserSettings from "./UserSettingsComponent.vue";
 export default {
   name: "user-card-component",
+  components:{
+    UserSettings,
+  },
   props: { 
     userInfo: Object,
     postCount: Number,
+  },
+  data(){
+    return {
+      paramId : null,
+    }
+  },
+  async created(){
+    this.paramId = this.$route.params.id;
+  },
+  methods: {
+    showModal(){
+      this.$refs.modalComponent.show();
+    }
   }
 };
 </script>

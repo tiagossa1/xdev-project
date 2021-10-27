@@ -116,8 +116,8 @@ export default new (class UserService {
   }
 
   async getFavoritePosts(id) {
-    const res = await axios.get(`${this.apiUrl}/api/users/favorite-posts/${id}`);
-    // console.log(res.data.posts)
+    const res = await axios.get(`${this.apiUrl}/api/users/favorite_posts/${id}`);
+    // console.log(res)
     return res.data.posts.map((x) => {
       return new Post(x);
     });

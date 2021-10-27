@@ -8,7 +8,6 @@ export default new (class TagService {
 
   async getTags() {
     let res = await axios.get(`${this.apiUrl}/api/tags`);
-
     if (res.data) {
       return res.data.data.map((t) => new Tag(t));
     }
@@ -18,7 +17,6 @@ export default new (class TagService {
 
   async getTagsByCount(count) {
     let res = await axios.get(`${this.apiUrl}/api/tags?count=${count}`);
-
     if (res.data) {
       return res.data.data.map((t) => new Tag(t));
     }

@@ -6,11 +6,13 @@
       </b-col>
 
       <b-col class="p-5" sm="6">
-        <b-tabs content-class="mt-3">
+        <b-tabs content-class="mt-3" >
           <b-tab title="Posts" active>
             <div v-if="posts.length > 0">
               <div v-for="post in posts" :key="post.id">
-                <post-component :post="post"></post-component>
+                <post-component 
+                @on-post-deleted="onPostDeleted"
+                :post="post"></post-component>
               </div>
             </div>
 
@@ -19,7 +21,7 @@
             </div>
           </b-tab>
 
-          <b-tab title="Guardados" v-if="paramId != null">
+          <b-tab v-if="!paramId" title="Guardados">
             <div v-if="favoritePosts.length > 0">
               <div v-for="post in favoritePosts" :key="post.id">
                 <post-component :post="post"></post-component>
@@ -58,7 +60,7 @@ export default {
   data() {
     return {
       getSuspendedPosts: {},
-      
+      paramId : null,
       userInfo: {
         userType: {},
         schoolClass: { school: {} },
@@ -71,18 +73,18 @@ export default {
     };
   },
   async created() {
-    const paramId = this.$route.params.id;
+    this.paramId = this.$route.params.id;
 
-    if (paramId) {
-      this.recentFeed = await userService.getRecentFeed(paramId);
+    if (this.paramId) {
+      this.recentFeed = await userService.getRecentFeed(this.paramId);
 
-      this.userInfo = await userService.getUserById(paramId);
-      this.posts = await postService.getPostsByUser(paramId);
+      this.userInfo = await userService.getUserById(this.paramId);
+      this.posts = await postService.getPostsByUser(this.paramId);
       this.posts = this.posts.filter(x => 
         !x.suspended
       );
 
-      this.favoritePosts = await userService.getFavoritePosts(paramId)
+      this.favoritePosts = await userService.getFavoritePosts(this.paramId)
       // console.log(this.favoritePosts)
 
     } else {
@@ -97,10 +99,17 @@ export default {
         this.$store.getters["auth/user"].id
       );
       
-      this.favoritePosts = await userService.getFavoritePosts(this.$store.getters["auth/user"].id)
+      this.favoritePosts = await userService.getFavoritePosts(
+        this.$store.getters["auth/user"].id
+      )
       // console.log(this.favoritePosts)
     }
   },
+  methods: {
+    onPostDeleted(id) {
+      this.posts = this.posts.filter((p) => p.id != id);
+    },
+  }
 };
 </script>
 

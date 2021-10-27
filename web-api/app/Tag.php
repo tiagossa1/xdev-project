@@ -11,9 +11,9 @@ class Tag extends Model
     ];
 
     protected $hidden = [
-        'pivot', 'posts_count'
+        'pivot', 
     ];
-
+//'posts_count'
     // protected $with = ['posts'];
 
     public $timestamps = false;

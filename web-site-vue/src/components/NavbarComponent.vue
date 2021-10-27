@@ -73,10 +73,10 @@
                 <b-dropdown-divider></b-dropdown-divider>
                 <b-dropdown-item-button
                   v-for="option in availableOptions"
-                  :key="option"
+                  :key="option.id"
                   @click="onOptionClick({ option, addTag })"
                 >
-                  {{ option }}
+                  {{ option.name }} <b-badge class="float-right text-white" pill variant="primary">{{option.postsCount}}</b-badge>
                 </b-dropdown-item-button>
                 <b-dropdown-text v-if="availableOptions.length === 0">
                   Não existem tags para selecionar
@@ -113,9 +113,9 @@
             <b-dropdown-item to="/moderation" v-if="this.isModerator"
               >Moderação</b-dropdown-item
             >
-            <b-dropdown-item @click="showModal()"
+            <!-- <b-dropdown-item @click="showModal()"
               >Configurações</b-dropdown-item
-            >
+            > -->
             <b-dropdown-item @click="showFeedbackModal()"
               >Feedback</b-dropdown-item
             >
@@ -203,7 +203,7 @@
         </template>
       </b-navbar-nav>
 
-      <user-settings ref="modalComponent" />
+      
       <feedback ref="feedbackComponent" />
     </b-collapse>
   </b-navbar>
@@ -216,7 +216,7 @@ import notificationService from "../services/notificationService";
 import Post from "../models/post";
 
 import PostComponent from "./PostComponent.vue";
-import UserSettings from "./UserSettingsComponent.vue";
+
 import Feedback from "./FeedbackComponent.vue";
 
 import { mapGetters, mapActions } from "vuex";
@@ -224,7 +224,6 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "navbar-component",
   components: {
-    UserSettings,
     Feedback,
     PostComponent,
   },
@@ -247,7 +246,8 @@ export default {
 
       let tags = await tagService.getTags();
       this.tags = tags;
-      this.options = tags.map((t) => t.name);
+      console.log(tags)
+      this.options = tags;
 
       var channel = this.$pusher.subscribe("xdev");
 
@@ -322,15 +322,15 @@ export default {
       let notifications = await notificationService.getNotifications();
       return notifications.filter((n) => n.type.toLowerCase() === "newpost");
     },
-    showModal() {
-      this.$refs.modalComponent.show();
-    },
+    // showModal() {
+    //   this.$refs.modalComponent.show();
+    // },
     showFeedbackModal() {
       this.$refs.feedbackComponent.show();
     },
     onOptionClick({ option, addTag }) {
-      addTag(option);
-      this.value.push(option);
+      addTag(option.name);
+      this.value.push(option.name);
       this.search = "";
 
       this.emitEventToSearchByTags();

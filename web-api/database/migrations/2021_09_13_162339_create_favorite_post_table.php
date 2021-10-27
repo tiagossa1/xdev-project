@@ -19,8 +19,8 @@ class CreateFavoritePostTable extends Migration
                 ->onDelete('cascade');
 
             $table->foreignId('user_id')
-                ->constrained()
-                ->onDelete('cascade');
+                ->constrained();
+                // ->onDelete('cascade');
 
             $table->primary([
                 'post_id',

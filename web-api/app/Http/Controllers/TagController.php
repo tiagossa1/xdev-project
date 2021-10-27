@@ -21,11 +21,11 @@ class TagController extends Controller
     {
         try {
             $query = Tag::withCount([
-                'posts as post_count' => function ($query) {
+                'posts as posts_count' => function ($query) {
                     $query->where('suspended', 0);
-                }
-            ]);
+                }]);
 
+            // $query = Tag::withCount('posts')->with('posts')->orderBy('posts_count', 'desc');
             $count = $request->count;
 
             if (!is_null($count)) {
@@ -40,7 +40,6 @@ class TagController extends Controller
             return response()->json(['error' => $exception->getMessage()], 500);
         }
     }
-
     /**
      * Store a newly created resource in storage.
      *

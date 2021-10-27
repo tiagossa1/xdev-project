@@ -1,69 +1,103 @@
 <template>
+
   <div class="mt-4 w-25 text-center m-auto">
     <b-alert v-if="errorMessage" show variant="danger">
       {{ errorMessage }}
     </b-alert>
     <br />
     <h4 class="mb-4">Login</h4>
-    <b-form @submit.prevent="onSubmit">
-      <b-input-group append="@edu.atec.pt">
-        <b-form-input
-          id="input-email"
-          v-model.trim="form.email"
-          type="text"
-          placeholder="Email"
-          :state="!v$.form.email.$invalid"
-        ></b-form-input>
-      </b-input-group>
-      <div
-        class="text-danger font-weight-bold float-left small mt-1 mb-4"
-        v-if="v$.form.email.required.$invalid"
-      >
-        O campo email é obrigatório.
-        <br />
-      </div>
-      <br />
-      <b-form-input
-        id="input-password"
-        class="mt-2"
-        v-model="form.password"
-        placeholder="Password"
-        type="password"
-        :state="!v$.form.password.$invalid"
-      ></b-form-input>
-      <div
-        class="text-danger font-weight-bold float-left small mt-1"
-        v-if="v$.form.password.required.$invalid"
-      >
-        O campo password é obrigatório.
-        <br />
-      </div>
-      <br />
-
-      <div class="row" style="margin-top: 3rem">
-        <div class="col-6">Não tem conta?</div>
-        <div class="col-6">
-          <router-link to="/register">Criar Conta</router-link>
+    
+      <b-form @submit.prevent="onSubmit">
+        <b-container>
+      <b-row >
+        <b-col sm="10" class="mx-auto">
+        <b-input-group append="@edu.atec.pt">
+          <b-form-input
+            id="input-email"
+            v-model.trim="form.email"
+            type="text"
+            placeholder="Email"
+            :state="!v$.form.email.$invalid"
+          ></b-form-input>
+        </b-input-group>
+        <div
+          class="text-danger font-weight-bold float-left small mt-1 mb-4"
+          v-if="v$.form.email.required.$invalid"
+        >
+          O campo email é obrigatório.
+          <br />
         </div>
-      </div>
+        </b-col>
+      </b-row>
 
-      <div class="row mt-2">
-        <div class="col-6">Esqueceu-se da palavra-passe?</div>
-        <div class="col-6">
-          <router-link to="/recover">Recuperar password</router-link>
+      <b-row>
+        <b-col sm="9" class="mx-auto">
+          <b-form-input
+            id="input-password"
+            v-model="form.password"
+            placeholder="Password"
+            :type="showPassword ? 'text' : 'password'"
+            :state="!v$.form.password.$invalid"
+          ></b-form-input>
+          <div
+            class="text-danger font-weight-bold float-left small mt-1"
+            v-if="v$.form.password.required.$invalid"
+          >
+            O campo password é obrigatório.
+            <br />
+          </div>
+        </b-col>
+        <b-col sm="1" @click="showPassword = !showPassword">
+          <b-icon
+            :icon="showPassword ? 'eye-fill' : 'eye-slash-fill'"
+          ></b-icon>
+        </b-col>
+      </b-row>
+
+          
+      <b-row>
+        <b-col sm="12" class="mx-auto">
+        <div style="margin-top: 2rem">
+          <div>Não tem conta?</div>
         </div>
-      </div>
-      <br />
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="12" class="mx-auto">
+          <div>
+            <router-link to="/register">Criar Conta</router-link>
+          </div>
+        </b-col>
+      </b-row>
 
-      <b-button
-        type="submit"
-        class="text-white"
-        variant="primary"
-        :disabled="this.v$.$invalid"
-        >Entrar</b-button
-      >
-    </b-form>
+      <b-row>
+        <b-col sm="12">
+        <div style="margin-top: 1rem">
+          <div>Esqueceu-se da palavra-passe?</div>
+        </div>
+        </b-col>
+      </b-row>
+      <b-row>
+        <b-col sm="12">
+          <div>
+            <router-link to="/recover">Recuperar password</router-link>
+          </div>
+        </b-col>
+      </b-row>
+
+    <b-button
+    style="margin-top: 1rem"
+      type="submit"
+      class="text-white"
+      variant="primary"
+      :disabled="this.v$.$invalid"
+      >Entrar</b-button
+    >  
+    </b-container>
+      </b-form>
+      
   </div>
+
 </template>
 
 <script>
@@ -94,6 +128,7 @@ export default {
   },
   data() {
     return {
+      showPassword: false,
       form: {
         email: "",
         password: "",
