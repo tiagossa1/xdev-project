@@ -23,11 +23,12 @@ class TagController extends Controller
             $query = Tag::withCount([
                 'posts as post_count' => function ($query) {
                     $query->where('suspended', 0);
-                }]);
+                }
+            ]);
 
             $count = $request->count;
 
-            if(!is_null($count)) {
+            if (!is_null($count)) {
                 $query->take($count);
             }
 
@@ -51,7 +52,7 @@ class TagController extends Controller
         try {
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            if(!in_array(StringUtility::remove_utf8($request->name),$forbiddenWords)) {
+            if (!in_array(StringUtility::remove_utf8($request->name), $forbiddenWords)) {
                 $tag = new Tag();
                 $tag->name = $request->name;
                 $tag->save();
@@ -65,7 +66,6 @@ class TagController extends Controller
             return response()->json([
                 'message' => 'Tag com palavra proibida'
             ], 400);
-
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
@@ -123,5 +123,36 @@ class TagController extends Controller
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
         }
+    }
+
+    public function getOrCreateTags(Request $request)
+    {
+        $request->validate([
+            'tags' => 'required'
+        ]);
+
+        $tags = [];
+
+        foreach ($request->tags as $tagName) {
+            $tagWithoutUtf8 = StringUtility::remove_utf8($tagName);
+
+            $tagRecord = Tag::whereRaw('LOWER(name) LIKE ?', [$tagWithoutUtf8])->first();
+            $isForbidden = ForbiddenWord::whereRaw('LOWER(name) LIKE ?', [$tagWithoutUtf8])->exists();
+
+            if ($tagRecord !== null) {
+                array_push($tags, $tagRecord);
+            } else if(!$isForbidden) {
+                $newTag = new Tag();
+                $newTag->name = $tagName;
+                $newTag->save();
+
+                array_push($tags, $newTag);
+            }
+        }
+
+        return response()->json([
+            'data' => $tags,
+            'message' => 'Success'
+        ]);
     }
 }

@@ -43,6 +43,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('tags', 'TagController@index');
     Route::get('tags/{id}', 'TagController@show');
+    Route::post('tags/get-or-create-by-name', 'TagController@getOrCreateTags');
     Route::post('tags', 'TagController@store')->middleware('ismoderator');
     Route::put('tags/{id}', 'TagController@update')->middleware('ismoderator');
     Route::delete('tags/{id}', 'TagController@destroy')->middleware('ismoderator');
