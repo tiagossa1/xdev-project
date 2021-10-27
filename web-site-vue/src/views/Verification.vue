@@ -36,7 +36,6 @@ export default {
       if (loginRequest) {
         return JSON.parse(loginRequest);
       }
-
       return null;
     },
     getRegisterRequest() {
@@ -44,30 +43,25 @@ export default {
       if (registerRequest) {
         return JSON.parse(registerRequest);
       }
-
       return null;
-    },
-    getEmail() {
-      let loginRequest = this.getLoginRequest;
-      let registerRequest = this.getRegisterRequest;
-      return loginRequest?.email ?? registerRequest?.email;
     },
   },
   async mounted() {
-    let intervalId = window.setInterval(async () => {
-      let loginRequest = this.getLoginRequest;
+    var channel = this.$pusher.subscribe("xdev");
+
+    channel.bind("user-email-verified", ({ user }) => {
+      console.log(user);
+
       let registerRequest = this.getRegisterRequest;
+      let loginRequest = this.getLoginRequest;
 
-      let res = await userService.isUserVerified(this.getEmail);
-      let isVerified = Boolean(res.data.isVerified);
-
-      if (isVerified) {
-        window.clearInterval(intervalId);
-
-        if (loginRequest) {
+      if (loginRequest) {
+        if (user.email === loginRequest.email) {
           window.localStorage.removeItem("loginRequest");
           this.signIn(loginRequest);
-        } else {
+        }
+      } else {
+        if (user.email === registerRequest.email) {
           window.localStorage.removeItem("registerRequest");
           this.signIn({
             email: registerRequest.email,
@@ -75,7 +69,7 @@ export default {
           });
         }
       }
-    }, 10000);
+    });
   },
   methods: {
     ...mapActions({
