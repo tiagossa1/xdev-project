@@ -21,6 +21,7 @@
             <a
               v-b-modal.post-modal
               :ref="data.item.report.post.title"
+              target="_blank"
               href=""
               @click.prevent="setPost(data.item.report.post)"
               >{{ data.item.report.post.title }}</a
@@ -41,7 +42,7 @@
         </template>
         <template #cell(actions)="data">
           <template v-if="data.item.report.post !== null">
-            <b-button @click="onSuspendedPost(data.item)" variant="warning"
+            <b-button @click="onSuspendedPost(data.item)" variant="danger"
               >Suspender Post</b-button
             >
           </template>
@@ -50,8 +51,11 @@
               >Eliminar Comentário</b-button
             >
           </template>
-          <b-button class="ml-2 text-white" variant="primary"
-            >Não fazer nada</b-button
+          <b-button
+            @click="onDoNothing(data.item)"
+            class="ml-2 text-white"
+            variant="primary"
+            >Fechar sem ação</b-button
           >
         </template>
       </b-table>
@@ -124,138 +128,172 @@ export default {
       this.postSelected = post;
     },
     async onSuspendedPost(item) {
-      let reportConclusions = await reportConclusionService.get();
-      let suspendedConclusion = reportConclusions.find((rc) =>
-        rc.name.toLowerCase().includes("suspenso")
-      );
+      this.$swal({
+        title: "Confirmação",
+        text: "Deseja mesmo suspender o post?",
+        showCancelButton: true,
+        confirmButtonText: "Suspender",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let reportConclusions = await reportConclusionService.get();
+          let suspendedConclusion = reportConclusions.find((rc) =>
+            rc.name.toLowerCase().includes("suspenso")
+          );
 
-      let postRequest = new PostRequest(
-        item.report.post.id,
-        item.report.post.title,
-        item.report.post.description,
-        true,
-        item.report.post.user.id,
-        item.report.post.postType.id
-      );
+          let postRequest = new PostRequest(
+            item.report.post.id,
+            item.report.post.title,
+            item.report.post.description,
+            true,
+            item.report.post.user.id,
+            item.report.post.postType.id
+          );
 
-      await postService.update(postRequest).catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response.data,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
+          await postService.update(postRequest).catch((err) => {
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
           });
-      });
 
-      let reportRequest = new ReportRequest(
-        item.report.id,
-        item.report.user.id,
-        item.report.post.id,
-        this.user.id,
-        suspendedConclusion?.id ?? null,
-        item.report?.comment?.id ?? null,
-        true,
-        item.report.reason,
-        null
-      );
+          let reportRequest = new ReportRequest(
+            item.report.id,
+            item.report.user.id,
+            item.report.post.id,
+            this.user.id,
+            suspendedConclusion?.id ?? null,
+            item.report?.comment?.id ?? null,
+            true,
+            item.report.reason,
+            null
+          );
 
-      await reportService.update(reportRequest).catch((err) => {
-        this.$swal({
-          icon: "error",
-          position: "bottom-right",
-          title: err.response.data,
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 3500,
-        });
-      });
-
-      let notificationRes = await notificationService
-        .markAsRead(item.id)
-        .catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response.data,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
+          await reportService.update(reportRequest).catch((err) => {
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
           });
-        });
 
-      if (notificationRes.status === 200) {
-        // this.$emit("on-notification-deleted", item.id);
-        const index = this.notifications.findIndex((n) => n.id === item.id);
+          let notificationRes = await notificationService
+            .markAsRead(item.id)
+            .catch((err) => {
+              this.$swal({
+                icon: "error",
+                position: "bottom-right",
+                title: err.response.data,
+                toast: true,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 3500,
+              });
+            });
 
-        if (index >= 0) {
-          this.notifications.splice(index, 1);
-          this.$refs.notificationTable.refresh();
+          if (notificationRes.status === 200) {
+            // this.$emit("on-notification-deleted", item.id);
+            const index = this.notifications.findIndex((n) => n.id === item.id);
+
+            if (index >= 0) {
+              this.notifications.splice(index, 1);
+              this.$refs.notificationTable.refresh();
+            }
+            this.$swal({
+              icon: "success",
+              position: "bottom-right",
+              title: "Post suspenso.",
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          }
         }
-        this.$swal({
-          icon: "success",
-          position: "bottom-right",
-          title: "Post suspenso.",
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 3500,
-        });
-      }
+      });
     },
     async onDeleteComment(item) {
-      let res = await commentService
-        .deleteComment(item.report.postComment.id)
-        .catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response.message,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
-          });
-        });
+      this.$swal({
+        title: "Confirmação",
+        text: "Deseja mesmo apagar o comentário?",
+        showCancelButton: true,
+        confirmButtonText: "Apagar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let res = await commentService
+            .deleteComment(item.report.postComment.id)
+            .catch((err) => {
+              this.$swal({
+                icon: "error",
+                position: "bottom-right",
+                title: err.response.message,
+                toast: true,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 3500,
+              });
+            });
 
-      if (res.status === 200) {
-        let notificationRes = await notificationService
-          .markAsRead(item.id)
-          .catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response.data,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
-          });
-          });
+          if (res.status === 200) {
+            let notificationRes = await notificationService
+              .markAsRead(item.id)
+              .catch((err) => {
+                this.$swal({
+                  icon: "error",
+                  position: "bottom-right",
+                  title: err.response.data,
+                  toast: true,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 3500,
+                });
+              });
 
-        if (notificationRes.status === 200) {
-          const index = this.notifications.findIndex((n) => n.id === item.id);
+            if (notificationRes.status === 200) {
+              const index = this.notifications.findIndex(
+                (n) => n.id === item.id
+              );
 
-          if (index >= 0) {
-            this.notifications.splice(index, 1);
-            this.$refs.notificationTable.refresh();
+              if (index >= 0) {
+                this.notifications.splice(index, 1);
+                this.$refs.notificationTable.refresh();
+              }
+
+              this.$swal({
+                icon: "success",
+                position: "bottom-right",
+                title: "Notificação criada.",
+                toast: true,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 3500,
+              });
+            }
           }
-
-          this.$swal({
-            icon: "success",
-            position: "bottom-right",
-            title: "Notificação criada.",
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
-          });
         }
-      }
+      });
+    },
+    async onDoNothing() {
+      this.$swal({
+        title: "Confirmação",
+        text: "Tem a certeza que não quer tomar nenhuma medida sobre este report?",
+        showCancelButton: true,
+        confirmButtonText: "Não",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      });
     },
   },
 };

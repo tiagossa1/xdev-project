@@ -13,7 +13,7 @@
       :items="feedbacks"
     >
       <template #cell(user)="data">
-        <b-link :to="'/profile/' + data.item.user.id">
+        <b-link target="_blank" :to="'/profile/' + data.item.user.id">
           {{ data.item.user.name }} ({{ data.item.user.email }})</b-link
         >
       </template>
@@ -81,37 +81,48 @@ export default {
       this.$refs["feedback-details-modal"].show();
     },
     async onDelete(feedback) {
-      let res = await feedbackService.delete(feedback.id).catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response.data,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
+      this.$swal({
+        title: "Confirmação",
+        text: "Deseja mesmo apagar o feedback?",
+        showCancelButton: true,
+        confirmButtonText: "Apagar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          let res = await feedbackService.delete(feedback.id).catch((err) => {
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
           });
-      });
 
-      if (res.status === 200) {
-        const index = this.feedbacks.findIndex((f) => f.id === feedback.id);
+          if (res.status === 200) {
+            const index = this.feedbacks.findIndex((f) => f.id === feedback.id);
 
-        if (index >= 0) {
-          this.feedbacks.splice(index, 1);
+            if (index >= 0) {
+              this.feedbacks.splice(index, 1);
+            }
+
+            this.$refs.feedbackTable.refresh();
+
+            this.$swal({
+              icon: "success",
+              position: "bottom-right",
+              title: "Feedback eliminado.",
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          }
         }
-
-        this.$refs.feedbackTable.refresh();
-
-        this.$swal({
-          icon: "success",
-          position: "bottom-right",
-          title: "Feedback eliminado.",
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 3500,
-        });
-      }
+      });
     },
     closeFeedbackModal() {
       this.$refs["feedback-details-modal"].hide();

@@ -118,15 +118,26 @@ export default {
       }
     },
     async onDeleteTag(id) {
-      const res = await tagService.delete(id);
+      this.$swal({
+        title: "Confirmação",
+        text: "Deseja mesmo apagar a tag?",
+        showCancelButton: true,
+        confirmButtonText: "Apagar",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await tagService.delete(id);
 
-      if (res.status === 200) {
-        const index = this.tags.findIndex((t) => t.id === id);
+          if (res.status === 200) {
+            const index = this.tags.findIndex((t) => t.id === id);
 
-        if (index > -1) {
-          this.tags.splice(index, 1);
+            if (index > -1) {
+              this.tags.splice(index, 1);
+            }
+          }
         }
-      }
+      });
     },
     async onClick() {
       let req = new TagRequest(this.form.name, null);

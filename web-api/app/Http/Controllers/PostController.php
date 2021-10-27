@@ -168,15 +168,6 @@ class PostController extends Controller
                 $post->users_saved()->sync($request->input('users_saved'));
             }
 
-            // $moderatorIds = [2, 4];
-
-            // if($post->suspended && !in_array(Auth::user()->user_type->id, $moderatorIds)) {
-            //     $mods = User::whereIn('user_type_id', $moderatorIds)->get();
-
-            //     if(!is_null($mods))
-            //         Notification::send($mods, new UpdateReport($post));
-            // }
-
             return response()->json([
                 'data' => $post->fresh(),
                 'message' => 'Success',

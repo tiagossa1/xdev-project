@@ -191,61 +191,71 @@ export default {
       this.$refs.userTable.refresh();
     },
     async onSuspended(user) {
-      console.log(user);
-      const request = new UserRequest(
-        user.id,
-        user.email,
-        user.name,
-        user.birth_date,
-        user.profile_picture,
-        user.github_url,
-        user.linkedin_url,
-        user.facebook_url,
-        user.instagram_url,
-        user.createdAt,
-        user.district.id,
-        user.schoolClass.id,
-        user.userType.id,
-        null,
-        null,
-        null,
-        null,
-        !user.suspended
-      );
+      this.$swal({
+        title: "Confirmação",
+        text: "Deseja mesmo suspender o utilizador?",
+        showCancelButton: true,
+        confirmButtonText: "Suspender",
+        cancelButtonText: "Cancelar",
+        confirmButtonColor: "#dc3545",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const request = new UserRequest(
+            user.id,
+            user.email,
+            user.name,
+            user.birth_date,
+            user.profile_picture,
+            user.github_url,
+            user.linkedin_url,
+            user.facebook_url,
+            user.instagram_url,
+            user.createdAt,
+            user.district.id,
+            user.schoolClass.id,
+            user.userType.id,
+            null,
+            null,
+            null,
+            null,
+            !user.suspended
+          );
 
-      const res = await userService.update(request).catch((err) => {
-        this.$swal({
-          icon: "error",
-          position: "bottom-right",
-          title: err.response.data.message,
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 3500,
-        });
-      });
+          const res = await userService.update(request).catch((err) => {
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data.message,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          });
 
-      if (res.status === 200) {
-        let user = new User(res.data.data);
-        let index = this.users.findIndex((u) => u.id === user.id);
+          if (res.status === 200) {
+            let user = new User(res.data.data);
+            let index = this.users.findIndex((u) => u.id === user.id);
 
-        if (user && index >= 0) {
-          this.users[index] = user;
+            if (user && index >= 0) {
+              this.users[index] = user;
+            }
+
+            this.$refs.userTable.refresh();
+            this.$swal({
+              icon: "success",
+              position: "bottom-right",
+              title: user.suspended
+                ? "Utilizador suspenso."
+                : "A suspensão foi removida.",
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          }
         }
-
-        this.$refs.userTable.refresh();
-        this.$swal({
-          icon: "success",
-          position: "bottom-right",
-          title: user.suspended
-            ? "Utilizador suspenso."
-            : "A suspensão foi removida.",
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 3500,
-        });
-      }
+      });
     },
   },
   async mounted() {

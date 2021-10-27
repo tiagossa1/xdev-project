@@ -20,7 +20,11 @@ class TagController extends Controller
     public function index(Request $request)
     {
         try {
-            $query = Tag::withCount('posts')->orderBy('posts_count', 'desc');
+            $query = Tag::withCount([
+                'posts as post_count' => function ($query) {
+                    $query->where('suspended', 0);
+                }]);
+
             $count = $request->count;
 
             if(!is_null($count)) {

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Events\ReportCreated;
 use App\Http\Requests\CreateReportRequest;
 use App\Http\Requests\ReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use App\Notifications\NewReport;
-use App\Notifications\UpdateReport;
 use App\Report;
 use App\Post;
 use App\User;
@@ -110,7 +110,7 @@ class ReportController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(UpdateReport $request, $id)
+    public function update(UpdateReportRequest $request, $id)
     {
         try {
             $report = Report::find($id);
