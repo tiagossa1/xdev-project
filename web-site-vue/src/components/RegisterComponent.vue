@@ -213,11 +213,11 @@ import schoolClassService from "../services/schoolClassService";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
 
+const notContainsEduAtecPt = (value) => !value.toLowerCase().includes("@edu.atec.pt");
+
 export default {
   name: "register-component",
   data() {
-    //min: 1900
-    //max: data atual
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
     return {
@@ -247,7 +247,7 @@ export default {
     return {
       form: {
         name: { required },
-        email: { required },
+        email: { required, notContainsEduAtecPt },
         password: { required, minLength: minLength(6) },
         district_id: { required },
         school_class_id: { required },
