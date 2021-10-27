@@ -13,7 +13,7 @@ class UserTypeSeeder extends Seeder
     {
         App\UserType::create([
             'name' => 'xDev',
-            'hexColorCode' => '#32b9f9'
+            'hexColorCode' => '#2273E3'
         ]);
 
         App\UserType::create([
@@ -23,7 +23,7 @@ class UserTypeSeeder extends Seeder
 
         App\UserType::create([
             'name' => 'xSheriff',
-            'hexColorCode' => '#fcbc67'
+            'hexColorCode' => '#FDC919'
         ]);
 
         App\UserType::create([
