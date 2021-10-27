@@ -278,7 +278,7 @@ export default {
           variant: "success",
         });
       }
-
+      // this.form.title = this.form.description = this.form.postTypeId = "",
       
 
     },

@@ -2,7 +2,7 @@
   <b-container fluid>
     <b-row>
       <b-col class="p-5" sm="3">
-        <user-card-component :userInfo="userInfo"></user-card-component>
+        <user-card-component :userInfo="userInfo" :postCount="posts.length" ></user-card-component>
       </b-col>
 
       <b-col class="p-5" sm="6" v-if="posts.length > 0">
@@ -59,8 +59,10 @@ export default {
 
       this.userInfo = await userService.getUserById(paramId);
       this.posts = await postService.getPostsByUser(paramId);
-
-      this.posts = this.posts.filter((x) => !x.suspended);
+      this.posts = this.posts.filter(x => 
+        !x.suspended
+      );
+      //console.log(this.userInfo)
     } else {
       this.recentFeed = await userService.getRecentFeed(
         this.$store.getters["auth/user"].id
@@ -72,6 +74,7 @@ export default {
       this.posts = await postService.getPostsByUser(
         this.$store.getters["auth/user"].id
       );
+      // console.log(this.userInfo)
     }
   },
 };

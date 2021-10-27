@@ -29,7 +29,7 @@
               <span class="font-weight-bold text-primary">Posts</span>
             </template>
             <b-card-text class="text-body">{{
-              userInfo.posts.length
+              postCount
             }}</b-card-text>
           </b-card>
         </b-card-group>
@@ -118,7 +118,10 @@
 <script>
 export default {
   name: "user-card-component",
-  props: { userInfo: {} }
+  props: { 
+    userInfo: Object,
+    postCount: Number,
+  }
 };
 </script>
 
