@@ -16,10 +16,10 @@
       </template>
       <template #cell(actions)="data">
         <b-button-group>
-          <b-button @click="onEditTag(data.item)" variant="warning"
+          <b-button class="m-1" @click="onEditTag(data.item)" variant="warning"
             >Editar</b-button
           >
-          <b-button @click="onDeleteTag(data.item.id)" variant="danger">
+          <b-button class="m-1" @click="onDeleteTag(data.item.id)" variant="danger">
             Eliminar
           </b-button>
         </b-button-group>

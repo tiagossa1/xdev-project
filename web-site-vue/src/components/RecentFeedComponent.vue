@@ -19,7 +19,7 @@
                 ><br />
                 <b-icon class="mr-1" icon="arrow-return-right"></b-icon>
                 <small class="font-italic font-weight-bold"
-                  >mostrar título do post</small
+                  >{{comment.post.title}}</small
                 >
               </span>
               <hr />
@@ -31,13 +31,10 @@
           <b-row v-for="like in recentFeed.likes" :key="like">
             <b-col class="text-left">
               <span>
-                Gostou do post<b>{{ feed.description }}</b
-                ><br />
+                Gostou do post <br/>
 
-                <b-icon icon="heart-fill" variant="danger"></b-icon
-                ><small class="font-italic font-weight-bold"
-                  >{{ feed.post.title }} ></small
-                >
+                <b-icon icon="heart-fill" variant="danger"></b-icon>
+                <b> {{like.title}}</b>
               </span>
               <hr />
             </b-col>

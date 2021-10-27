@@ -4,6 +4,7 @@ import UserType from "../models/userType";
 import Comment from "../models/comment";
 
 import postService from "./postService";
+import Post from "../models/post";
 
 export default new (class UserService {
   constructor() {
@@ -112,6 +113,14 @@ export default new (class UserService {
 
       return { comments: res.data.comments.map(c => new Comment(c)), likes: posts };
     }
+  }
+
+  async getFavoritePosts(id) {
+    const res = await axios.get(`${this.apiUrl}/api/users/favorite-posts/${id}`);
+    // console.log(res.data.posts)
+    return res.data.posts.map((x) => {
+      return new Post(x);
+    });
   }
 
 })();

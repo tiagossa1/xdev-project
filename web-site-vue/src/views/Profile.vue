@@ -5,14 +5,31 @@
         <user-card-component :userInfo="userInfo" :postCount="posts.length" ></user-card-component>
       </b-col>
 
-      <b-col class="p-5" sm="6" v-if="posts.length > 0">
-        <div v-for="post in posts" :key="post.id">
-          <post-component :post="post"></post-component>
-        </div>
-      </b-col>
+      <b-col class="p-5" sm="6">
+        <b-tabs content-class="mt-3">
+          <b-tab title="Posts" active>
+            <div v-if="posts.length > 0">
+              <div v-for="post in posts" :key="post.id">
+                <post-component :post="post"></post-component>
+              </div>
+            </div>
 
-      <b-col class="p-5" sm="6" v-else>
-        <span>Não tem posts</span>
+            <div v-else>
+              <span>Não tem posts</span>
+            </div>
+          </b-tab>
+
+          <b-tab title="Guardados" v-if="paramId != null">
+            <div v-if="favoritePosts.length > 0">
+              <div v-for="post in favoritePosts" :key="post.id">
+                <post-component :post="post"></post-component>
+              </div>
+            </div>
+            <div v-else>
+              <h2 class="text-center">Não tem posts guardados</h2>
+            </div>
+          </b-tab>
+        </b-tabs>
       </b-col>
 
       <b-col class="p-5" sm="3">
@@ -41,12 +58,14 @@ export default {
   data() {
     return {
       getSuspendedPosts: {},
+      
       userInfo: {
         userType: {},
         schoolClass: { school: {} },
         posts: {},
         tags: {},
       },
+      favoritePosts : Post,
       recentFeed: { comments: [], likes: [] },
       posts: Post,
     };
@@ -62,7 +81,10 @@ export default {
       this.posts = this.posts.filter(x => 
         !x.suspended
       );
-      //console.log(this.userInfo)
+
+      this.favoritePosts = await userService.getFavoritePosts(paramId)
+      // console.log(this.favoritePosts)
+
     } else {
       this.recentFeed = await userService.getRecentFeed(
         this.$store.getters["auth/user"].id
@@ -74,7 +96,9 @@ export default {
       this.posts = await postService.getPostsByUser(
         this.$store.getters["auth/user"].id
       );
-      // console.log(this.userInfo)
+      
+      this.favoritePosts = await userService.getFavoritePosts(this.$store.getters["auth/user"].id)
+      // console.log(this.favoritePosts)
     }
   },
 };

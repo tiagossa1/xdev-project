@@ -27,15 +27,16 @@
                 </b-form-group>
 
                 <b-form-group label="Insira a descrição:" label-for="textarea">
-                  <quill-editor ref="myQuillEditor" v-model="form.description">
+                  <quill-editor ref="myQuillEditor" v-model="form.description" size='10' >
                   </quill-editor>
                 </b-form-group>
 
-                <b-form-group
+
+                <b-form-group 
                   label="Insira o tipo de post:"
                   label-for="postType"
                 >
-                  <b-form-select
+                  <b-form-select 
                     id="postType"
                     v-model="form.postTypeId"
                     :options="postTypesSelect"
@@ -44,7 +45,7 @@
                 </b-form-group>
 
                 <b-form-group
-                  label="Tagged input using select"
+                  label="Insira as tags do post:"
                   label-for="tags-component-select"
                 >
                   <!-- Prop `add-on-change` is needed to enable adding tags vie the `change` event -->
@@ -194,6 +195,8 @@ export default {
     this.tags = tags;
     this.tagOptions = tags.map((t) => t.name).sort();
 
+    // console.log(this.tagOptions)
+
     this.$root.$on("tag-search-navbar", (tagIds) => {
       if (tagIds.length > 0) {
         this.posts = this.originalPosts.filter(p => p.tags.some(t => tagIds.includes(t.id)));
@@ -267,6 +270,9 @@ export default {
           alertMessage: "Ocorreu um erro: " + err.response + ".",
           variant: "danger",
         });
+        this.form.title = this.form.description = this.form.postTypeId = ""
+        this.form.postTypeId = null
+        this.form.tags = []
       });
 
       let newPost = new Post(res.data.data);
@@ -278,7 +284,11 @@ export default {
           variant: "success",
         });
       }
-      // this.form.title = this.form.description = this.form.postTypeId = "",
+
+      this.form.title = this.form.description = this.form.postTypeId = ""
+      this.form.postTypeId = null
+      this.form.tags = []
+      
       
 
     },

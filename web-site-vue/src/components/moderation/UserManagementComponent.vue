@@ -15,13 +15,14 @@
     >
       <template #cell(actions)="data">
         <b-button-group>
-          <b-button @click="onDetailsClick(data.item)" variant="success"
+          <b-button class="m-1" @click="onDetailsClick(data.item)" variant="success"
             >Detalhes</b-button
           >
-          <b-button @click="onEditClick(data.item)" variant="warning"
+          <b-button class="m-1" @click="onEditClick(data.item)" variant="warning"
             >Editar</b-button
           >
-          <b-button v-if="data.item.id !== $store.getters['auth/user'].id" @click="onSuspended(data.item)" variant="danger">
+          <b-button class="m-1 text-white" v-if="data.item.id !== $store.getters['auth/user'].id" @click="onSuspended(data.item)" 
+          :variant="data.item.suspended ? 'primary' : 'danger'">
             {{ data.item.suspended ? "Remover suspensão" : "Suspender" }}
           </b-button>
         </b-button-group>

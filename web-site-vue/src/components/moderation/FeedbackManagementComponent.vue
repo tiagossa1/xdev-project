@@ -25,10 +25,10 @@
       </template>
       <template #cell(actions)="data">
         <b-button-group>
-          <b-button @click="onDetails(data.item)" variant="success"
+          <b-button class="m-1" @click="onDetails(data.item)" variant="info"
             >Detalhes</b-button
           >
-          <b-button @click="onDelete(data.item)" variant="danger">
+          <b-button class="m-1" @click="onDelete(data.item)" variant="danger">
             Eliminar
           </b-button>
         </b-button-group>

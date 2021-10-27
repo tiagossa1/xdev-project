@@ -324,10 +324,10 @@ export default {
       var linkedinRegex = /(?:https?:\/\/)?(?:www\.)(?:linkedin.com\/)/;
 
       if (
-        facebookRegex.test(this.userInfo.facebook_url) &&
-        githubRegex.test(this.userInfo.github_url) &&
-        instagramRegex.test(this.userInfo.instagram_url) &&
-        linkedinRegex.test(this.userInfo.linkedin_url)
+        facebookRegex.test(this.userInfo.facebook_url) || this.userInfo.facebook_url === "" &&
+        githubRegex.test(this.userInfo.github_url) || this.userInfo.github_url === "" &&
+        instagramRegex.test(this.userInfo.instagram_url) || this.userInfo.instagram_url === "" &&
+        linkedinRegex.test(this.userInfo.linkedin_url) || this.userInfo.linkedin_url === ""
       ) {
         let request = new UserRequest(
           this.userInfo.id,
@@ -335,10 +335,10 @@ export default {
           this.userInfo.name,
           this.userInfo.birth_date,
           null,
-          this.userInfo.github_url,
-          this.userInfo.linkedin_url,
-          this.userInfo.facebook_url,
-          this.userInfo.instagram_url,
+          this.userInfo?.github_url,
+          this.userInfo?.linkedin_url,
+          this.userInfo?.facebook_url,
+          this.userInfo?.instagram_url,
           this.userInfo.createdAt,
           this.userInfo.district.id,
           this.userInfo.schoolClass.id,
