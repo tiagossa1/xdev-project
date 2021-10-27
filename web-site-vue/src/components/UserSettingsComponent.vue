@@ -239,7 +239,7 @@ export default {
       AlertMessage: false,
 
       updateSucces: false,
-      messageSucces: "Redes Sociais atualizadas com sucesso",
+      messageSucces: "Redes sociais atualizadas.",
       messageFail: "Erro ao atualizar as redes sociais",
 
       AlertPasswordMessage: false,

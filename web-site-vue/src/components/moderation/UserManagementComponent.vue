@@ -14,16 +14,23 @@
       :tbody-tr-class="rowClass"
     >
       <template #cell(actions)="data">
-          <b-button class="m-1 text-white" @click="onDetailsClick(data.item)" variant="primary"
-            >Detalhes</b-button
-          >
-          <b-button class="m-1" @click="onEditClick(data.item)" variant="warning"
-            >Editar</b-button
-          >
-          <b-button class="m-1 text-white" v-if="data.item.id !== $store.getters['auth/user'].id" @click="onSuspended(data.item)" 
-          :variant="data.item.suspended ? 'success' : 'danger'">
-            {{ data.item.suspended ? "Remover suspensão" : "Suspender" }}
-          </b-button>
+        <b-button
+          class="m-1 text-white"
+          @click="onDetailsClick(data.item)"
+          variant="primary"
+          >Detalhes</b-button
+        >
+        <b-button class="m-1" @click="onEditClick(data.item)" variant="warning"
+          >Editar</b-button
+        >
+        <b-button
+          class="m-1 text-white"
+          v-if="data.item.id !== $store.getters['auth/user'].id"
+          @click="onSuspended(data.item)"
+          :variant="data.item.suspended ? 'success' : 'danger'"
+        >
+          {{ data.item.suspended ? "Remover suspensão" : "Suspender" }}
+        </b-button>
       </template>
       <!-- eslint-disable-next-line -->
       <template #cell(userType.name)="data">
@@ -142,10 +149,14 @@ export default {
       );
 
       const res = await userService.update(request).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage:
-            "Ocorreu um erro ao atualizar o utilizador: " + err.response + ".",
-          variant: "danger",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       });
 
@@ -159,9 +170,14 @@ export default {
         }
 
         this.$refs["edit-modal"].hide();
-        this.$root.$emit("show-alert", {
-          alertMessage: "Utilizador editado com sucesso!",
-          variant: "success",
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: "Utilizador editado.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       }
     },
@@ -198,9 +214,14 @@ export default {
       );
 
       const res = await userService.update(request).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.data.message + ".",
-          variant: "danger",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data.message,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       });
 
@@ -213,11 +234,16 @@ export default {
         }
 
         this.$refs.userTable.refresh();
-        this.$root.$emit("show-alert", {
-          alertMessage: user.suspended
-            ? "Utilizador suspendido com sucesso!"
-            : "A suspensão foi removida com sucesso!",
-          variant: "success",
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: user.suspended
+            ? "Utilizador suspenso."
+            : "A suspensão foi removida.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       }
     },

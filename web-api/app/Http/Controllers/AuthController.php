@@ -107,7 +107,7 @@ class AuthController extends Controller
 
         if (!$user || !Hash::check($request['password'], $user->password)) {
             return response([
-                'message' => 'Bad Credentials',
+                'message' => 'Credenciais erradas. Por favor, verifique-as.',
             ], 401);
         }
 

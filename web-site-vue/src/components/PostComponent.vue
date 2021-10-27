@@ -299,7 +299,7 @@ export default {
       );
 
       await postService
-        .updatePost(request)
+        .update(request)
         .catch((err) => console.log(err.response));
 
       this.liked = !this.liked;
@@ -330,9 +330,14 @@ export default {
       );
 
       await postService.update(request).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.data,
-          variant: "danger",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       });
 
@@ -348,9 +353,14 @@ export default {
         );
 
         let res = await commentService.create(request).catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.data.message,
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
 
@@ -400,16 +410,26 @@ export default {
         );
 
         let res = await postService.update(request).catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.data,
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
 
         if (res.status === 200) {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Post editado com sucesso!",
-            variant: "success",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: "Post criado.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
 
           this.post.postType = this.postTypes.find(

@@ -1,5 +1,6 @@
 import router from "../router";
 import userService from "../services/userService";
+import Vue from 'vue';
 
 export default {
   namespaced: true,
@@ -60,6 +61,16 @@ export default {
               JSON.stringify(credentials)
             );
             router.push("Verification");
+          } else {
+            Vue.swal({
+              icon: 'error',
+              position: 'bottom-right',
+              title: err.response.data.message,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500
+            })
           }
         });
     },

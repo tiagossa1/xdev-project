@@ -75,7 +75,8 @@ import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 
 // custom validation
-const notContainsEduAtecPt = (value) => !value.toLowerCase().includes("@edu.atec.pt");
+const notContainsEduAtecPt = (value) =>
+  !value.toLowerCase().includes("@edu.atec.pt");
 
 export default {
   name: "login-component",

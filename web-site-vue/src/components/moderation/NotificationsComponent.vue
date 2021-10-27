@@ -139,10 +139,15 @@ export default {
       );
 
       await postService.update(postRequest).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
-          variant: "danger",
-        });
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
       });
 
       let reportRequest = new ReportRequest(
@@ -158,18 +163,28 @@ export default {
       );
 
       await reportService.update(reportRequest).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.data + ".",
-          variant: "danger",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       });
 
       let notificationRes = await notificationService
         .markAsRead(item.id)
         .catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.data + ".",
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
 
@@ -181,9 +196,14 @@ export default {
           this.notifications.splice(index, 1);
           this.$refs.notificationTable.refresh();
         }
-        this.$root.$emit("show-alert", {
-          alertMessage: "Post suspenso com sucesso!",
-          variant: "success",
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: "Post suspenso.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       }
     },
@@ -191,9 +211,14 @@ export default {
       let res = await commentService
         .deleteComment(item.report.postComment.id)
         .catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.message + ".",
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.message,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
 
@@ -201,10 +226,15 @@ export default {
         let notificationRes = await notificationService
           .markAsRead(item.id)
           .catch((err) => {
-            this.$root.$emit("show-alert", {
-              alertMessage: "Ocorreu um erro: " + err.response.data + ".",
-              variant: "danger",
-            });
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
           });
 
         if (notificationRes.status === 200) {
@@ -214,9 +244,15 @@ export default {
             this.notifications.splice(index, 1);
             this.$refs.notificationTable.refresh();
           }
-          this.$root.$emit("show-alert", {
-            alertMessage: "Comentário eliminado com sucesso.",
-            variant: "success",
+
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Notificação criada.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         }
       }

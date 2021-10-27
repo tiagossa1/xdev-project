@@ -266,10 +266,16 @@ export default {
       );
 
       let res = await postService.create(request).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response + ".",
-          variant: "danger",
-        });
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
+
         this.form.title = this.form.description = this.form.postTypeId = ""
         this.form.postTypeId = null
         this.form.tags = []
@@ -279,10 +285,15 @@ export default {
 
       if (res.status === 201) {
         this.posts.unshift(newPost);
-        this.$root.$emit("show-alert", {
-          alertMessage: "Post criado com sucesso!",
-          variant: "success",
-        });
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Post criado.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
       }
 
       this.form.title = this.form.description = this.form.postTypeId = ""

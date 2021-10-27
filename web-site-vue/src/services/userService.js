@@ -12,7 +12,7 @@ export default new (class UserService {
   }
 
   async login(form) {
-    return await axios.post(`${this.apiUrl}/api/login`, form);
+    return await axios.post(`${this.apiUrl}/api/login`, form)
   }
 
   async register(form) {

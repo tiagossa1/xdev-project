@@ -82,10 +82,15 @@ export default {
     },
     async onDelete(feedback) {
       let res = await feedbackService.delete(feedback.id).catch((err) => {
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.message,
-          variant: "danger",
-        });
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
       });
 
       if (res.status === 200) {
@@ -97,9 +102,14 @@ export default {
 
         this.$refs.feedbackTable.refresh();
 
-        this.$root.$emit("show-alert", {
-          alertMessage: "Feedback eliminado sucesso!",
-          variant: "success",
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: "Feedback eliminado.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       }
     },

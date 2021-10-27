@@ -89,9 +89,15 @@ export default {
         if (res.status === 201) {
           this.description = "";
           this.selected = "";
-          this.$root.$emit("show-alert", {
-            alertMessage: "Feedback criado com sucesso!",
-            variant: "success",
+          
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Feedback criado.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         }
 

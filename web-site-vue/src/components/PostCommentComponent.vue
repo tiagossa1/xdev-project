@@ -141,15 +141,20 @@ export default {
         );
 
         let res = await reportService.create(request).catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.data,
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
 
         if (res.status === 200) {
           this.$emit("on-reported", {
-            alertMessage: "Comentário reportado com sucesso!",
+            alertMessage: "Comentário reportado.",
             variant: "success",
           });
         }
@@ -170,17 +175,27 @@ export default {
 
       let res = await commentService.edit(request).catch((err) => {
         this.reportComment = "";
-        this.$root.$emit("show-alert", {
-          alertMessage: "Ocorreu um erro: " + err.response.message + ".",
-          variant: "danger",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       });
 
       if (res.status === 200) {
         this.reportComment = "";
-        this.$root.$emit("show-alert", {
-          alertMessage: "Comentário editado com sucesso!",
-          variant: "success",
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: "Comentário editado!",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
       }
 

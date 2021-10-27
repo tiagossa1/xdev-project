@@ -139,27 +139,37 @@ export default {
         }
 
         let res = await reportService.create(request).catch((err) => {
-          this.$root.$emit("show-alert", {
-            alertMessage: "Ocorreu um erro: " + err.response.data,
-            variant: "danger",
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
           });
         });
-        
+
         okRequest = res.status === 201;
 
         if (okRequest) {
           if (this.post) {
-            alertMsg = "Post reportado com sucesso!";
+            alertMsg = "Post reportado.";
           } else if (this.comment) {
-            alertMsg = "Comentário reportado com sucesso!";
+            alertMsg = "Comentário reportado.";
           }
         } else {
           alertMsg = "Ocorreu um erro";
         }
 
-        this.$root.$emit("show-alert", {
-          alertMessage: alertMsg,
-          variant: okRequest ? "success" : "danger",
+        this.$swal({
+          icon: okRequest ? "success" : "error",
+          position: "bottom-right",
+          title: alertMsg,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
         });
 
         this.$refs["modal-report"].hide();

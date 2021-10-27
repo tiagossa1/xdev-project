@@ -7,6 +7,7 @@ import VueCompositionAPI from "@vue/composition-api";
 import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import store from "./store";
 import VueQuillEditor from "vue-quill-editor";
+import VueSweetAlert2 from 'vue-sweetalert2';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -15,8 +16,15 @@ import router from "./router";
 
 require("@/store/subscriber");
 
+import 'sweetalert2/dist/sweetalert2.min.css';
 import "./styles/app.scss";
 
+const options = {
+  confirmButtonColor: '#007bff',
+  cancelButtonColor: '#6c757d',
+};
+
+Vue.use(VueSweetAlert2, options);
 Vue.use(BootstrapVue);
 Vue.use(IconsPlugin);
 Vue.use(Vuelidate);
