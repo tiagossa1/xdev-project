@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\ForbiddenWord;
 use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Utilities\StringUtility;
 use Illuminate\Http\Request;
 
 class CommentController extends Controller
@@ -35,12 +37,23 @@ class CommentController extends Controller
     public function store(CreateCommentRequest $request)
     {
         try {
-            $comment = Comment::create($request->all());
+            $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
+            if(!in_array(StringUtility::remove_utf8($request->description),$forbiddenWords)) {
+                $comment = new Comment();
+                $comment->description = $request->description;
+                $comment->user_id = $request->user_id;
+                $comment->post_id = $request->post_id;
+                $comment->save();
+
+                return response()->json([
+                    'data' => $comment->load('user'),
+                    'message' => 'Success',
+                ], 201);
+            }
             return response()->json([
-                'data' => $comment->load('user'),
-                'message' => 'Success',
-            ], 201);
+                'message' => 'Descrição com palavra proibida'
+            ], 400);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

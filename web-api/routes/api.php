@@ -127,3 +127,5 @@ Route::get('districts/{id}', 'DistrictController@show');
 
 Route::get('school-classes', 'SchoolClassController@index');
 Route::get('school-classes/{id}', 'SchoolClassController@show');
+
+Route::get('forbidden-words','ForbiddenWordController@index');

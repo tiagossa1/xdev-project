@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Events\PostCreated;
+use App\ForbiddenWord;
 use App\Http\Requests\UpdatePostRequest;
 use App\Post;
 use App\User;
+use App\Utilities\StringUtility;
 use Exception;
 use Illuminate\Http\Request;
 use App\Notifications\NewPost;
@@ -84,26 +86,39 @@ class PostController extends Controller
         try {
             $request->validate($request->rules());
 
-            $post = Post::create($request->all());
-            $post->tags()->attach($request->input('tags'));
+            $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $user_id = $request->user_id;
+            if(!in_array(StringUtility::remove_utf8($request->description),$forbiddenWords) && !in_array(StringUtility::remove_utf8($request->title),$forbiddenWords)) {
+                $post = new Post();
+                $post->title = $request->title;
+                $post->description = $request->description;
+                $post->user_id = $request->user_id;
+                $post->post_type_id = $request->post_type_id;
+                $post->save();
 
-            $users = User::whereIn('id', function ($query) use ($post, $user_id) {
-                $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $user_id);
-            })->get();
+                $post->tags()->attach($request->input('tags'));
 
-            if (!is_null($users) || $users->length > 0) {
-                $newPostNotification = new NewPost(Post::find($post->id));
-                Notification::send($users, $newPostNotification);
+                $user_id = $request->user_id;
 
-                event(new PostCreated(Post::find($post->id)));
+                $users = User::whereIn('id', function ($query) use ($post, $user_id) {
+                    $query->select('user_id')->from('tag_user')->whereIn('tag_id', $post->tags()->pluck('tag_id')->toArray())->where('user_id', '<>', $user_id);
+                })->get();
+
+                if (!is_null($users) || $users->length > 0) {
+                    $newPostNotification = new NewPost(Post::find($post->id));
+                    Notification::send($users, $newPostNotification);
+
+                    event(new PostCreated(Post::find($post->id)));
+                }
+
+                return response()->json([
+                    'data' => Post::find($post->id),
+                    'message' => 'Success',
+                ], 201);
             }
-
-            return response()->json([
-                'data' => Post::find($post->id),
-                'message' => 'Success',
-            ], 201);
+                return response()->json([
+                    'message' => 'Titulo ou descrição com palavra proibida'
+                ], 400);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

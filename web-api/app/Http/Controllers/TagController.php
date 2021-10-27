@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\ForbiddenWord;
 use App\Http\Requests\CreateTagRequest;
 use App\Http\Requests\UpdateTagRequest;
 use App\Tag;
+use App\Utilities\StringUtility;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -43,12 +45,22 @@ class TagController extends Controller
     public function store(CreateTagRequest $request)
     {
         try {
-            $tag = Tag::create($request->all());
+            $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+
+            if(!in_array(StringUtility::remove_utf8($request->name),$forbiddenWords)) {
+                $tag = new Tag();
+                $tag->name = $request->name;
+                $tag->save();
+
+                return response()->json([
+                    'data' => Tag::find($tag->id),
+                    'message' => 'Success'
+                ], 201);
+            }
 
             return response()->json([
-                'data' => Tag::find($tag->id),
-                'message' => 'Success'
-            ], 201);
+                'message' => 'Tag com palavra proibida'
+            ], 400);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

@@ -13,22 +13,18 @@ class TagSeeder extends Seeder
     {
         App\Tag::create([
             'name' => 'C#',
-
         ]);
 
         App\Tag::create([
             'name' => 'C',
-
         ]);
 
         App\Tag::create([
             'name' => 'C++',
-
         ]);
 
         App\Tag::create([
             'name' => 'Laravel',
-
         ]);
 
         App\Tag::create([
@@ -46,7 +42,7 @@ class TagSeeder extends Seeder
         App\Tag::create([
             'name' => 'SQL Server',
         ]);
-        
+
         App\Tag::create([
             'name' => 'JavaScript',
         ]);
@@ -122,7 +118,7 @@ class TagSeeder extends Seeder
         App\Tag::create([
             'name' => 'Mecatrónica',
         ]);
-        
+
         App\Tag::create([
             'name' => 'Outros',
         ]);
