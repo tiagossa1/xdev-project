@@ -195,8 +195,6 @@ export default {
     this.tags = tags;
     this.tagOptions = tags.map((t) => t.name).sort();
 
-    // console.log(this.tagOptions)
-
     this.$root.$on("tag-search-navbar", (tagIds) => {
       if (tagIds.length > 0) {
         this.posts = this.originalPosts.filter(p => p.tags.some(t => tagIds.includes(t.id)));

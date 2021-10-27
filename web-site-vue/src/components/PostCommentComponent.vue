@@ -189,7 +189,7 @@ export default {
       if (res.status === 200) {
         this.reportComment = "";
         this.$swal({
-          icon: "error",
+          icon: "success",
           position: "bottom-right",
           title: "Comentário editado!",
           toast: true,

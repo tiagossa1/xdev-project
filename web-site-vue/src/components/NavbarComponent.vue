@@ -46,7 +46,6 @@
                 variant="outline-secondary"
                 block
                 menu-class="w-100"
-                class="my-class"
               >
                 <template #button-content>
                   <b-icon icon="search"></b-icon> Filtrar por tags
@@ -71,13 +70,21 @@
                   </b-form-group>
                 </b-dropdown-form>
                 <b-dropdown-divider></b-dropdown-divider>
-                <b-dropdown-item-button
-                  v-for="option in availableOptions"
-                  :key="option.id"
-                  @click="onOptionClick({ option, addTag })"
-                >
-                  {{ option.name }} <b-badge class="float-right text-white" pill variant="primary">{{option.postsCount}}</b-badge>
-                </b-dropdown-item-button>
+                <div class="scrollable-select">
+                  <b-dropdown-item-button
+                    v-for="option in availableOptions"
+                    :key="option.id"
+                    @click="onOptionClick({ option, addTag })"
+                  >
+                    {{ option.name }}
+                    <b-badge
+                      class="float-right text-white"
+                      pill
+                      variant="primary"
+                      >{{ option.postsCount }}</b-badge
+                    >
+                  </b-dropdown-item-button>
+                </div>
                 <b-dropdown-text v-if="availableOptions.length === 0">
                   Não existem tags para selecionar
                 </b-dropdown-text>
@@ -203,7 +210,6 @@
         </template>
       </b-navbar-nav>
 
-      
       <feedback ref="feedbackComponent" />
     </b-collapse>
   </b-navbar>
@@ -241,12 +247,11 @@ export default {
   async created() {
     if (this.authenticated) {
       const moderators = [2, 3, 4];
-      const userTypeId = this.$store.getters["auth/user"].user_type.id
+      const userTypeId = this.$store.getters["auth/user"].user_type.id;
       this.isModerator = moderators.includes(userTypeId);
 
       let tags = await tagService.getTags();
       this.tags = tags;
-      console.log(tags)
       this.options = tags;
 
       var channel = this.$pusher.subscribe("xdev");
@@ -359,7 +364,17 @@ export default {
     async markAsRead(notificationId) {
       let res = await notificationService
         .markAsRead(notificationId)
-        .catch((err) => console.log(err.response.data));
+        .catch((err) => {
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response.data,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
+        });
 
       if (res.status === 200) {
         let indexToRemove = this.notifications.findIndex(
@@ -376,7 +391,8 @@ export default {
 </script>
 
 <style>
-.my-class .dropdown-menu {
-  max-height: 15rem;
-  overflow-y: auto;
+.scrollable-select {
+  height: 25rem;
+  overflow: auto;
 }
+</style>

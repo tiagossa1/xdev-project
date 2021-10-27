@@ -423,7 +423,7 @@ export default {
 
         if (res.status === 200) {
           this.$swal({
-            icon: "error",
+            icon: "success",
             position: "bottom-right",
             title: "Post criado.",
             toast: true,

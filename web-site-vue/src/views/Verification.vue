@@ -50,8 +50,6 @@ export default {
     var channel = this.$pusher.subscribe("xdev");
 
     channel.bind("user-email-verified", ({ user }) => {
-      console.log(user);
-
       let registerRequest = this.getRegisterRequest;
       let loginRequest = this.getLoginRequest;
 

@@ -2,7 +2,7 @@
   <b-modal id="modal2" size="lg" ref="modal2" hide-footer title="Editar perfil">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar Password" active>
-        <b-alert v-model="AlertPasswordMessage" variant="danger" dismissible>
+        <b-alert v-model="alertPasswordMessage" variant="danger" dismissible>
           Erro ao atualizar a password
         </b-alert>
         <b-form @submit.prevent="updatePassword">
@@ -242,7 +242,7 @@ export default {
       messageSucces: "Redes sociais atualizadas.",
       messageFail: "Erro ao atualizar as redes sociais",
 
-      AlertPasswordMessage: false,
+      alertPasswordMessage: false,
 
       tagsFields: [
         // {key: "name", label: "Nome"},
@@ -268,7 +268,7 @@ export default {
       this.allTags = await tagService.getTags();
     }
   },
-  
+
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
@@ -325,10 +325,14 @@ export default {
       var linkedinRegex = /(?:https?:\/\/)?(?:www\.)(?:linkedin.com\/)/;
 
       if (
-        (facebookRegex.test(this.userInfo.facebook_url) || this.userInfo.facebook_url === "") &&
-        (githubRegex.test(this.userInfo.github_url) || this.userInfo.github_url === "") &&
-        (instagramRegex.test(this.userInfo.instagram_url) || this.userInfo.instagram_url === "") &&
-        (linkedinRegex.test(this.userInfo.linkedin_url) || this.userInfo.linkedin_url === "")
+        (facebookRegex.test(this.userInfo.facebook_url) ||
+          this.userInfo.facebook_url === "") &&
+        (githubRegex.test(this.userInfo.github_url) ||
+          this.userInfo.github_url === "") &&
+        (instagramRegex.test(this.userInfo.instagram_url) ||
+          this.userInfo.instagram_url === "") &&
+        (linkedinRegex.test(this.userInfo.linkedin_url) ||
+          this.userInfo.linkedin_url === "")
       ) {
         let request = new UserRequest(
           this.userInfo.id,
@@ -350,19 +354,25 @@ export default {
           null,
           this.userInfo.suspended
         );
-        let res = await userService
-          .update(request)
-          .catch((err) => console.log(err.response));
-        console.log(res);
+
+        await userService.update(request).catch((err) => {
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 3500,
+          });
+        });
 
         this.updateSucces = true;
         this.showSocialMediaAlert();
-        
       } else {
         this.updateSucces = false;
         this.showSocialMediaAlert();
       }
-      
     },
     showSocialMediaAlert() {
       this.AlertMessage = true;
@@ -370,11 +380,10 @@ export default {
         this.AlertMessage = false;
       }, 3000);
     },
-    showPasswordAlert(error) {
-      console.log(error);
-      this.AlertPasswordMessage = true;
+    showPasswordAlert() {
+      this.alertPasswordMessage = true;
       setTimeout(() => {
-        this.AlertPasswordMessage = false;
+        this.alertPasswordMessage = false;
       }, 3000);
     },
     rowClass(item, type) {
@@ -416,10 +425,17 @@ export default {
         this.userInfo.suspended
       );
 
-      await userService
-        .update(request)
-        .catch((err) => console.log(err.response));
-      // console.log(res);
+      await userService.update(request).catch((err) => {
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
+        });
+      });
     },
   },
 };
