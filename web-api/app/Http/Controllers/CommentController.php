@@ -39,7 +39,13 @@ class CommentController extends Controller
         try {
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            if(!in_array(StringUtility::remove_utf8($request->description),$forbiddenWords)) {
+            $rawDescription = explode(" ", $request->description);
+
+            $description = StringUtility::remove_multiple_utf8($rawDescription);
+
+            $diffDescription = array_diff($description,$forbiddenWords);
+
+            if(sizeof($diffDescription) == sizeof($description)) {
                 $comment = new Comment();
                 $comment->description = $request->description;
                 $comment->user_id = $request->user_id;

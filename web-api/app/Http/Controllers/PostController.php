@@ -29,8 +29,12 @@ class PostController extends Controller
         try {
             $query = Post::query();
 
-            if ($request->user_id) {
+            if (!is_null($request->user_id)) {
                 $query->where('user_id', $request->user_id);
+            }
+
+            if(!is_null($request->suspended)) {
+                $query->where('suspended', $request->suspended);
             }
 
             $posts = $query->latest()->get();
@@ -88,7 +92,22 @@ class PostController extends Controller
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            if(!in_array(StringUtility::remove_utf8($request->description),$forbiddenWords) && !in_array(StringUtility::remove_utf8($request->title),$forbiddenWords)) {
+            $rawTitle = explode(" ", $request->title);
+            $rawDescription = explode(" ", $request->description);
+
+            $title = StringUtility::remove_multiple_utf8($rawTitle);
+            $description = StringUtility::remove_multiple_utf8($rawDescription);
+
+            $diffDescription = array_diff($description,$forbiddenWords);
+            $diffTitle = array_diff($title,$forbiddenWords);
+
+            if(sizeof($diffTitle) == sizeof($title) && sizeof($diffDescription) == sizeof($description)) {
+                /*return response()->json(['Array Description:' => sizeof($description),
+                                         'Array Title:' => sizeof($title),
+                                         'Array Forbidden Words:' => sizeof($forbiddenWords),
+                                         'Array Description Difference:' => sizeof($diffDescription),
+                                         'Array Title Difference:' => sizeof($diffTitle)]);*/
+
                 $post = new Post();
                 $post->title = $request->title;
                 $post->description = $request->description;

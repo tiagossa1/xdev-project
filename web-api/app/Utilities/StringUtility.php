@@ -4,6 +4,13 @@ namespace App\Utilities;
 
 class StringUtility
 {
+    public static function remove_multiple_utf8($values){
+        for($i=0;$i<sizeof($values);$i++) {
+            $values[$i] = self::remove_utf8($values[$i]);
+        }
+        return $values;
+    }
+
     public static function remove_utf8($value)
     {
         if ( !preg_match('/[\x80-\xff]/', $value) )

@@ -57,6 +57,18 @@ export default new (class PostService {
     return [];
   }
 
+  async getPostsBySuspended(suspended) {
+    let response = await axios.get(`${this.apiUrl}/api/posts?suspended=${suspended}`);
+
+    if (response.data.data) {
+      return response.data.data.map((x) => {
+        return new Post(x);
+      });
+    }
+
+    return [];
+  }
+
   async getPostTypes() {
     let response = await axios.get(`${this.apiUrl}/api/post-types`);
 

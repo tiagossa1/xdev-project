@@ -51,7 +51,13 @@ class TagController extends Controller
         try {
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            if (!in_array(StringUtility::remove_utf8($request->name), $forbiddenWords)) {
+            $rawName = explode(" ", $request->name);
+
+            $name = StringUtility::remove_multiple_utf8($rawName);
+
+            $diffDescription = array_diff($name,$forbiddenWords);
+
+            if(sizeof($diffDescription) == sizeof($name)) {
                 $tag = new Tag();
                 $tag->name = $request->name;
                 $tag->save();
