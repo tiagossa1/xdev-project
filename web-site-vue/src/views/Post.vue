@@ -209,47 +209,51 @@ export default {
   name: "Post",
   components: { PostComponent, PopularTagsComponent },
   async mounted() {
-    this.posts = await postService.getPosts().catch((err) => {
-      this.$swal({
-        icon: "error",
-        position: "bottom-right",
-        title: err.response,
-        toast: true,
-        showCloseButton: true,
-        showConfirmButton: false,
-        timer: 3500,
+    const isAuthenticated = this.$store.getters["auth/authenticated"];
+
+    if (isAuthenticated) {
+      this.posts = await postService.getPosts().catch((err) => {
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 10000,
+        });
       });
-    });
 
-    this.posts = this.posts.filter((x) => !x.suspended);
-    this.originalPosts = this.posts;
-    let postTypes = await postService.getPostTypes();
+      this.posts = this.posts.filter((x) => !x.suspended);
+      this.originalPosts = this.posts;
+      let postTypes = await postService.getPostTypes();
 
-    this.postTypes = postTypes;
+      this.postTypes = postTypes;
 
-    this.postTypesSelect.push({ value: null, text: "Selecione uma opção" });
-    let selectOptions = postTypes.map((x) => ({
-      value: x.id,
-      text: x.name,
-    }));
+      this.postTypesSelect.push({ value: null, text: "Selecione uma opção" });
+      let selectOptions = postTypes.map((x) => ({
+        value: x.id,
+        text: x.name,
+      }));
 
-    this.postTypesSelect = this.postTypesSelect.concat(selectOptions);
+      this.postTypesSelect = this.postTypesSelect.concat(selectOptions);
 
-    let tags = await tagService.getTags();
-    this.tags = tags;
-    this.tagOptions = tags.map((t) => t.name).sort();
+      let tags = await tagService.getTags();
+      this.tags = tags;
+      this.tagOptions = tags.map((t) => t.name).sort();
 
-    this.$root.$on("tag-search-navbar", (tagIds) => {
-      if (tagIds.length > 0) {
-        this.posts = this.originalPosts.filter((p) =>
-          p.tags.some((t) => tagIds.includes(t.id))
-        );
-      } else {
-        this.posts = this.originalPosts;
-      }
-    });
+      this.$root.$on("tag-search-navbar", (tagIds) => {
+        if (tagIds.length > 0) {
+          this.posts = this.originalPosts.filter((p) =>
+            p.tags.some((t) => tagIds.includes(t.id))
+          );
+        } else {
+          this.posts = this.originalPosts;
+        }
+      });
 
-    this.show = true;
+      this.show = true;
+    }
   },
   computed: {
     availableOptions() {
@@ -320,7 +324,7 @@ export default {
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
-          timer: 3500,
+          timer: 10000,
         });
 
         this.form.title = this.form.description = this.form.postTypeId = "";
@@ -339,7 +343,7 @@ export default {
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
-          timer: 3500,
+          timer: 10000,
         });
       }
 

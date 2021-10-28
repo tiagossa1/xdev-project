@@ -16,7 +16,8 @@ class AuthController extends Controller
 {
     protected $table = 'users';
 
-    public function getUserByToken() {
+    public function getUserByToken()
+    {
         return Auth::user();
     }
 
@@ -29,7 +30,7 @@ class AuthController extends Controller
 
             if ($userCount == 0) {
                 if ($request["user_type_id"] == 1) {
-                    $user = \App\User::create([
+                    \App\User::create([
                         'name' => $request['name'],
                         'email' => $request['email'],
                         'birth_date' => $request['birth_date'],
@@ -73,10 +74,11 @@ class AuthController extends Controller
         }
     }
 
-    public function isSheriff() {
+    public function isSheriff()
+    {
         $xSheriff = UserType::where('name', 'LIKE', '%sheriff%')->first();
 
-        if(Auth::user()->user_type->id == $xSheriff->id) {
+        if (Auth::user()->user_type->id == $xSheriff->id) {
             return response()->json(['isxSheriff' => true], 200);
         } else {
             return response()->json(['isxSheriff' => false], 200);
@@ -98,6 +100,10 @@ class AuthController extends Controller
                 'message' => 'O utilizador não verificou o email.',
                 'type' => 'UserDidNotVerifiedEmail',
             ], 401, [], JSON_UNESCAPED_UNICODE);
+        } else if ($user->suspended == 1) {
+            return response()->json([
+                'message' => "O utilizador está suspenso. Por favor, contacte um moderador."
+            ], 401);
         }
 
         // When login in, it's not needed to load the following entities:

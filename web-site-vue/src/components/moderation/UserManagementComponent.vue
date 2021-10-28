@@ -156,7 +156,7 @@ export default {
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
-          timer: 3500,
+          timer: 10000,
         });
       });
 
@@ -177,7 +177,7 @@ export default {
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
-          timer: 3500,
+          timer: 10000,
         });
       }
     },
@@ -229,7 +229,7 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
-              timer: 3500,
+              timer: 10000,
             });
           });
 
@@ -251,7 +251,7 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
-              timer: 3500,
+              timer: 10000,
             });
           }
         }
