@@ -177,7 +177,24 @@ class PostController extends Controller
         try {
             $post = Post::find($id);
 
-            $post->update($request->all());
+            $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+
+            $rawTitle = explode(" ", $request->title);
+            $rawDescription = explode(" ", $request->description);
+
+            $title = StringUtility::remove_multiple_utf8($rawTitle);
+            $description = StringUtility::remove_multiple_utf8($rawDescription);
+
+            $diffDescription = array_diff($description,$forbiddenWords);
+            $diffTitle = array_diff($title,$forbiddenWords);
+
+            if(sizeof($diffTitle) == sizeof($title) && sizeof($diffDescription) == sizeof($description)) {
+                $post->title = $request->title;
+                $post->description = $request->description;
+                $post->user_id = $request->user_id;
+                $post->post_type_id = $request->post_type_id;
+                $post->save();
+
 
             if (!is_null($request->input('tags'))) {
                 $post->tags()->sync($request->input('tags'));
@@ -195,6 +212,10 @@ class PostController extends Controller
                 'data' => $post->fresh(),
                 'message' => 'Success',
             ], 200);
+            }
+            return response()->json([
+                'message' => 'O Titulo ou a descrição contem palavras proibidas.'
+            ], 400);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

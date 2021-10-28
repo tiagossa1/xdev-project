@@ -93,12 +93,29 @@ class CommentController extends Controller
     {
         try {
             $comment = Comment::find($id);
-            $comment->update($request->all());
 
+            $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+
+            $rawDescription = explode(" ", $request->description);
+
+            $description = StringUtility::remove_multiple_utf8($rawDescription);
+
+            $diffDescription = array_diff($description,$forbiddenWords);
+
+            if(sizeof($diffDescription) == sizeof($description)) {
+                $comment->description = $request->description;
+                $comment->user_id = $request->user_id;
+                $comment->post_id = $request->post_id;
+                $comment->save();
+
+                return response()->json([
+                    'data' => $comment,
+                    'message' => 'Success',
+                ], 200);
+            }
             return response()->json([
-                'data' => $comment,
-                'message' => 'Success',
-            ], 200);
+                'message' => 'Descrição com palavra proibida'
+            ], 400);
 
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);
