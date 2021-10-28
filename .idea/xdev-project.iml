@@ -106,6 +106,9 @@
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/guzzlehttp/guzzle" />
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/hamcrest/hamcrest-php" />
       <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/laravel/sanctum" />
+      <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/pusher/pusher-php-server" />
+      <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/paragonie/random_compat" />
+      <excludeFolder url="file://$MODULE_DIR$/web-api/vendor/paragonie/sodium_compat" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
