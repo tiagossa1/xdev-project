@@ -43,13 +43,16 @@
             <b-tab v-if="!paramId" class="bg-white" title="Guardados">
               <div v-if="favoritePosts.length > 0">
                 <div v-for="post in favoritePosts" :key="post.id">
-                  <post-component :post="post"></post-component>
+                  <post-component
+                    @on-unsaved="onUnsaved"
+                    :post="post"
+                  ></post-component>
                 </div>
               </div>
               <div v-else>
                 <h5 class="text-center">
-                  Não há posts guardados. Guarde clicando no botão "Guardar"
-                  num post.
+                  Não há posts guardados. Guarde clicando no botão "Guardar" num
+                  post.
                 </h5>
               </div>
             </b-tab>
@@ -139,6 +142,13 @@ export default {
   methods: {
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);
+    },
+    onUnsaved(postId) {
+      const index = this.favoritePosts.findIndex((p) => p.id === postId);
+
+      if (index > -1) {
+        this.favoritePosts.splice(index, 1);
+      }
     },
   },
 };

@@ -343,6 +343,10 @@ export default {
       });
 
       this.saved = !this.saved;
+
+      if (!this.saved) {
+        this.$emit("on-unsaved", this.post.id);
+      }
     },
     async onSubmit() {
       if (this.comment) {
