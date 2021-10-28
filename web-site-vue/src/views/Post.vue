@@ -13,14 +13,14 @@
                 v-if="show"
                 class="text-white"
                 variant="primary"
-                v-b-modal.modal-1
+                v-b-modal.post-modal
                 >Criar Post</b-button
               >
             </transition>
 
             <b-modal
               class="w-75"
-              id="modal-1"
+              id="post-modal"
               title="Criar Post"
               size="lg"
               @ok="createPost"
@@ -32,7 +32,8 @@
                     type="email"
                     v-model="form.title"
                     placeholder="Insira o titulo"
-                    required
+                    :state="!v$.form.title.$invalid"
+                    @blur="v$.form.title.$touch"
                   ></b-form-input>
                 </b-form-group>
 
@@ -41,6 +42,7 @@
                     ref="myQuillEditor"
                     v-model="form.description"
                     size="10"
+                    @blur="v$.form.description.$touch"
                   >
                   </quill-editor>
                 </b-form-group>
@@ -53,7 +55,8 @@
                     id="postType"
                     v-model="form.postTypeId"
                     :options="postTypesSelect"
-                    required
+                    :state="!v$.form.postTypeId.$invalid"
+                    @blur="v$.form.postTypeId.$touch"
                   ></b-form-select>
                 </b-form-group>
 
@@ -193,6 +196,7 @@
 </template>
 
 <script>
+import Post from "../models/post";
 import PostRequest from "../models/requests/postRequest";
 
 import PostComponent from "../components/PostComponent.vue";
@@ -203,7 +207,6 @@ import tagService from "../services/tagService";
 
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
-import Post from "../models/post";
 
 export default {
   name: "Post",
@@ -212,7 +215,7 @@ export default {
     const isAuthenticated = this.$store.getters["auth/authenticated"];
 
     if (isAuthenticated) {
-      this.posts = await postService.getPosts().catch((err) => {
+      this.posts = await postService.getPostsBySuspended(0).catch((err) => {
         this.$swal({
           icon: "error",
           position: "bottom-right",
@@ -224,13 +227,16 @@ export default {
         });
       });
 
-      this.posts = this.posts.filter((x) => !x.suspended);
       this.originalPosts = this.posts;
       let postTypes = await postService.getPostTypes();
 
       this.postTypes = postTypes;
 
-      this.postTypesSelect.push({ value: null, text: "Selecione uma opção" });
+      this.postTypesSelect.push({
+        value: null,
+        text: "Selecione uma opção",
+        disabled: true,
+      });
       let selectOptions = postTypes.map((x) => ({
         value: x.id,
         text: x.name,
@@ -269,14 +275,19 @@ export default {
         title: { required },
         description: { required },
         postTypeId: { required },
-        userId: { required },
-        suspended: { required },
-        tags: { required },
       },
     };
   },
   data() {
     return {
+      form: {
+        title: null,
+        description: null,
+        postTypeId: null,
+        userId: this.$store.getters["auth/user"].id,
+        suspended: 0,
+        tags: [],
+      },
       filterSelected: "Filtro",
       originalPosts: [],
       posts: [],
@@ -287,69 +298,65 @@ export default {
       postTypes: [],
       postTypesSelect: [],
       limitTag: 6,
-      form: {
-        title: "",
-        description: "",
-        postTypeId: null,
-        userId: this.$store.getters["auth/user"].id,
-        suspended: 0,
-        tags: [],
-      },
       show: false,
       filterMode: false,
     };
   },
   methods: {
-    async createPost() {
-      let tagIds = this.tags
-        .filter((t) => this.form.tags.includes(t.name))
-        .map((t) => t.id);
+    async createPost(bvModalEvt) {
+      if (!this.v$.form.$invalid) {
+        let tagIds = this.tags
+          .filter((t) => this.form.tags.includes(t.name))
+          .map((t) => t.id);
 
-      let request = new PostRequest(
-        null,
-        this.form.title,
-        this.form.description,
-        this.form.suspended,
-        this.form.userId,
-        this.form.postTypeId,
-        null,
-        tagIds
-      );
+        let request = new PostRequest(
+          null,
+          this.form.title,
+          this.form.description,
+          this.form.suspended,
+          this.form.userId,
+          this.form.postTypeId,
+          null,
+          tagIds
+        );
 
-      let res = await postService.create(request).catch((err) => {
-        this.$swal({
-          icon: "error",
-          position: "bottom-right",
-          title: err.response,
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 10000,
+        let res = await postService.create(request).catch((err) => {
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: err.response,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+
+          this.form.title = this.form.description = this.form.postTypeId = "";
+          this.form.postTypeId = null;
+          this.form.tags = [];
         });
+
+        let newPost = new Post(res.data.data);
+
+        if (res.status === 201) {
+          this.posts.unshift(newPost);
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Post criado.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        }
 
         this.form.title = this.form.description = this.form.postTypeId = "";
         this.form.postTypeId = null;
         this.form.tags = [];
-      });
-
-      let newPost = new Post(res.data.data);
-
-      if (res.status === 201) {
-        this.posts.unshift(newPost);
-        this.$swal({
-          icon: "success",
-          position: "bottom-right",
-          title: "Post criado.",
-          toast: true,
-          showCloseButton: true,
-          showConfirmButton: false,
-          timer: 10000,
-        });
+      } else {
+        bvModalEvt.preventDefault();
       }
-
-      this.form.title = this.form.description = this.form.postTypeId = "";
-      this.form.postTypeId = null;
-      this.form.tags = [];
     },
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);

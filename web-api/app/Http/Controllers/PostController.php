@@ -29,8 +29,12 @@ class PostController extends Controller
         try {
             $query = Post::query();
 
-            if ($request->user_id) {
+            if (!is_null($request->user_id)) {
                 $query->where('user_id', $request->user_id);
+            }
+
+            if(!is_null($request->suspended)) {
+                $query->where('suspended', $request->suspended);
             }
 
             $posts = $query->latest()->get();
