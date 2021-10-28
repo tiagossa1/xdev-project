@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Str;
 
 
 class ForgotPasswordController extends Controller
@@ -36,18 +37,20 @@ class ForgotPasswordController extends Controller
 
     public function reset(Request $request)
     {
+        
         $request->validate([
             'token' => 'required',
             'email' => 'required|email',
-            'password' => ['required', 'confirmed'],
+            'password' => ['required'],
         ]);
 
+     
         $status = Password::reset(
             $request->only('email', 'password', 'password_confirmation', 'token'),
             function ($user) use ($request) {
                 $user->forceFill([
                     'password' => Hash::make($request->password),
-                    'remember_token' => Str::random(60),
+                    /*'remember_token' => Str::random(60),*/
                 ])->save();
 
                 $user->tokens()->delete();

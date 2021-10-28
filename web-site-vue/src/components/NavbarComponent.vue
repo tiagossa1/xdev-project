@@ -286,10 +286,11 @@ export default {
       const options = this.options.filter(
         (opt) => this.value.indexOf(opt) === -1
       );
-
+      
       if (criteria) {
+        // console.log(options.name)
         return options.filter(
-          (opt) => opt.toLowerCase().indexOf(criteria) > -1
+          (opt) => opt.name.toLowerCase().indexOf(criteria) > -1
         );
       }
 

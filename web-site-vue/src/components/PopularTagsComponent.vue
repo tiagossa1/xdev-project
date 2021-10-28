@@ -1,6 +1,6 @@
 <template>
-  <b-card-group deck class="mb-3 text-center">
-    <b-card class="popular-card">
+  <b-card-group deck class="mb-3 text-center" >
+    <b-card class="popular-card" :style="{border: '1px solid gray'}">
       <template #header>
         <span class="font-weight-bold">Tags Populares</span>
         <!-- <b-icon-x

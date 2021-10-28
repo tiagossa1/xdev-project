@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card>
+    <b-card :style="{borderRadius: '10px',border: '1px solid gray'}">
       <b-media>
         <template #aside>
           <b-img

@@ -265,25 +265,25 @@ export default {
       let res = null;
       if (!this.v$.$invalid) {
         if (!this.form.email.includes("@edu.atec.pt")) {
-          this.form.email += "@edu.atec.pt";
+          // this.form.email += "@edu.atec.pt";
+        
+
+          res = await userService.register(this.form).catch((err) => {
+            this.showErrorAlert = true;
+            this.formStatus = Object.values(err.response.data.errors)
+              .map((x) => x[0])
+              .toString();
+            this.showAlert();
+          });
+
+          if (res.status === 201) {
+            window.localStorage.setItem(
+              "registerRequest",
+              JSON.stringify(this.form)
+            );
+            window.location.href = "/verification";
+          }
         }
-
-        res = await userService.register(this.form).catch((err) => {
-          this.showErrorAlert = true;
-          this.formStatus = Object.values(err.response.data.errors)
-            .map((x) => x[0])
-            .toString();
-          this.showAlert();
-        });
-
-        if (res.status === 201) {
-          window.localStorage.setItem(
-            "registerRequest",
-            JSON.stringify(this.form)
-          );
-          window.location.href = "/verification";
-        }
-
         // if (res.status === 201) {
         //   this.signIn({
         //     email: this.form.email,
