@@ -1,9 +1,14 @@
 <?php
 
+<<<<<<< Updated upstream
 use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\AuthController;
+=======
+>>>>>>> Stashed changes
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ForgotPasswordController;
 
 /*
 |--------------------------------------------------------------------------
@@ -110,7 +115,6 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('post-types/{id}', 'PostTypeController@update')->middleware('ismoderator');
     Route::delete('post-types/{id}', 'PostTypeController@destroy')->middleware('ismoderator');
 
-    Route::post('image-upload', 'ImageUploadController@store');
     Route::post('get-profile-picture', 'ImageUploadController@getProfilePicture');
 
     Route::get('notifications', 'NotificationController@index');
@@ -134,6 +138,7 @@ Route::get('school-classes/{id}', 'SchoolClassController@show');
 
 Route::get('forbidden-words','ForbiddenWordController@index');
 
-Route::post('forgot-password', [ForgotPasswordController::class, 'forgot'])->name('password.email');
-Route::post('reset-password', [ForgotPasswordController::class, 'reset'])->name('password.reset');
+Route::post('image-upload', 'ImageUploadController@store');
 
+Route::post('forgot-password', [ForgotPasswordController::class, 'forgot'])->name('password.email');
+Route::get('reset-password', [ForgotPasswordController::class, 'reset'])->name('password.reset');

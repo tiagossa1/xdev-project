@@ -38,9 +38,12 @@ class AuthController extends Controller
                         'district_id' => $request['district_id'],
                         'user_type_id' => $request['user_type_id'],
                         'school_class_id' => $request['school_class_id'],
+                        'profile_picture' => $request['profile_picture']
                     ])->sendEmailVerificationNotification();
 
-                    return response()->json(['message' => 'User created, verification email has been sent.'], 201);
+                    $user = User::where('email', $request['email'])->first();
+
+                    return response()->json(['message' => 'Utilizador criado, foi enviado um email de confirmação.', 'user_id' => $user->id], 201);
                 } else {
                     return response(['message' => 'A user cannot be created with higher privileges.'], 400);
                 }

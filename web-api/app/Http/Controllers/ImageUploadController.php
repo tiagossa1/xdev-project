@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use App\Http\Requests\ImageUploadRequest;
@@ -19,10 +20,15 @@ class ImageUploadController extends Controller
     public function store(Request $request)
     {
         try {
-            $user = User::find($request->user_id);
+            $user = User::where('email', $request->email)->first();
+            // $user->refresh();
+
+            if(!$request->hasFile('profile_picture')) {
+                return response()->json(['Profile picture is mandatory.'], 400);
+            }
 
             if (!is_null($user)) {
-                $file_name = time() . '.' . $request->file('profile_picture')->getClientOriginalExtension();
+                //$file_name = time() . '.' . $request->file('profile_picture')->getClientOriginalExtension();
                 $file_name = time() . '.' . $request->profile_picture->getClientOriginalExtension();
                 $request->profile_picture->move(public_path('images'), $file_name);
                 $path = "public/images/" . $file_name;
@@ -54,7 +60,7 @@ class ImageUploadController extends Controller
     {
         $path = dirname(public_path(), 1) . '/' . $request->profile_picture;
         return response()->json(['data' => base64_encode(file_get_contents($path)), 'message' => 'Success']);
-        
+
         // return Response::download($path);
     }
 }

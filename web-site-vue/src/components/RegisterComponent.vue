@@ -213,7 +213,8 @@ import schoolClassService from "../services/schoolClassService";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
 
-const notContainsEduAtecPt = (value) => !value.toLowerCase().includes("@edu.atec.pt");
+const notContainsEduAtecPt = (value) =>
+  !value.toLowerCase().includes("@edu.atec.pt");
 
 export default {
   name: "register-component",
@@ -239,6 +240,7 @@ export default {
         school_class_id: null,
         birth_date: "",
         user_type_id: 1,
+        profile_picture: null,
       },
     };
   },
@@ -263,10 +265,19 @@ export default {
 
     async onSubmit() {
       let res = null;
+      let email = this.form.email;
+
       if (!this.v$.$invalid) {
-        if (!this.form.email.includes("@edu.atec.pt")) {
-          // this.form.email += "@edu.atec.pt";
-        
+        if (!email.includes("@edu.atec.pt")) {
+          email += "@edu.atec.pt";
+        }
+
+        this.form.email = email;
+
+        const reader = new FileReader();
+
+        reader.onloadend = async () => {
+          this.form.profile_picture = reader.result;
 
           res = await userService.register(this.form).catch((err) => {
             this.showErrorAlert = true;
@@ -276,31 +287,47 @@ export default {
             this.showAlert();
           });
 
+          console.log(res);
+
           if (res.status === 201) {
+            // const config = {
+            //   headers: { Authorization: `Bearer ${res.data.token}` },
+            // };
+
+            // let request = new ImageUploadRequest(this.form.email, this.photo);
+
+            // console.log(request);
+
+            // res = await imageUploadService
+            //   .createImageUpload(request)
+            //   .catch((err) => {
+            //     console.log(err.response);
+            //   });
+
+            //   console.log(res);
+
             window.localStorage.setItem(
               "registerRequest",
               JSON.stringify(this.form)
             );
+<<<<<<< Updated upstream
             window.location.href = "/verification";
           }
         }
+=======
+            //window.location.href = "/verification";
+          }
+        };
+
+        // this.form.profile_picture = reader.readAsDataURL(this.photo);
+
+>>>>>>> Stashed changes
         // if (res.status === 201) {
         //   this.signIn({
         //     email: this.form.email,
         //     password: this.form.password,
         //   });
 
-        //   const config = {
-        //     headers: { Authorization: `Bearer ${res.data.token}` },
-        //   };
-
-        //   let request = new ImageUploadRequest(res.data.user.id, this.photo);
-
-        //   res = await imageUploadService
-        //     .createImageUpload(config, request)
-        //     .catch((err) => {
-        //       console.log(err.response);
-        //     });
         // }
       } else {
         this.showErrorAlert = true;

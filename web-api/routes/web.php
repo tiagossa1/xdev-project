@@ -18,6 +18,6 @@ use App\Http\Controllers\ForgotPasswordController;
 //     return view('welcome');
 // });
 
-Route::post('forgot-password', [ForgotPasswordController::class, 'forgot'])->name('password.email');
-
-Route::get('reset-password/', [ForgotPasswordController::class, 'reset'])->name('password.reset');
+Route::get('/recover-password/{email}/{token}', function($email, $token) {
+    return view('recover-password', ['email' => $email, 'token' => $token]);
+});
