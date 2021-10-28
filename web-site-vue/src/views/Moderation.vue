@@ -1,15 +1,50 @@
 <template>
   <div class="w-75 m-auto" style="margin-bottom: 55px">
-    <h5 class="mb-3 mt-4 font-weight-bold">
-      {{ getGrettingsByTime }}, {{ this.user.name }}!
-    </h5>
-    <notifications-component
-      :notifications="notifications"
-    ></notifications-component>
-    <hr />
-    <user-management-component v-if="!isxSheriff"></user-management-component>
-    <feedback-management-component v-if="!isxSheriff"></feedback-management-component>
-    <tags-management-component v-if="!isxSheriff"></tags-management-component>
+    <transition
+      name="fade"
+      enter-active-class="fadeInLeft"
+      leave-active-class="fadeOutRight"
+    >
+      <div v-if="show">
+        <h5 class="mb-3 mt-4 font-weight-bold">
+          {{ getGrettingsByTime }}, {{ this.user.name }}!
+        </h5>
+        <notifications-component
+          :notifications="notifications"
+        ></notifications-component>
+        <hr />
+      </div>
+    </transition>
+
+    <transition
+      name="fade"
+      enter-active-class="fadeInLeft"
+      leave-active-class="fadeOutRight"
+    >
+      <user-management-component
+        v-if="!isSheriff && show"
+      ></user-management-component>
+    </transition>
+
+    <transition
+      name="fade"
+      enter-active-class="fadeInLeft"
+      leave-active-class="fadeOutRight"
+    >
+      <feedback-management-component
+        v-if="!isSheriff && show"
+      ></feedback-management-component>
+    </transition>
+
+    <transition
+      name="fade"
+      enter-active-class="fadeInLeft"
+      leave-active-class="fadeOutRight"
+    >
+      <tags-management-component
+        v-if="!isSheriff && show"
+      ></tags-management-component>
+    </transition>
   </div>
 </template>
 
@@ -19,10 +54,10 @@ import { mapGetters } from "vuex";
 import UserManagementComponent from "../components/moderation/UserManagementComponent.vue";
 import NotificationsComponent from "../components/moderation/NotificationsComponent.vue";
 import FeedbackManagementComponent from "../components/moderation/FeedbackManagementComponent.vue";
-import TagsManagementComponent from '../components/moderation/TagsManagementComponent.vue';
+import TagsManagementComponent from "../components/moderation/TagsManagementComponent.vue";
 
 import notificationService from "../services/notificationService";
-import userService from '../services/userService';
+import userService from "../services/userService";
 
 export default {
   name: "Moderation",
@@ -30,7 +65,7 @@ export default {
     NotificationsComponent,
     UserManagementComponent,
     FeedbackManagementComponent,
-    TagsManagementComponent
+    TagsManagementComponent,
   },
   computed: {
     ...mapGetters({
@@ -52,16 +87,19 @@ export default {
   data() {
     return {
       notifications: [],
-      isxSheriff: false
+      isSheriff: false,
+      show: false,
     };
   },
   async mounted() {
-    this.isxSheriff = await userService.isSheriff();
-    
+    this.isSheriff = await userService.isSheriff();
+
     let notifications = await notificationService.getNotifications();
     this.notifications = notifications.filter(
       (n) => n.type.toLowerCase() === "newreport"
     );
+
+    this.show = true;
   },
 };
 </script>

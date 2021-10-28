@@ -52,26 +52,28 @@ export default {
       description: { required },
     };
   },
-  async created() {
-    if (this.authenticated) {
-      let feedbackTypes = await feedbackTypeService.getFeedbackTypes();
-      this.feedbackTypes = feedbackTypes;
-      this.feedbackTypesSelect = feedbackTypes.map((x) => ({
-        value: x.id,
-        text: x.name,
-      }));
-
-      this.feedbackTypesSelect.unshift({
-        value: null,
-        text: "Selecione uma opção...",
-        disabled: true,
-      });
-    }
-  },
   computed: {
     ...mapGetters({
       authenticated: "auth/authenticated",
     }),
+  },
+  watch: {
+    async authenticated(newValue) {
+      if (newValue) {
+        let feedbackTypes = await feedbackTypeService.getFeedbackTypes();
+        this.feedbackTypes = feedbackTypes;
+        this.feedbackTypesSelect = feedbackTypes.map((x) => ({
+          value: x.id,
+          text: x.name,
+        }));
+
+        this.feedbackTypesSelect.unshift({
+          value: null,
+          text: "Selecione uma opção...",
+          disabled: true,
+        });
+      }
+    },
   },
   methods: {
     show() {
@@ -89,11 +91,11 @@ export default {
         if (res.status === 201) {
           this.description = "";
           this.selected = "";
-          
+
           this.$swal({
             icon: "success",
             position: "bottom-right",
-            title: "Feedback criado.",
+            title: "Feedback criado!",
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,

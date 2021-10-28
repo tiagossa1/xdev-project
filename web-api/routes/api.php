@@ -23,7 +23,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('is-sheriff', 'AuthController@isSheriff');
     Route::get('get-user', 'AuthController@getUserByToken');
 
-    Route::get('users/favorite_posts/{id}', 'UserController@getFavoritePosts');
+    Route::get('users/favorite-posts/{id}', 'UserController@getFavoritePosts');
 
     Route::get('feedbacks', 'FeedbackController@index')->middleware('ismoderator');
     Route::get('feedbacks/{id}', 'FeedbackController@show')->middleware('ismoderator');

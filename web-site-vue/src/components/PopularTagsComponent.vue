@@ -1,14 +1,14 @@
 <template>
   <b-card-group deck class="mb-3 text-center">
-    <b-card :style="cardStyle">
-      <template #header >
+    <b-card class="popular-card">
+      <template #header>
         <span class="font-weight-bold">Tags Populares</span>
-        <b-icon-x
+        <!-- <b-icon-x
           @click="clearFilter"
           v-if="showClearButton"
           style="cursor: pointer"
           class="text-danger align-middle"
-        ></b-icon-x>
+        ></b-icon-x> -->
       </template>
       <b-card-text>
         <div
@@ -18,11 +18,8 @@
           {{ filteringTag }}
         </div>
         <b-badge
-        
           v-for="popularTag in popularTags"
-          @click="emitEventForSearch(popularTag)"
-          href="#"
-          class="m-2 text-white p-2"
+          class="m-2 text-white p-2 no-select"
           pill
           variant="secondary"
           :key="popularTag.name"
@@ -37,28 +34,28 @@
 <script>
 import tagService from "../services/tagService";
 export default {
-  name: "popularTags-component",
+  name: "popular-tags-component",
   data() {
     return {
-      cardStyle:{
-        backgroundColor: '#dee2e6'
+      cardStyle: {
+        backgroundColor: "#dee2e6",
       },
       popularTags: null,
       filteringBy: [],
-      showClearButton: false,
+      // showClearButton: false,
     };
   },
   async created() {
     this.popularTags = await tagService.getTagsByCount(5);
   },
   methods: {
-    emitEventForSearch(tabObj) {
-      if (!this.filteringBy.includes(tabObj.name)) {
-        this.filteringBy.push(tabObj.name);
-        this.$root.$emit("tag-search-navbar", [tabObj.id]);
-        this.showClearButton = true;
-      }
-    },
+    // emitEventForSearch(tabObj) {
+    //   if (!this.filteringBy.includes(tabObj.name)) {
+    //     this.filteringBy.push(tabObj.name);
+    //     this.$root.$emit("tag-search-navbar", [tabObj.id]);
+    //     this.showClearButton = true;
+    //   }
+    // },
     clearFilter() {
       this.filteringBy = [];
       this.$root.$emit("tag-search-navbar", []);
@@ -68,5 +65,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.popular-card {
+  border-radius: 10px;
+  /* border: 1px solid gray; */
+}
 </style>

@@ -2,9 +2,7 @@
   <b-card-group deck class="mb-3 text-center">
     <b-card
       :style="{
-        backgroundColor: '#dee2e6',
-        'border-radius': '25px',
-        border: '2px solid gray',
+        'border-radius': '10px',
       }"
     >
       <template #header>
@@ -18,9 +16,9 @@
                 Comentou <b>{{ comment.description }}</b
                 ><br />
                 <b-icon class="mr-1" icon="arrow-return-right"></b-icon>
-                <small class="font-italic font-weight-bold"
-                  >{{comment.post.title}}</small
-                >
+                <small class="font-italic font-weight-bold">{{
+                  comment.post.title
+                }}</small>
               </span>
               <hr />
             </b-col>
@@ -28,13 +26,13 @@
         </div>
 
         <div v-if="recentFeed.likes.length > 0">
-          <b-row v-for="like in recentFeed.likes" :key="like">
+          <b-row v-for="like in recentFeed.likes" :key="like.id">
             <b-col class="text-left">
               <span>
-                Gostou do post <br/>
+                Gostou do post <br />
 
                 <b-icon icon="heart-fill" variant="danger"></b-icon>
-                <b> {{like.title}}</b>
+                <b> {{ like.title }}</b>
               </span>
               <hr />
             </b-col>

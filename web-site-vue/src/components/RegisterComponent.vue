@@ -256,9 +256,6 @@ export default {
       confirmPassword: { required, sameAs: sameAs(this.form.password) },
     };
   },
-  mounted() {
-    console.log("Register component mounted.");
-  },
   methods: {
     ...mapActions({
       signIn: "auth/signIn",

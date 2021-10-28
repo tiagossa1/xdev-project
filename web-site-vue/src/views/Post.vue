@@ -3,10 +3,20 @@
     <b-container>
       <b-row>
         <b-col>
-          <div class="buttons m-3">
-            <b-button class="text-white" variant="primary" v-b-modal.modal-1
-              >Criar Post</b-button
+          <div class="buttons mt-3 mb-3">
+            <transition
+              name="fade"
+              enter-active-class="fadeInLeft"
+              leave-active-class="fadeOutRight"
             >
+              <b-button
+                v-if="show"
+                class="text-white"
+                variant="primary"
+                v-b-modal.modal-1
+                >Criar Post</b-button
+              >
+            </transition>
 
             <b-modal
               class="w-75"
@@ -27,16 +37,19 @@
                 </b-form-group>
 
                 <b-form-group label="Insira a descrição:" label-for="textarea">
-                  <quill-editor ref="myQuillEditor" v-model="form.description" size='10' >
+                  <quill-editor
+                    ref="myQuillEditor"
+                    v-model="form.description"
+                    size="10"
+                  >
                   </quill-editor>
                 </b-form-group>
 
-
-                <b-form-group 
+                <b-form-group
                   label="Insira o tipo de post:"
                   label-for="postType"
                 >
-                  <b-form-select 
+                  <b-form-select
                     id="postType"
                     v-model="form.postTypeId"
                     :options="postTypesSelect"
@@ -107,49 +120,72 @@
               </b-form>
             </b-modal>
 
-            <b-dropdown class="ml-2" id="dropdown-1" :text="filterSelected">
-              <b-dropdown-item disabled value="0"
-                >Escolha o tipo de post</b-dropdown-item
+            <transition
+              name="fade"
+              enter-active-class="fadeInLeft"
+              leave-active-class="fadeOutRight"
+            >
+              <b-dropdown
+                v-if="show"
+                class="ml-2"
+                id="dropdown-1"
+                :text="filterSelected"
               >
-              <b-dropdown-item
-                @click="onFilterClick(postType)"
-                v-for="postType in postTypes"
-                :key="postType.id"
-              >
-                {{ postType.name }}
-              </b-dropdown-item>
-            </b-dropdown>
+                <b-dropdown-item disabled value="0"
+                  >Escolha o tipo de post</b-dropdown-item
+                >
+                <b-dropdown-item
+                  @click="onFilterClick(postType)"
+                  v-for="postType in postTypes"
+                  :key="postType.id"
+                >
+                  {{ postType.name }}
+                </b-dropdown-item>
+              </b-dropdown>
+            </transition>
 
-            <b-icon
-              v-if="filterMode"
-              class="ml-2 align-middle text-danger"
-              style="cursor: pointer"
-              icon="x"
-              font-scale="2"
-              @click="onClearFilter"
-            ></b-icon>
+            <transition
+              name="fade"
+              enter-active-class="fadeInLeft"
+              leave-active-class="fadeOutRight"
+            >
+              <b-icon
+                v-if="filterMode"
+                class="ml-2 align-middle text-danger"
+                style="cursor: pointer"
+                icon="x"
+                font-scale="2"
+                @click="onClearFilter"
+              ></b-icon>
+            </transition>
           </div>
         </b-col>
       </b-row>
       <b-row class="w-100">
         <b-col sm="9">
           <template v-if="posts.length > 0">
-          <transition-group name="fade" tag="div">
-            <div v-for="post in posts" :key="post.id">
-              <post-component
-                @on-post-deleted="onPostDeleted"
-                @on-comment-deleted="onCommentDeleted"
-                :post="post"
-              ></post-component>
-            </div>
-          </transition-group>
+            <transition-group name="fadeRight" tag="div">
+              <div v-for="post in posts" :key="post.id">
+                <post-component
+                  @on-post-deleted="onPostDeleted"
+                  @on-comment-deleted="onCommentDeleted"
+                  :post="post"
+                ></post-component>
+              </div>
+            </transition-group>
           </template>
           <template v-else>
             <h5>Não há posts para mostrar.</h5>
           </template>
         </b-col>
         <b-col class="ml-4">
-          <popularTags-component></popularTags-component>
+          <transition
+            name="fade"
+            enter-active-class="fadeInLeft"
+            leave-active-class="fadeOutRight"
+          >
+            <popular-tags-component v-if="show"></popular-tags-component>
+          </transition>
         </b-col>
       </b-row>
     </b-container>
@@ -173,11 +209,19 @@ export default {
   name: "Post",
   components: { PostComponent, PopularTagsComponent },
   async mounted() {
-    this.posts = await postService
-      .getPosts()
-      .catch((err) => console.log(err.response));
+    this.posts = await postService.getPosts().catch((err) => {
+      this.$swal({
+        icon: "error",
+        position: "bottom-right",
+        title: err.response,
+        toast: true,
+        showCloseButton: true,
+        showConfirmButton: false,
+        timer: 3500,
+      });
+    });
 
-    this.posts = this.posts.filter(x => !x.suspended)
+    this.posts = this.posts.filter((x) => !x.suspended);
     this.originalPosts = this.posts;
     let postTypes = await postService.getPostTypes();
 
@@ -197,11 +241,15 @@ export default {
 
     this.$root.$on("tag-search-navbar", (tagIds) => {
       if (tagIds.length > 0) {
-        this.posts = this.originalPosts.filter(p => p.tags.some(t => tagIds.includes(t.id)));
+        this.posts = this.originalPosts.filter((p) =>
+          p.tags.some((t) => tagIds.includes(t.id))
+        );
       } else {
         this.posts = this.originalPosts;
       }
     });
+
+    this.show = true;
   },
   computed: {
     availableOptions() {
@@ -243,6 +291,7 @@ export default {
         suspended: 0,
         tags: [],
       },
+      show: false,
       filterMode: false,
     };
   },
@@ -264,42 +313,39 @@ export default {
       );
 
       let res = await postService.create(request).catch((err) => {
-          this.$swal({
-            icon: "error",
-            position: "bottom-right",
-            title: err.response,
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
-          });
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
+        });
 
-        this.form.title = this.form.description = this.form.postTypeId = ""
-        this.form.postTypeId = null
-        this.form.tags = []
+        this.form.title = this.form.description = this.form.postTypeId = "";
+        this.form.postTypeId = null;
+        this.form.tags = [];
       });
 
       let newPost = new Post(res.data.data);
 
       if (res.status === 201) {
         this.posts.unshift(newPost);
-          this.$swal({
-            icon: "success",
-            position: "bottom-right",
-            title: "Post criado.",
-            toast: true,
-            showCloseButton: true,
-            showConfirmButton: false,
-            timer: 3500,
-          });
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: "Post criado.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
+        });
       }
 
-      this.form.title = this.form.description = this.form.postTypeId = ""
-      this.form.postTypeId = null
-      this.form.tags = []
-      
-      
-
+      this.form.title = this.form.description = this.form.postTypeId = "";
+      this.form.postTypeId = null;
+      this.form.tags = [];
     },
     onPostDeleted(id) {
       this.posts = this.posts.filter((p) => p.id != id);

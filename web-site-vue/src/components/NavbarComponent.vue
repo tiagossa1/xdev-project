@@ -50,7 +50,7 @@
                 <template #button-content>
                   <b-icon icon="search"></b-icon> Filtrar por tags
                 </template>
-                <b-dropdown-form @submit.stop.prevent="() => {}">
+                <b-dropdown-form>
                   <b-form-group
                     label="Procurar tag"
                     label-for="tag-search-input"
@@ -97,48 +97,58 @@
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
         <template v-if="authenticated">
-          <b-nav-item-dropdown left>
+          <div class="align-self-center mr-2" v-b-toggle.sidebar-1>
+            <b-badge
+              v-if="notifications.length > 0"
+              class="mr-1"
+              style="vertical-align: text-top"
+              pill
+              variant="light"
+            >
+              {{ notifications.length }}
+            </b-badge>
+            <b-icon
+              :class="notifications.length > 0 ? 'text-danger' : 'text-white'"
+              style="cursor: pointer"
+              icon="bell"
+              font-scale="2"
+            ></b-icon>
+          </div>
+          <b-nav-item-dropdown right>
             <template #button-content>
+              <b-avatar
+                :src="'data:image/jpeg;base64,' + user.profile_picture"
+                :style="{ border: '3px solid ' + user.user_type.hexColorCode }"
+              >
+              </b-avatar>
               <b-badge
-                class="mr-2 p-1"
+                class="ml-2 p-1"
                 :style="{
                   backgroundColor: user.user_type.hexColorCode,
                 }"
               >
                 {{ user.name }}
               </b-badge>
-              <b-avatar
-                :src="'data:image/jpeg;base64,' + user.profile_picture"
-                :style="{ border: '3px solid ' + user.user_type.hexColorCode }"
-              >
-              </b-avatar>
             </template>
             <b-dropdown-item v-if="notifications.length > 0" disabled
               >Tem {{ notifications.length }} notificações.
             </b-dropdown-item>
-            <b-dropdown-item to="/profile">O meu perfil</b-dropdown-item>
-            <b-dropdown-item to="/moderation" v-if="this.isModerator"
-              >Moderação</b-dropdown-item
+            <b-dropdown-item to="/profile">
+              <b-icon-person-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-person-fill>
+              O meu perfil</b-dropdown-item
             >
-            <!-- <b-dropdown-item @click="showModal()"
-              >Configurações</b-dropdown-item
-            > -->
-            <b-dropdown-item @click="showFeedbackModal()"
-              >Feedback</b-dropdown-item
+            <b-dropdown-item to="/moderation" v-if="this.isModerator">
+              <b-icon-exclamation-circle-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-exclamation-circle-fill>
+              Moderação</b-dropdown-item
             >
-            <b-dropdown-item @click.prevent="signOut">Sair</b-dropdown-item>
+            <b-dropdown-item @click="showFeedbackModal()">
+              <b-icon-chat-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-chat-fill>
+              Feedback</b-dropdown-item
+            >
+            <b-dropdown-item @click.prevent="signOut">
+              <b-icon-arrow-left class="mr-1 align-middle" font-scale="0.9"></b-icon-arrow-left> Sair</b-dropdown-item
+            >
           </b-nav-item-dropdown>
-          <div class="align-self-center" v-b-toggle.sidebar-1>
-            <b-icon
-              class="text-white"
-              style="cursor: pointer"
-              icon="bell"
-              font-scale="2"
-            ></b-icon>
-            <b-badge class="ml-1" pill variant="light">
-              {{ notifications.length }}
-            </b-badge>
-          </div>
           <b-sidebar
             id="sidebar-1"
             title="Notificações"
@@ -148,43 +158,40 @@
             shadow
           >
             <template v-if="notifications.length > 0">
-              <transition-group name="fade" tag="div">
-                <div
-                  v-for="(notification, index) in notifications"
-                  :key="notification.id"
-                >
-                  <b-card no-body class="text-center p-4">
-                    <b-card-text>
-                      <span
-                        :style="{
-                          color: notification.user.userType.hexColorCode,
-                        }"
-                        >{{ notification.user.name }}</span
-                      >
-                      criou um novo post sobre
-                      {{ notification.tags.map((t) => t.name).join(", ") }}!
-                      <br />
-                      <!-- <b-button v-b-modal.modal-post-notification>Show Modal</b-button> -->
-                      <b-link v-b-modal.modal-post-notification href=""
-                        >Ver</b-link
-                      >
-                      <b-modal
-                        id="modal-post-notification"
-                        ok-only
-                        @ok="removeNotification(index)"
-                        @close="removeNotification(index)"
-                        size="xl"
-                        title="Novo Post"
-                      >
-                        <post-component
-                          class="w-75 m-auto"
-                          :post="notification"
-                        ></post-component>
-                      </b-modal>
-                    </b-card-text>
-                  </b-card>
-                </div>
-              </transition-group>
+              <div
+                v-for="(notification, index) in notifications"
+                :key="notification.id"
+              >
+                <b-card no-body class="text-center p-4">
+                  <b-card-text>
+                    <span
+                      :style="{
+                        color: notification.user.userType.hexColorCode,
+                      }"
+                      >{{ notification.user.name }}</span
+                    >
+                    criou um novo post sobre
+                    {{ notification.tags.map((t) => t.name).join(", ") }}!
+                    <br />
+                    <b-link v-b-modal.modal-post-notification href=""
+                      >Ver</b-link
+                    >
+                    <b-modal
+                      id="modal-post-notification"
+                      ok-only
+                      @ok="removeNotification(index)"
+                      @close="removeNotification(index)"
+                      size="xl"
+                      title="Novo Post"
+                    >
+                      <post-component
+                        class="w-75 m-auto"
+                        :post="notification"
+                      ></post-component>
+                    </b-modal>
+                  </b-card-text>
+                </b-card>
+              </div>
             </template>
             <template v-else>
               <table class="h-100 w-100">
@@ -241,15 +248,10 @@ export default {
       search: "",
       notifications: [],
       notificationCounter: 0,
-      isModerator: false,
     };
   },
   async created() {
     if (this.authenticated) {
-      const moderators = [2, 3, 4];
-      const userTypeId = this.$store.getters["auth/user"].user_type.id;
-      this.isModerator = moderators.includes(userTypeId);
-
       let tags = await tagService.getTags();
       this.tags = tags;
       this.options = tags;
@@ -305,6 +307,11 @@ export default {
     isHome() {
       return this.$route.name === "Home";
     },
+    isModerator() {
+      const moderators = [2, 3, 4];
+      const userTypeId = this.$store.getters["auth/user"].user_type.id;
+      return moderators.includes(userTypeId);
+    },
   },
   methods: {
     ...mapActions({
@@ -327,9 +334,6 @@ export default {
       let notifications = await notificationService.getNotifications();
       return notifications.filter((n) => n.type.toLowerCase() === "newpost");
     },
-    // showModal() {
-    //   this.$refs.modalComponent.show();
-    // },
     showFeedbackModal() {
       this.$refs.feedbackComponent.show();
     },
@@ -339,16 +343,6 @@ export default {
       this.search = "";
 
       this.emitEventToSearchByTags();
-    },
-    emitEventToSearchByTags() {
-      if (this.value.length == 0) {
-        this.$root.$emit("tag-search-navbar", []);
-      } else {
-        let tagIds = this.tags
-          .filter((t) => this.value.includes(t.name))
-          .map((t) => t.id);
-        this.$root.$emit("tag-search-navbar", tagIds);
-      }
     },
     onRemove(tag) {
       const index = this.value.indexOf(tag);

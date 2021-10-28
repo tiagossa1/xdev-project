@@ -2,44 +2,73 @@
   <b-container fluid>
     <b-row>
       <b-col class="p-5" sm="3">
-        <user-card-component
-          :userInfo="userInfo"
-          :postCount="posts.length"
-        ></user-card-component>
+        <transition
+          name="fade"
+          enter-active-class="fadeInLeft"
+          leave-active-class="fadeOutRight"
+        >
+          <user-card-component
+            v-if="show"
+            :userInfo="userInfo"
+            :postCount="posts.length"
+          ></user-card-component>
+        </transition>
       </b-col>
 
       <b-col class="p-5" sm="6">
-        <b-tabs content-class="mt-3">
-          <b-tab title="Posts" active>
-            <div v-if="posts.length > 0">
-              <div v-for="post in posts" :key="post.id">
-                <post-component
-                  @on-post-deleted="onPostDeleted"
-                  :post="post"
-                ></post-component>
+        <transition
+          name="fade"
+          enter-active-class="fadeInLeft"
+          leave-active-class="fadeOutRight"
+        >
+          <b-tabs v-if="show" pills card class="bg-white">
+            <b-tab class="bg-white" title="Posts" active>
+              <div v-if="posts.length > 0">
+                <div v-for="post in posts" :key="post.id">
+                  <post-component
+                    @on-post-deleted="onPostDeleted"
+                    :post="post"
+                  ></post-component>
+                </div>
               </div>
-            </div>
 
-            <div v-else>
-              <span>Não tem posts</span>
-            </div>
-          </b-tab>
-
-          <b-tab v-if="!paramId" title="Guardados">
-            <div v-if="favoritePosts.length > 0">
-              <div v-for="post in favoritePosts" :key="post.id">
-                <post-component :post="post"></post-component>
+              <div v-else>
+                <h5 class="text-center">
+                  Não criou nenhum post. Crie um usando o botão "Criar post" na
+                  página inicial.
+                </h5>
               </div>
-            </div>
-            <div v-else>
-              <h2 class="text-center">Não tem posts guardados</h2>
-            </div>
-          </b-tab>
-        </b-tabs>
+            </b-tab>
+
+            <b-tab v-if="!paramId" class="bg-white" title="Guardados">
+              <div v-if="favoritePosts.length > 0">
+                <div v-for="post in favoritePosts" :key="post.id">
+                  <post-component :post="post"></post-component>
+                </div>
+              </div>
+              <div v-else>
+                <h5 class="text-center">
+                  Não há posts guardados. Guarde clicando no botão "Guardar"
+                  num post.
+                </h5>
+              </div>
+            </b-tab>
+          </b-tabs>
+        </transition>
       </b-col>
 
-      <b-col class="p-5" sm="3">
-        <recent-feed :recentFeed="recentFeed"></recent-feed>
+      <b-col
+        v-if="recentFeed.comments.length > 0 || recentFeed.likes.length > 0"
+        class="p-5"
+        sm="3"
+      >
+        <transition
+          name="fade"
+          enter-active-class="fadeInLeft"
+          leave-active-class="fadeOutRight"
+        >
+          <recent-feed v-if="show" :recentFeed="recentFeed"></recent-feed>
+        </transition>
       </b-col>
     </b-row>
   </b-container>
@@ -74,6 +103,7 @@ export default {
       favoritePosts: Post,
       recentFeed: { comments: [], likes: [] },
       posts: Post,
+      show: false,
     };
   },
   async created() {
@@ -103,6 +133,8 @@ export default {
         this.$store.getters["auth/user"].id
       );
     }
+
+    this.show = true;
   },
   methods: {
     onPostDeleted(id) {

@@ -1,20 +1,5 @@
 <template>
-  <b-container
-    :style="
-      !post.suspended
-        ? {
-            border: '2px solid gray',
-            'border-radius': '25px',
-            backgroundColor: '#dee2e6',
-          }
-        : {
-            border: '2px solid red ',
-            'border-radius': '25px',
-            backgroundColor: '#dee2e6',
-          }
-    "
-    class="bv-example-row p-3 ml-4 mb-4 x"
-  >
+  <b-container :style="getPostStyle" class="bv-example-row p-3 mb-4 x">
     <b-row class="ml-2 mb-3">
       <b-col>
         <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
@@ -150,8 +135,8 @@
       </b-col>
       <b-col
         v-if="!post.suspended"
+        class="cursor-pointer"
         cols="3"
-        style="cursor: pointer"
         @click="onSave"
       >
         <p class="h5">
@@ -189,7 +174,6 @@
           >
             Mostrar {{ post.comments.length }} comentários
             <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
-            <!-- <b-icon-arrow-down></b-icon-arrow-down -->
           </p>
         </a>
 
@@ -266,6 +250,15 @@ export default {
       modalVisible: false,
     };
   },
+  computed: {
+    getPostStyle() {
+      return {
+        borderRadius: "10px",
+        backgroundColor: "white",
+        border: this.post.suspended === 1 ? "1px solid red" : "1px solid gray",
+      };
+    },
+  },
   methods: {
     async getPostTypes() {
       let postTypes = await postService.getPostTypes();
@@ -298,9 +291,17 @@ export default {
         this.post.usersSaved
       );
 
-      await postService
-        .update(request)
-        .catch((err) => console.log(err.response));
+      await postService.update(request).catch((err) => {
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 3500,
+        });
+      });
 
       this.liked = !this.liked;
     },
