@@ -105,8 +105,6 @@ export default {
       this.$emit("on-deleted", eventBody);
     },
     async onOkReportModal(bvModalEvt) {
-      bvModalEvt.preventDefault();
-
       let request = {};
       let okRequest = false;
       let alertMsg = "";
@@ -172,7 +170,11 @@ export default {
           timer: 10000,
         });
 
+        this.reportComment = "";
+
         this.$refs["modal-report"].hide();
+      } else {
+        bvModalEvt.preventDefault();
       }
     },
     onEdit() {

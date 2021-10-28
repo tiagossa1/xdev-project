@@ -46,14 +46,14 @@ class NewPost extends Notification implements ShouldQueue
         ];
     }
 
-    public function toDatabase($notifiable)
-    {
-        info("This is the current notification ID, it's generated right here before inserting to database");
-        info($this->id);
-        return [
-            'id'     =>  $this->id,
-            'message' => 'Notification message',
+    // public function toDatabase($notifiable)
+    // {
+    //     info("This is the current notification ID, it's generated right here before inserting to database");
+    //     info($this->id);
+    //     return [
+    //         'id'     =>  $this->id,
+    //         'message' => 'Notification message',
 
-        ];
-    }
+    //     ];
+    // }
 }

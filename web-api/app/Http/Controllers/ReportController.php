@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\ReportCreated;
-use App\Http\Requests\CreateReportRequest;
-use App\Http\Requests\ReportRequest;
-use App\Http\Requests\UpdateReportRequest;
-use App\Notifications\NewReport;
-use App\Report;
 use App\Post;
 use App\User;
 use Exception;
+use App\Report;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use App\Events\ReportCreated;
+use App\Notifications\NewReport;
+use App\Http\Requests\ReportRequest;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\CreateReportRequest;
+use App\Http\Requests\UpdateReportRequest;
 use Illuminate\Support\Facades\Notification;
 
 class ReportController extends Controller
@@ -55,12 +56,10 @@ class ReportController extends Controller
                 $report->comments()->sync($request->input('comments'));
 
             // isModerator, isSheriff and isFromTheSameClass are called scopes. They are declared on User.php (User model file).
-            $moderators = User::isModerator()->get();
+            $moderators = User::isModerator()->where('id', '<>', Auth::user()->id)->get();
 
             $ownerSchoolClass = Post::find($request->post_id)->user->school_class->id;
             $sheriffs = User::isSheriff()->isFromTheSameClass($ownerSchoolClass)->get();
-
-            //return response()->json(['sheriff' => $sheriffs, 'postOwner' => $ownerSchoolClass]);
 
             if(!is_null($moderators)) {
                 Notification::send($moderators, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));

@@ -15,6 +15,7 @@ class PostCreated implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public $post;
+    // public $notification;
 
     /**
      * Create a new event instance.
@@ -23,6 +24,7 @@ class PostCreated implements ShouldBroadcast
      */
     public function __construct($post)
     {
+        // $this->notification = $notification;
         $this->post = $post;
     }
 

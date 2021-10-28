@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PostCreated;
-use App\ForbiddenWord;
-use App\Http\Requests\UpdatePostRequest;
 use App\Post;
 use App\User;
-use App\Utilities\StringUtility;
 use Exception;
+use App\ForbiddenWord;
+use App\Events\PostCreated;
 use Illuminate\Http\Request;
 use App\Notifications\NewPost;
+use App\Utilities\StringUtility;
 use Illuminate\Support\Facades\DB;
 use App\Notifications\UpdateReport;
 use App\Http\Requests\CreatePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 
@@ -105,8 +105,12 @@ class PostController extends Controller
                 })->get();
 
                 if (!is_null($users) || $users->length > 0) {
-                    $newPostNotification = new NewPost(Post::find($post->id));
-                    Notification::send($users, $newPostNotification);
+                    // $post = Post::find($post->id);
+
+                    // TODO: Mandar o post e a notificação para ser marcada como lida!
+                    // FIXME: Notification não estava a funcionar. Call to undefined method App\Post::via(), 500.
+                    // $notification = new NewPost($post);
+                    // Notification::send($users, Post::find($post->id));
 
                     event(new PostCreated(Post::find($post->id)));
                 }
@@ -117,7 +121,7 @@ class PostController extends Controller
                 ], 201);
             }
                 return response()->json([
-                    'message' => 'Titulo ou descrição com palavra proibida'
+                    'message' => 'O Titulo ou a descrição contem palavras proibidas.'
                 ], 400);
 
         } catch (Exception $exception) {
