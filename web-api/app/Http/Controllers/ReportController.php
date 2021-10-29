@@ -96,8 +96,14 @@ class ReportController extends Controller
     public function show($id)
     {
         try {
+            $report = Report::find($id);
+
+            if(is_null($report)){
+                return response()->json(['message' => "Report not found!"], 404);
+            }
+
             return response()->json([
-                'data' => Report::find($id),
+                'data' => $report,
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

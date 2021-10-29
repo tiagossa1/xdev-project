@@ -38,6 +38,10 @@ class UserController extends Controller
     {
         try {
             $user = User::find($id);
+
+            if(is_null($user)){
+                return response()->json(['message' => "User not found!"], 404);
+            }
             return response()->json([
                 'data' => $user,
                 'message' => 'Success'

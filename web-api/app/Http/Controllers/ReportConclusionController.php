@@ -60,8 +60,14 @@ class ReportConclusionController extends Controller
     public function show($id)
     {
         try {
+            $reportConclusion = ReportConclusion::find($id);
+
+            if(is_null($reportConclusion)){
+                return response()->json(['message' => "ReportConclusion not found!"], 404);
+            }
+
             return response()->json([
-                'data' => ReportConclusion::find($id),
+                'data' => $reportConclusion,
                 'message' => 'Success'
             ], 200);
 

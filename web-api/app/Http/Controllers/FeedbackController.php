@@ -57,6 +57,12 @@ class FeedbackController extends Controller
     public function show($id)
     {
         try {
+            $feedback = Feedback::find($id);
+
+            if(is_null($feedback)){
+                return response()->json(['message' => "Feedback not found!"], 404);
+            }
+
             return response()->json([
                 'data' => Feedback::find($id),
                 'message' => 'Success',

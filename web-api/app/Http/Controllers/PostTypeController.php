@@ -59,8 +59,14 @@ class PostTypeController extends Controller
     public function show($id)
     {
         try {
+            $postType = PostType::find($id);
+
+            if(is_null($postType)){
+                return response()->json(['message' => "Comment not found!"], 404);
+            }
+
             return response()->json([
-                'data' => PostType::find($id),
+                'data' => $postType,
                 'message' => 'Success'
             ], 200);
 

@@ -58,8 +58,14 @@ class UserTypeController extends Controller
     public function show($id)
     {
         try {
+            $userType = UserType::find($id);
+
+            if(is_null($userType)){
+                return response()->json(['message' => "UserType not found!"], 404);
+            }
+
             return response()->json([
-                'data' => UserType::find($id),
+                'data' => $userType,
                 'message' => 'Success'
             ], 200);
 

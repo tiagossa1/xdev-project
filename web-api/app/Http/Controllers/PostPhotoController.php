@@ -54,8 +54,14 @@ class PostPhotoController extends Controller
     public function show($id)
     {
         try {
+            $postPhoto = PostPhoto::find($id);
+
+            if(is_null($postPhoto)){
+                return response()->json(['message' => "Comment not found!"], 404);
+            }
+
             return response()->json([
-                'data' => PostPhoto::find($id),
+                'data' => $postPhoto,
                 'message' => 'Success'
             ], 200);
 

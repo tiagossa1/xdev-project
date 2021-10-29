@@ -59,8 +59,14 @@ class SchoolClassController extends Controller
     public function show($id)
     {
         try {
+            $schoolClass = SchoolClass::find($id);
+
+            if(is_null($schoolClass)){
+                return response()->json(['message' => "SchoolClass not found!"], 404);
+            }
+
             return response()->json([
-                'data' => SchoolClass::find($id),
+                'data' => $schoolClass,
                 'message' => 'Success'
             ], 200);
 

@@ -59,8 +59,14 @@ class DistrictController extends Controller
     public function show($id)
     {
         try {
+            $district = District::find($id);
+
+            if(is_null($district)){
+                return response()->json(['message' => "District not found!"], 404);
+            }
+
             return response()->json([
-                'data' => District::find($id),
+                'data' => $district,
                 'message' => 'Success'], 201);
 
         } catch (Exception $exception) {

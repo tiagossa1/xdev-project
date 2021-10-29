@@ -85,8 +85,13 @@ class TagController extends Controller
     public function show($id)
     {
         try {
+            $tag = Tag::find($id);
+
+            if(is_null($tag)){
+                return response()->json(['message' => "Tag not found!"], 404);
+            }
             return response()->json([
-                'data' => Tag::find($id),
+                'data' => $tag,
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

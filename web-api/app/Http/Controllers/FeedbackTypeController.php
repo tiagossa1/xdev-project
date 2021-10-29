@@ -59,8 +59,13 @@ class FeedbackTypeController extends Controller
     public function show($id)
     {
         try {
+            $feedbackType = FeedbackType::find($id);
+
+            if(is_null($feedbackType)){
+                return response()->json(['message' => "FeedbackType not found!"], 404);
+            }
             return response()->json([
-                'data' => FeedbackType::find($id),
+                'data' => $feedbackType,
                 'message' => 'Success'
             ], 200);
 
