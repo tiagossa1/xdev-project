@@ -104,7 +104,6 @@ export default {
         { key: "actions", label: "Ações" },
       ],
       users: [],
-      userTypeSelected: null,
       userSelected: { district: {}, userType: {}, schoolClass: {} },
       isEditFormValid: false,
     };
@@ -116,7 +115,6 @@ export default {
     },
     onDetailsClick(user) {
       this.userSelected = this.users.find((u) => u.id == user.id);
-      // this.userSelected = user;
       this.$refs["details-modal"].show();
     },
     onEditClick(user) {
@@ -132,14 +130,14 @@ export default {
         this.userSelected.email,
         this.userSelected.name,
         this.userSelected.birth_date,
-        null,
+        this.userSelected.profile_picture,
         this.userSelected.github_url,
         this.userSelected.linkedin_url,
         this.userSelected.facebook_url,
         this.userSelected.instagram_url,
         null,
-        null,
-        null,
+        this.userSelected.district.id,
+        this.userSelected.schoolClass.id,
         this.userSelected.userType.id,
         null,
         null,

@@ -63,13 +63,15 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            $user->name = $request->name ?? $user->name;
-            $user->github_url = $request->github_url;
-            $user->linkedin_url = $request->linkedin_url;
-            $user->facebook_url = $request->facebook_url;
-            $user->instagram_url = $request->instagram_url;
-            $user->suspended = $request->suspended ?? $user->suspended;
-            $user->user_type_id = $request->user_type_id ?? $user->user_type_id;
+            $user->name =               $request->name ?? $user->name;
+            $user->github_url =         $request->github_url;
+            $user->linkedin_url =       $request->linkedin_url;
+            $user->facebook_url =       $request->facebook_url;
+            $user->instagram_url =      $request->instagram_url;
+            $user->suspended =          $request->suspended ?? $user->suspended;
+            $user->district_id =        $request->district_id ?? $user->district_id;
+            $user->school_class_id =    $request->school_class_id ?? $user->school_class_id;
+            $user->user_type_id =       $request->user_type_id ?? $user->user_type_id;
 
             if (!is_null($request->password)) {
                 $user->password = bcrypt($request->password);
