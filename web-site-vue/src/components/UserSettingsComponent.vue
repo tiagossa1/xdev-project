@@ -2,9 +2,6 @@
   <b-modal id="modal2" size="lg" ref="modal2" hide-footer title="Editar perfil">
     <b-tabs content-class="mt-3">
       <b-tab title="Editar Password" active>
-        <b-alert v-model="alertPasswordMessage" variant="danger" dismissible>
-          Erro ao atualizar a password
-        </b-alert>
         <b-form @submit.prevent="updatePassword">
           <b-row>
             <b-col>
@@ -100,13 +97,6 @@
       </b-tab>
 
       <b-tab title="Editar Redes Sociais">
-        <b-alert
-          v-model="AlertMessage"
-          :variant="updateSucces ? 'success' : 'danger'"
-          dismissible
-        >
-          {{ updateSucces ? messageSucces : messageFail }}
-        </b-alert>
         <b-form @submit.prevent="updateSocial">
           <b-row>
             <b-col>
@@ -174,9 +164,6 @@
       </b-tab>
 
       <b-tab title="Editar Tags">
-        <!-- <b-alert v-model="AlertMessage" :variant="updateSucces? 'success' : 'danger'" dismissible>
-          {{updateSucces ? messageSucces : messageFail}}
-        </b-alert> -->
         <b-table
           hover
           sticky-header="500px"
@@ -219,14 +206,14 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
+
 import UserRequest from "../models/requests/userRequest";
 import ChangePasswordRequest from "../models/requests/changePasswordRequest";
 
-//import User from "../models/user";
 import userService from "../services/userService";
 import tagService from "../services/tagService";
 
-import { mapActions } from "vuex";
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
 
@@ -236,20 +223,10 @@ export default {
     return {
       dismissSecs: 5,
       dismissCountDown: 0,
-      AlertMessage: false,
-
-      updateSucces: false,
-      messageSucces: "Redes sociais atualizadas.",
-      messageFail: "Erro ao atualizar as redes sociais",
-
-      alertPasswordMessage: false,
-
       tagsFields: [
-        // {key: "name", label: "Nome"},
         { key: "allTags.name", label: "Tags" },
         { key: "actions", label: "Ações" },
       ],
-
       favouriteTag: false,
       userInfo: {},
       allTags: {},
@@ -284,7 +261,6 @@ export default {
     ...mapActions({
       signOutAction: "auth/signOut",
     }),
-
     signOut() {
       this.signOutAction().then(() => {
         this.$router.push("Login").catch(() => {});
@@ -303,14 +279,22 @@ export default {
       this.confirm_new_password = "";
     },
     async updatePassword() {
-      // if (!this.v$.$invalid) {
       let request = new ChangePasswordRequest(
         this.old_password,
         this.confirm_password,
         this.confirm_new_password
       );
+
       let res = await userService.changePassword(request).catch((err) => {
-        this.showPasswordAlert(err);
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: err.response.data.message,
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 10000,
+        });
       });
 
       if (res.status === 200) {
@@ -325,14 +309,10 @@ export default {
       var linkedinRegex = /(?:https?:\/\/)?(?:www\.)(?:linkedin.com\/)/;
 
       if (
-        (facebookRegex.test(this.userInfo.facebook_url) ||
-          this.userInfo.facebook_url === "") &&
-        (githubRegex.test(this.userInfo.github_url) ||
-          this.userInfo.github_url === "") &&
-        (instagramRegex.test(this.userInfo.instagram_url) ||
-          this.userInfo.instagram_url === "") &&
-        (linkedinRegex.test(this.userInfo.linkedin_url) ||
-          this.userInfo.linkedin_url === "")
+        facebookRegex.test(this.userInfo.facebook_url) &&
+        githubRegex.test(this.userInfo.github_url) &&
+        instagramRegex.test(this.userInfo.instagram_url) &&
+        linkedinRegex.test(this.userInfo.linkedin_url)
       ) {
         let request = new UserRequest(
           this.userInfo.id,
@@ -355,11 +335,11 @@ export default {
           this.userInfo.suspended
         );
 
-        await userService.update(request).catch((err) => {
+        const res = await userService.update(request).catch((err) => {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response,
+            title: err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
@@ -367,24 +347,30 @@ export default {
           });
         });
 
-        this.updateSucces = true;
-        this.showSocialMediaAlert();
-      } else {
-        this.updateSucces = false;
-        this.showSocialMediaAlert();
+        if (res.status === 200) {
+          this.$emit("on-social-media-update", this.userInfo);
+
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Redes sociais editadas.",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        } else {
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: res.response.data.message,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        }
       }
-    },
-    showSocialMediaAlert() {
-      this.AlertMessage = true;
-      setTimeout(() => {
-        this.AlertMessage = false;
-      }, 3000);
-    },
-    showPasswordAlert() {
-      this.alertPasswordMessage = true;
-      setTimeout(() => {
-        this.alertPasswordMessage = false;
-      }, 3000);
     },
     rowClass(item, type) {
       if (!item || type !== "row") {

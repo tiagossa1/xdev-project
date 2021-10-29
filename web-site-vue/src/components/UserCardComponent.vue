@@ -1,10 +1,10 @@
 <template>
   <div class="w-75">
     <b-card
-      :img-alt="userInfo.name + ` photo`"
+      :img-alt="propUserInfo.name + ` photo`"
       img-top
       rounded="circle"
-      :img-src="userInfo.profile_picture"
+      :img-src="propUserInfo.profile_picture"
       tag="article"
       style="max-width: 20rem; border-radius: 10px"
     >
@@ -18,19 +18,20 @@
         ></b-icon>
         <b-card-title
           class="font-weight-bold h5"
-          :style="{ color: userInfo.userType.hexColorCode }"
+          :style="{ color: propUserInfo.userType.hexColorCode }"
         >
           <span>
-            {{ userInfo.name }}
+            {{ propUserInfo.name }}
           </span>
           <br />
-          <b-badge :style="{ backgroundColor: userInfo.userType.hexColorCode }"
-            >{{ userInfo.userType.name }}
+          <b-badge
+            :style="{ backgroundColor: propUserInfo.userType.hexColorCode }"
+            >{{ propUserInfo.userType.name }}
           </b-badge>
         </b-card-title>
         <b-card-sub-title class="mt-3 mb-3 small"
-          >{{ userInfo.schoolClass.name }} |
-          {{ userInfo.schoolClass.school.name }}
+          >{{ propUserInfo.schoolClass.name }} |
+          {{ propUserInfo.schoolClass.school.name }}
         </b-card-sub-title>
 
         <b-card-group class="mb-3">
@@ -48,7 +49,7 @@
               <span class="font-weight-bold text-primary">Email</span>
             </template>
             <b-card-text>
-              <a class="text-body" :href="'mailto:' + userInfo.email">
+              <a class="text-body" :href="'mailto:' + propUserInfo.email">
                 <b-icon icon="envelope-open" aria-hidden="true"></b-icon>
               </a>
             </b-card-text>
@@ -60,10 +61,10 @@
             <template #header>
               <span class="font-weight-bold text-primary">Interesses</span>
             </template>
-            <b-card-text v-if="userInfo.tags.length > 0">
+            <b-card-text v-if="propUserInfo.tags.length > 0">
               <b-badge
                 class="m-2 text-white p-2"
-                v-for="tag in userInfo.tags"
+                v-for="tag in propUserInfo.tags"
                 :key="tag.id"
                 pill
                 variant="primary"
@@ -87,7 +88,7 @@
                     <a
                       class="text-dark"
                       target="_blank"
-                      :href="'http://' + userInfo.facebook_url"
+                      :href="'http://' + propUserInfo.facebook_url"
                     >
                       <b-icon
                         class="w-22"
@@ -100,7 +101,7 @@
                     <a
                       class="text-dark"
                       target="_blank"
-                      :href="'http://' + userInfo.linkedin_url"
+                      :href="'http://' + propUserInfo.linkedin_url"
                     >
                       <b-icon
                         class="w-22"
@@ -113,7 +114,7 @@
                     <a
                       class="text-dark"
                       target="_blank"
-                      :href="'http://' + userInfo.github_url"
+                      :href="'http://' + propUserInfo.github_url"
                     >
                       <b-icon
                         class="w-22"
@@ -126,7 +127,7 @@
                     <a
                       class="text-dark"
                       target="_blank"
-                      :href="'http://' + userInfo.instagram_url"
+                      :href="'http://' + propUserInfo.instagram_url"
                     >
                       <b-icon
                         class="w-22"
@@ -142,7 +143,10 @@
         </b-card-group>
       </b-card-body>
     </b-card>
-    <user-settings ref="modalComponent" />
+    <user-settings
+      ref="modalComponent"
+      @on-social-media-update="onSocialMediaUpdate"
+    />
   </div>
 </template>
 
@@ -160,6 +164,7 @@ export default {
   data() {
     return {
       paramId: null,
+      propUserInfo: this.userInfo,
     };
   },
   async created() {
@@ -168,6 +173,10 @@ export default {
   methods: {
     showModal() {
       this.$refs.modalComponent.show();
+    },
+    onSocialMediaUpdate(user) {
+      console.log(user);
+      this.propUserInfo = user;
     },
   },
 };
