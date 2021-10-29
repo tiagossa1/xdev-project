@@ -91,6 +91,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           let res = await feedbackService.delete(feedback.id).catch((err) => {
+<<<<<<< Updated upstream
             let error;
 
             if (err.response.data.errors) {
@@ -107,6 +108,16 @@ export default {
               showCloseButton: true,
               showConfirmButton: false,
               timer: 10000,
+=======
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+>>>>>>> Stashed changes
             });
           });
 
@@ -126,7 +137,11 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
+<<<<<<< Updated upstream
               timer: 10000,
+=======
+              timer: 3500,
+>>>>>>> Stashed changes
             });
           }
         }

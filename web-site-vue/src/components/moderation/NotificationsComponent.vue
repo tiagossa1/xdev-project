@@ -152,6 +152,7 @@ export default {
           );
 
           await postService.update(postRequest).catch((err) => {
+<<<<<<< Updated upstream
             let error;
 
             if (err.response.data.errors) {
@@ -200,12 +201,47 @@ export default {
               showCloseButton: true,
               showConfirmButton: false,
               timer: 10000,
+=======
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          });
+
+          let reportRequest = new ReportRequest(
+            item.report.id,
+            item.report.user.id,
+            item.report.post.id,
+            this.user.id,
+            suspendedConclusion?.id ?? null,
+            item.report?.comment?.id ?? null,
+            true,
+            item.report.reason,
+            null
+          );
+
+          await reportService.update(reportRequest).catch((err) => {
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+>>>>>>> Stashed changes
             });
           });
 
           let notificationRes = await notificationService
             .markAsRead(item.id)
             .catch((err) => {
+<<<<<<< Updated upstream
               let error;
 
               if (err.response.data.errors) {
@@ -229,6 +265,23 @@ export default {
             // this.$emit("on-notification-deleted", item.id);
             const index = this.notifications.findIndex((n) => n.id === item.id);
 
+=======
+              this.$swal({
+                icon: "error",
+                position: "bottom-right",
+                title: err.response.data,
+                toast: true,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 3500,
+              });
+            });
+
+          if (notificationRes.status === 200) {
+            // this.$emit("on-notification-deleted", item.id);
+            const index = this.notifications.findIndex((n) => n.id === item.id);
+
+>>>>>>> Stashed changes
             if (index >= 0) {
               this.notifications.splice(index, 1);
               this.$refs.notificationTable.refresh();
@@ -240,7 +293,11 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
+<<<<<<< Updated upstream
               timer: 10000,
+=======
+              timer: 3500,
+>>>>>>> Stashed changes
             });
           }
         }
@@ -259,6 +316,7 @@ export default {
           let res = await commentService
             .deleteComment(item.report.postComment.id)
             .catch((err) => {
+<<<<<<< Updated upstream
               let error;
 
               if (err.response.data.errors) {
@@ -311,6 +369,44 @@ export default {
                 this.$refs.notificationTable.refresh();
               }
 
+=======
+              this.$swal({
+                icon: "error",
+                position: "bottom-right",
+                title: err.response.message,
+                toast: true,
+                showCloseButton: true,
+                showConfirmButton: false,
+                timer: 3500,
+              });
+            });
+
+          if (res.status === 200) {
+            let notificationRes = await notificationService
+              .markAsRead(item.id)
+              .catch((err) => {
+                this.$swal({
+                  icon: "error",
+                  position: "bottom-right",
+                  title: err.response.data,
+                  toast: true,
+                  showCloseButton: true,
+                  showConfirmButton: false,
+                  timer: 3500,
+                });
+              });
+
+            if (notificationRes.status === 200) {
+              const index = this.notifications.findIndex(
+                (n) => n.id === item.id
+              );
+
+              if (index >= 0) {
+                this.notifications.splice(index, 1);
+                this.$refs.notificationTable.refresh();
+              }
+
+>>>>>>> Stashed changes
               this.$swal({
                 icon: "success",
                 position: "bottom-right",
@@ -318,7 +414,11 @@ export default {
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
+<<<<<<< Updated upstream
                 timer: 10000,
+=======
+                timer: 3500,
+>>>>>>> Stashed changes
               });
             }
           }

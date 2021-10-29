@@ -21,12 +21,19 @@ class TagController extends Controller
     {
         try {
             $query = Tag::withCount([
+<<<<<<< Updated upstream
                 'posts as posts_count' => function ($query) {
                     $query->where('suspended', 0);
                 }
             ]);
 
             // $query = Tag::withCount('posts')->with('posts')->orderBy('posts_count', 'desc');
+=======
+                'posts as post_count' => function ($query) {
+                    $query->where('suspended', 0);
+                }]);
+
+>>>>>>> Stashed changes
             $count = $request->count;
 
             if (!is_null($count)) {

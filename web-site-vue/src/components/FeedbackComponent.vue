@@ -57,21 +57,15 @@ export default {
       authenticated: "auth/authenticated",
     }),
   },
+  mounted() {
+    if (this.authenticated) {
+      this.getFeedbackTypes();
+    }
+  },
   watch: {
     async authenticated(newValue) {
       if (newValue) {
-        let feedbackTypes = await feedbackTypeService.getFeedbackTypes();
-        this.feedbackTypes = feedbackTypes;
-        this.feedbackTypesSelect = feedbackTypes.map((x) => ({
-          value: x.id,
-          text: x.name,
-        }));
-
-        this.feedbackTypesSelect.unshift({
-          value: null,
-          text: "Selecione uma opção...",
-          disabled: true,
-        });
+        this.getFeedbackTypes();
       }
     },
   },
@@ -109,6 +103,20 @@ export default {
       } else {
         bvModalEvt.preventDefault();
       }
+    },
+    async getFeedbackTypes() {
+      let feedbackTypes = await feedbackTypeService.getFeedbackTypes();
+      this.feedbackTypes = feedbackTypes;
+      this.feedbackTypesSelect = feedbackTypes.map((x) => ({
+        value: x.id,
+        text: x.name,
+      }));
+
+      this.feedbackTypesSelect.unshift({
+        value: null,
+        text: "Selecione uma opção...",
+        disabled: true,
+      });
     },
   },
 };

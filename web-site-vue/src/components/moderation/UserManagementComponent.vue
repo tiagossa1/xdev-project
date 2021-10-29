@@ -228,6 +228,7 @@ export default {
           );
 
           const res = await userService.update(request).catch((err) => {
+<<<<<<< Updated upstream
             let error;
 
             if (err.response.data.errors) {
@@ -255,6 +256,27 @@ export default {
               this.users[index] = user;
             }
 
+=======
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: err.response.data.message,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 3500,
+            });
+          });
+
+          if (res.status === 200) {
+            let user = new User(res.data.data);
+            let index = this.users.findIndex((u) => u.id === user.id);
+
+            if (user && index >= 0) {
+              this.users[index] = user;
+            }
+
+>>>>>>> Stashed changes
             this.$refs.userTable.refresh();
             this.$swal({
               icon: "success",
@@ -265,7 +287,11 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
+<<<<<<< Updated upstream
               timer: 10000,
+=======
+              timer: 3500,
+>>>>>>> Stashed changes
             });
           }
         }
