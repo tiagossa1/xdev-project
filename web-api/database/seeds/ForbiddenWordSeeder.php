@@ -16,7 +16,7 @@ class ForbiddenWordSeeder extends Seeder
         ]);
 
         App\ForbiddenWord::create([
-            'name' => 'piça',
+            'name' => 'pica',
         ]);
 
         App\ForbiddenWord::create([

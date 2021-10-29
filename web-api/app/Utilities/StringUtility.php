@@ -21,7 +21,7 @@ class StringUtility
     chr(195).chr(128) => 'A', chr(195).chr(129) => 'A',
     chr(195).chr(130) => 'A', chr(195).chr(131) => 'A',
     chr(195).chr(132) => 'A', chr(195).chr(133) => 'A',
-    chr(195).chr(135) => 'C', chr(195).chr(136) => 'E',
+    chr(195).chr(135) => 'C', chr(195).chr(136) => 'C',
     chr(195).chr(137) => 'E', chr(195).chr(138) => 'E',
     chr(195).chr(139) => 'E', chr(195).chr(140) => 'I',
     chr(195).chr(141) => 'I', chr(195).chr(142) => 'I',

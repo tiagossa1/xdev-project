@@ -39,7 +39,8 @@ class CommentController extends Controller
         try {
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $rawDescription = explode(" ", $request->description);
+            $rawDescription = explode(" ", mb_strtolower($request->description));
+            //return response()->json([$rawDescription,$forbiddenWords]);
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 
@@ -102,7 +103,8 @@ class CommentController extends Controller
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $rawDescription = explode(" ", $request->description);
+            $rawDescription = explode(" ", mb_strtolower($request->description));
+            return response()->json($rawDescription);
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 

@@ -92,8 +92,8 @@ class PostController extends Controller
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $rawTitle = explode(" ", $request->title);
-            $rawDescription = explode(" ", $request->description);
+            $rawTitle = explode(" ", mb_strtolower($request->title));
+            $rawDescription = explode(" ", mb_strtolower($request->description));
 
             $title = StringUtility::remove_multiple_utf8($rawTitle);
             $description = StringUtility::remove_multiple_utf8($rawDescription);
@@ -102,11 +102,16 @@ class PostController extends Controller
             $diffTitle = array_diff($title,$forbiddenWords);
 
             if(sizeof($diffTitle) == sizeof($title) && sizeof($diffDescription) == sizeof($description)) {
-                /*return response()->json(['Array Description:' => sizeof($description),
+                return response()->json(['Array Description:' => sizeof($description),
                                          'Array Title:' => sizeof($title),
                                          'Array Forbidden Words:' => sizeof($forbiddenWords),
                                          'Array Description Difference:' => sizeof($diffDescription),
-                                         'Array Title Difference:' => sizeof($diffTitle)]);*/
+                                         'Array Title Difference:' => sizeof($diffTitle),
+                                         'Array Description:' => $description,
+                                         'Array Title:' => $title,
+                                         'Array Forbidden Words:' => $forbiddenWords,
+                                         'Array Description Difference:' => $diffDescription,
+                                         'Array Title Difference:' => $diffTitle]);
 
                 $post = new Post();
                 $post->title = $request->title;
@@ -185,8 +190,8 @@ class PostController extends Controller
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $rawTitle = explode(" ", $request->title);
-            $rawDescription = explode(" ", $request->description);
+            $rawTitle = explode(" ",  mb_strtolower($request->title));
+            $rawDescription = explode(" ",  mb_strtolower($request->description));
 
             $title = StringUtility::remove_multiple_utf8($rawTitle);
             $description = StringUtility::remove_multiple_utf8($rawDescription);
