@@ -1,10 +1,5 @@
 <?php
 
-<<<<<<< Updated upstream
-use App\Http\Controllers\ForgotPasswordController;
-use App\Http\Controllers\AuthController;
-=======
->>>>>>> Stashed changes
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
