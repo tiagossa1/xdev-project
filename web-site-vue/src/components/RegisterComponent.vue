@@ -284,8 +284,6 @@ export default {
           this.showAlert();
         });
 
-        console.log(res);
-
         if (res.status === 201) {
           window.localStorage.setItem(
             "registerRequest",

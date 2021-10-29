@@ -27,6 +27,7 @@
                 <div v-for="post in posts" :key="post.id">
                   <post-component
                     @on-post-deleted="onPostDeleted"
+                    @on-comment-deleted="onCommentDelete"
                     :post="post"
                   ></post-component>
                 </div>
@@ -45,6 +46,7 @@
                 <div v-for="post in favoritePosts" :key="post.id">
                   <post-component
                     @on-unsaved="onUnsaved"
+                    @on-comment-deleted="onFavoritePostsCommentDelete"
                     :post="post"
                   ></post-component>
                 </div>
@@ -100,7 +102,6 @@ export default {
       userInfo: {
         userType: {},
         schoolClass: { school: {} },
-        posts: {},
         tags: {},
       },
       favoritePosts: Post,
@@ -148,6 +149,27 @@ export default {
 
       if (index > -1) {
         this.favoritePosts.splice(index, 1);
+      }
+    },
+    onCommentDelete(id) {
+      let post = this.posts.find((x) => x.comments.some((c) => c.id === id));
+
+      if (post) {
+        post.comments = post.comments.filter((c) => c.id != id);
+        this.posts.find((x) => x.id === post.id).comments = post.comments;
+      }
+    },
+    onFavoritePostsCommentDelete(id) {
+      let post = this.favoritePosts.find((x) =>
+        x.comments.some((c) => c.id === id)
+      );
+
+      if (post) {
+        post.comments = post.comments.filter(
+          (c) => c.id != id
+        );
+        this.favoritePosts.find((x) => x.id === post.id).comments =
+          post.comments;
       }
     },
   },
