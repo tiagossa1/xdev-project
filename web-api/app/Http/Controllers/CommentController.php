@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\Comment;
 use App\ForbiddenWord;
+use Illuminate\Http\Request;
+use App\Utilities\StringUtility;
 use App\Http\Requests\CreateCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
-use App\Utilities\StringUtility;
-use Illuminate\Http\Request;
+use Illuminate\Validation\Validator;
 
 class CommentController extends Controller
 {

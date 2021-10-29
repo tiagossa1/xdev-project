@@ -152,10 +152,18 @@ export default {
           );
 
           await postService.update(postRequest).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
             this.$swal({
               icon: "error",
               position: "bottom-right",
-              title: err.response.data.message,
+              title: error ?? err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
@@ -176,10 +184,18 @@ export default {
           );
 
           await reportService.update(reportRequest).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
             this.$swal({
               icon: "error",
               position: "bottom-right",
-              title: err.response.data.message,
+              title: error ?? err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
@@ -190,10 +206,18 @@ export default {
           let notificationRes = await notificationService
             .markAsRead(item.id)
             .catch((err) => {
+              let error;
+
+              if (err.response.data.errors) {
+                error = Object.values(err.response.data.errors)
+                  .map((v) => v.join(", "))
+                  .join(", ");
+              }
+
               this.$swal({
                 icon: "error",
                 position: "bottom-right",
-                title: err.response.data.message,
+                title: error ?? err.response.data.message,
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -235,10 +259,18 @@ export default {
           let res = await commentService
             .deleteComment(item.report.postComment.id)
             .catch((err) => {
+              let error;
+
+              if (err.response.data.errors) {
+                error = Object.values(err.response.data.errors)
+                  .map((v) => v.join(", "))
+                  .join(", ");
+              }
+
               this.$swal({
                 icon: "error",
                 position: "bottom-right",
-                title: err.response.message,
+                title: error ?? err.response.message,
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -250,10 +282,18 @@ export default {
             let notificationRes = await notificationService
               .markAsRead(item.id)
               .catch((err) => {
+                let error;
+
+                if (err.response.data.errors) {
+                  error = Object.values(err.response.data.errors)
+                    .map((v) => v.join(", "))
+                    .join(", ");
+                }
+
                 this.$swal({
                   icon: "error",
                   position: "bottom-right",
-                  title: err.response.data.message,
+                  title: error ?? err.response.data.message,
                   toast: true,
                   showCloseButton: true,
                   showConfirmButton: false,

@@ -91,10 +91,18 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           let res = await feedbackService.delete(feedback.id).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
             this.$swal({
               icon: "error",
               position: "bottom-right",
-              title: err.response.data.message,
+              title: error ?? err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
