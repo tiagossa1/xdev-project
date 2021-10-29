@@ -23,7 +23,8 @@ class TagController extends Controller
             $query = Tag::withCount([
                 'posts as posts_count' => function ($query) {
                     $query->where('suspended', 0);
-                }]);
+                }
+            ]);
 
             // $query = Tag::withCount('posts')->with('posts')->orderBy('posts_count', 'desc');
             $count = $request->count;
@@ -55,9 +56,9 @@ class TagController extends Controller
 
             $name = StringUtility::remove_multiple_utf8($rawName);
 
-            $diffDescription = array_diff($name,$forbiddenWords);
+            $diffDescription = array_diff($name, $forbiddenWords);
 
-            if(sizeof($diffDescription) == sizeof($name)) {
+            if (sizeof($diffDescription) == sizeof($name)) {
                 $tag = new Tag();
                 $tag->name = $request->name;
                 $tag->save();
@@ -120,9 +121,15 @@ class TagController extends Controller
      * @param \App\Tag $tag
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Tag $tag)
+    public function destroy($id)
     {
         try {
+            $tag = Tag::find($id);
+
+            if (is_null($tag)) {
+                return response()->json(['message' => 'Tag does not exists.', 404]);
+            }
+
             $tag->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
@@ -146,7 +153,7 @@ class TagController extends Controller
 
             if ($tagRecord !== null) {
                 array_push($tags, $tagRecord);
-            } else if(!$isForbidden) {
+            } else if (!$isForbidden) {
                 $newTag = new Tag();
                 $newTag->name = $tagName;
                 $newTag->save();
