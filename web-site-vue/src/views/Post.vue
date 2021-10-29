@@ -216,10 +216,18 @@ export default {
 
     if (isAuthenticated) {
       this.posts = await postService.getPostsBySuspended(0).catch((err) => {
+        let error;
+
+        if (err.response.data.errors) {
+          error = Object.values(err.response.data.errors)
+            .map((v) => v.join(", "))
+            .join(", ");
+        }
+
         this.$swal({
           icon: "error",
           position: "bottom-right",
-          title: err.response,
+          title: error ?? err.response.data.message,
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
@@ -321,10 +329,18 @@ export default {
         );
 
         let res = await postService.create(request).catch((err) => {
+          let error;
+
+          if (err.response.data.errors) {
+            error = Object.values(err.response.data.errors)
+              .map((v) => v.join(", "))
+              .join(", ");
+          }
+
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data.message,
+            title: error ?? err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,

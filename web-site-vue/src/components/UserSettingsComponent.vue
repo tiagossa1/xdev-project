@@ -286,10 +286,18 @@ export default {
       );
 
       let res = await userService.changePassword(request).catch((err) => {
+        let error;
+
+        if (err.response.data.errors) {
+          error = Object.values(err.response.data.errors)
+            .map((v) => v.join(", "))
+            .join(", ");
+        }
+
         this.$swal({
           icon: "error",
           position: "bottom-right",
-          title: err.response.data.message,
+          title: error ?? err.response.data.message,
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
@@ -304,32 +312,30 @@ export default {
     },
     async updateSocial() {
       // var facebookRegex = /(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w]*\/)*([\w]*)/;
-      let facebookRegex = /(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w]*\/)?(?:profile.php\?id=(?=\d.*))?([\w]*)?/;
-      var githubRegex = /(?:https\/\/)?(?:www\.)?github\.com\//ig;
-      var instagramRegex = /(?:https\/\/)?(?:www\.)(?:instagram.com\/)/ig;
-      var linkedinRegex = /(?:https\/\/)?(?:www\.)(?:linkedin.com\/)/ig;
-      
+      let facebookRegex =
+        /(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w]*\/)?(?:profile.php\?id=(?=\d.*))?([\w]*)?/;
+      var githubRegex = /(?:https\/\/)?(?:www\.)?github\.com\//gi;
+      var instagramRegex = /(?:https\/\/)?(?:www\.)(?:instagram.com\/)/gi;
+      var linkedinRegex = /(?:https\/\/)?(?:www\.)(?:linkedin.com\/)/gi;
+
       if (
         facebookRegex.test(this.userInfo.facebook_url) &&
         githubRegex.test(this.userInfo.github_url) &&
         instagramRegex.test(this.userInfo.instagram_url) &&
         linkedinRegex.test(this.userInfo.linkedin_url)
       ) {
-
-        if(this.userInfo.facebook_url.startsWith('https://')){
-          this.userInfo.facebook_url = this.userInfo.facebook_url.slice(8)
+        if (this.userInfo.facebook_url.startsWith("https://")) {
+          this.userInfo.facebook_url = this.userInfo.facebook_url.slice(8);
         }
-        if(this.userInfo.github_url.startsWith('https://')){
-          this.userInfo.github_url = this.userInfo.github_url.slice(8)
+        if (this.userInfo.github_url.startsWith("https://")) {
+          this.userInfo.github_url = this.userInfo.github_url.slice(8);
         }
-        if(this.userInfo.instagram_url.startsWith('https://')){
-          this.userInfo.instagram_url = this.userInfo.instagram_url.slice(8)
+        if (this.userInfo.instagram_url.startsWith("https://")) {
+          this.userInfo.instagram_url = this.userInfo.instagram_url.slice(8);
         }
-        if(this.userInfo.linkedin_url.startsWith('https://')){
-          this.userInfo.linkedin_url = this.userInfo.linkedin_url.slice(8)
+        if (this.userInfo.linkedin_url.startsWith("https://")) {
+          this.userInfo.linkedin_url = this.userInfo.linkedin_url.slice(8);
         }
-        
-        
 
         let request = new UserRequest(
           this.userInfo.id,
@@ -353,10 +359,18 @@ export default {
         );
 
         const res = await userService.update(request).catch((err) => {
+          let error;
+
+          if (err.response.data.errors) {
+            error = Object.values(err.response.data.errors)
+              .map((v) => v.join(", "))
+              .join(", ");
+          }
+
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data.message,
+            title: error ?? err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
@@ -377,10 +391,18 @@ export default {
             timer: 10000,
           });
         } else {
+          let error;
+
+          if (res.response.data.errors) {
+            error = Object.values(res.response.data.errors)
+              .map((v) => v.join(", "))
+              .join(", ");
+          }
+
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: res.response.data.message,
+            title: error ?? res.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
@@ -429,10 +451,18 @@ export default {
       );
 
       await userService.update(request).catch((err) => {
+        let error;
+
+        if (err.response.data.errors) {
+          error = Object.values(err.response.data.errors)
+            .map((v) => v.join(", "))
+            .join(", ");
+        }
+
         this.$swal({
           icon: "error",
           position: "bottom-right",
-          title: err.response.data.message,
+          title: error ?? err.response.data.message,
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,

@@ -152,10 +152,18 @@ export default {
           );
 
           await postService.update(postRequest).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
             this.$swal({
               icon: "error",
               position: "bottom-right",
-              title: err.response.data.message,
+              title: error ?? err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
@@ -176,10 +184,18 @@ export default {
           );
 
           await reportService.update(reportRequest).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
             this.$swal({
               icon: "error",
               position: "bottom-right",
-              title: err.response.data.message,
+              title: error ?? err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
@@ -190,10 +206,18 @@ export default {
           let notificationRes = await notificationService
             .markAsRead(item.id)
             .catch((err) => {
+              let error;
+
+              if (err.response.data.errors) {
+                error = Object.values(err.response.data.errors)
+                  .map((v) => v.join(", "))
+                  .join(", ");
+              }
+
               this.$swal({
                 icon: "error",
                 position: "bottom-right",
-                title: err.response.data.message,
+                title: error ?? err.response.data.message,
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
@@ -216,7 +240,7 @@ export default {
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
-              timer: 10000,
+              timer: 3500,
             });
           }
         }
@@ -242,7 +266,7 @@ export default {
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
-                timer: 10000,
+                timer: 3500,
               });
             });
 
@@ -253,11 +277,11 @@ export default {
                 this.$swal({
                   icon: "error",
                   position: "bottom-right",
-                  title: err.response.data.message,
+                  title: err.response.data,
                   toast: true,
                   showCloseButton: true,
                   showConfirmButton: false,
-                  timer: 10000,
+                  timer: 3500,
                 });
               });
 
@@ -278,7 +302,7 @@ export default {
                 toast: true,
                 showCloseButton: true,
                 showConfirmButton: false,
-                timer: 10000,
+                timer: 3500,
               });
             }
           }

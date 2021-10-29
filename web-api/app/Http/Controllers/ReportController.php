@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+<<<<<<< Updated upstream
+=======
+use App\Events\ReportCreated;
+use App\Http\Requests\CreateReportRequest;
+use App\Http\Requests\ReportRequest;
+use App\Http\Requests\UpdateReportRequest;
+use App\Notifications\NewReport;
+use App\Report;
+>>>>>>> Stashed changes
 use App\Post;
 use App\User;
 use Exception;
