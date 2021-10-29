@@ -70,5 +70,9 @@ class ForbiddenWordSeeder extends Seeder
         App\ForbiddenWord::create([
             'name' => 'fodasse',
         ]);
+
+        App\ForbiddenWord::create([
+            'name' => 'foda-se',
+        ]);
     }
 }
