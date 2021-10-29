@@ -36,18 +36,10 @@ class SchoolClassSeeder extends Seeder
         $palmelaCourses = ["GRSI", "TPSI", "MAPCP", "ARCI", "CISEG", "TM"];
 
         // $i == 3
-        $cascaisCourses = ["TPSI", "MAPCP"];
-
-        // $i == 4
         $madeiraCourses = ["TM"];
-
-        // $i == 5
-        $carregadoCourses = ["TM"];
 
         $this->populateCourse($matosinhosCourses, 1);
         $this->populateCourse($palmelaCourses, 2);
-        $this->populateCourse($cascaisCourses, 3);
-        $this->populateCourse($madeiraCourses, 4);
-        $this->populateCourse($carregadoCourses, 5);
+        $this->populateCourse($madeiraCourses, 3);
     }
 }
