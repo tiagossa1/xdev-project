@@ -65,7 +65,7 @@ export default {
             Vue.swal({
               icon: 'error',
               position: 'bottom-right',
-              title: err.response.data.message.message,
+              title: err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
