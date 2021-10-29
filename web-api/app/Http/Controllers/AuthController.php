@@ -97,7 +97,7 @@ class AuthController extends Controller
         $user = User::where('email', $request['email'])->first();
 
         if(is_null($user)) {
-            return response()->json(['message' => 'Credenciais erradas.'], 404);
+            return response()->json(['message' => 'O utilizador não existe.'], 404);
         }
 
         // JSON_UNESCAPED_UNICODE is used due to UTF-8 characters in Portuguese language.
