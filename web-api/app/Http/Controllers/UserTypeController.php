@@ -101,9 +101,15 @@ class UserTypeController extends Controller
      * @param \App\UserType $userType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(UserType $userType)
+    public function destroy($id)
     {
         try {
+            $userType = UserType::find($id);
+
+            if(is_null($userType)){
+                return response()->json(['message' => "UserType not found!"], 404);
+            }
+
             $userType->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {

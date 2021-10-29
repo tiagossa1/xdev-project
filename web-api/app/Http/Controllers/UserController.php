@@ -42,6 +42,7 @@ class UserController extends Controller
             if(is_null($user)){
                 return response()->json(['message' => "User not found!"], 404);
             }
+
             return response()->json([
                 'data' => $user,
                 'message' => 'Success'
@@ -100,10 +101,11 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            if (!is_null($user)) {
-                $user->delete();
+            if(is_null($user)){
+                return response()->json(['message' => "User not found!"], 404);
             }
 
+            $user->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
             return response()->json(['error' => $exception->getMessage()], 500);

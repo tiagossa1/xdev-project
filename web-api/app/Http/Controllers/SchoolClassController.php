@@ -103,9 +103,15 @@ class SchoolClassController extends Controller
      * @param \App\SchoolClass $schoolClass
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(SchoolClass $schoolClass)
+    public function destroy($id)
     {
         try {
+            $schoolClass = SchoolClass::find($id);
+
+            if(is_null($schoolClass)){
+                return response()->json(['message' => "SchoolClass not found!"], 404);
+            }
+
             $schoolClass->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {

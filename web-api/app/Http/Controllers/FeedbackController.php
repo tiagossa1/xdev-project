@@ -101,9 +101,15 @@ class FeedbackController extends Controller
      * @param \App\Feedback $feedback
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Feedback $feedback)
+    public function destroy($id)
     {
         try {
+            $feedback = Feedback::find($id);
+
+            if(is_null($feedback)){
+                return response()->json(['message' => "Feedback not found!"], 404);
+            }
+
             $feedback->delete();
             return response()->json(['message' => 'Deleted'], 200);
 

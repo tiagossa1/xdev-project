@@ -104,9 +104,15 @@ class ReportConclusionController extends Controller
      * @param \App\ReportConclusion $reportConclusion
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(ReportConclusion $reportConclusion)
+    public function destroy($id)
     {
         try {
+            $reportConclusion = ReportConclusion::find($id);
+
+            if(is_null($reportConclusion)){
+                return response()->json(['message' => "ReportConclusion not found!"], 404);
+            }
+
             $reportConclusion->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {

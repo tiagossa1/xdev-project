@@ -90,6 +90,7 @@ class TagController extends Controller
             if(is_null($tag)){
                 return response()->json(['message' => "Tag not found!"], 404);
             }
+
             return response()->json([
                 'data' => $tag,
                 'message' => 'Success'
@@ -131,8 +132,8 @@ class TagController extends Controller
         try {
             $tag = Tag::find($id);
 
-            if (is_null($tag)) {
-                return response()->json(['message' => 'Tag does not exists.', 404]);
+            if(is_null($tag)){
+                return response()->json(['message' => "Tag not found!"], 404);
             }
 
             $tag->delete();

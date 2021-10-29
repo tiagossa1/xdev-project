@@ -103,9 +103,15 @@ class PostTypeController extends Controller
      * @param \App\PostType $postType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(PostType $postType)
+    public function destroy($id)
     {
         try {
+            $postType = PostType::find($id);
+
+            if(is_null($postType)){
+                return response()->json(['message' => "Comment not found!"], 404);
+            }
+
             $postType->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {

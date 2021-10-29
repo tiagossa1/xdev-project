@@ -238,6 +238,10 @@ class PostController extends Controller
         try {
             $post = Post::find($id);
 
+            if(is_null($post)){
+                return response()->json(['message' => "Post not found!"], 404);
+            }
+
             $post->post_photos()->delete();
             $post->comments()->delete();
             $post->likes()->delete();

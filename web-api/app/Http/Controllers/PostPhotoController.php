@@ -98,9 +98,15 @@ class PostPhotoController extends Controller
      * @param \App\PostPhoto $postPhoto
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(PostPhoto $postPhoto)
+    public function destroy($id)
     {
         try {
+            $postPhoto = PostPhoto::find($id);
+
+            if(is_null($postPhoto)){
+                return response()->json(['message' => "Comment not found!"], 404);
+            }
+
             $postPhoto->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {

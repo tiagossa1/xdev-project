@@ -102,9 +102,15 @@ class DistrictController extends Controller
      * @param \App\District $district
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(District $district)
+    public function destroy($id)
     {
         try {
+            $district = District::find($id);
+
+            if(is_null($district)){
+                return response()->json(['message' => "District not found!"], 404);
+            }
+
             $district->delete();
             return response()->json(['message' => 'Deleted'], 200);
 

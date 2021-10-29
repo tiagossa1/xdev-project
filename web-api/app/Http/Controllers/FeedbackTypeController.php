@@ -64,6 +64,7 @@ class FeedbackTypeController extends Controller
             if(is_null($feedbackType)){
                 return response()->json(['message' => "FeedbackType not found!"], 404);
             }
+
             return response()->json([
                 'data' => $feedbackType,
                 'message' => 'Success'
@@ -102,9 +103,14 @@ class FeedbackTypeController extends Controller
      * @param \App\FeedbackType $feedbackType
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(FeedbackType $feedbackType)
+    public function destroy($id)
     {
         try {
+            $feedbackType = FeedbackType::find($id);
+
+            if(is_null($feedbackType)){
+                return response()->json(['message' => "FeedbackType not found!"], 404);
+            }
             $feedbackType->delete();
             return response()->json(['message' => 'Deleted'], 205);
 
