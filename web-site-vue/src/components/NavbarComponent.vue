@@ -134,19 +134,32 @@
               >Tem {{ notifications.length }} notificações.
             </b-dropdown-item>
             <b-dropdown-item to="/profile">
-              <b-icon-person-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-person-fill>
+              <b-icon-person-fill
+                class="mr-1 align-middle"
+                font-scale="0.9"
+              ></b-icon-person-fill>
               O meu perfil</b-dropdown-item
             >
             <b-dropdown-item to="/moderation" v-if="this.isModerator">
-              <b-icon-exclamation-circle-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-exclamation-circle-fill>
+              <b-icon-exclamation-circle-fill
+                class="mr-1 align-middle"
+                font-scale="0.9"
+              ></b-icon-exclamation-circle-fill>
               Moderação</b-dropdown-item
             >
             <b-dropdown-item @click="showFeedbackModal()">
-              <b-icon-chat-fill class="mr-1 align-middle" font-scale="0.9"></b-icon-chat-fill>
+              <b-icon-chat-fill
+                class="mr-1 align-middle"
+                font-scale="0.9"
+              ></b-icon-chat-fill>
               Feedback</b-dropdown-item
             >
             <b-dropdown-item @click.prevent="signOut">
-              <b-icon-arrow-left class="mr-1 align-middle" font-scale="0.9"></b-icon-arrow-left> Sair</b-dropdown-item
+              <b-icon-arrow-left
+                class="mr-1 align-middle"
+                font-scale="0.9"
+              ></b-icon-arrow-left>
+              Sair</b-dropdown-item
             >
           </b-nav-item-dropdown>
           <b-sidebar
@@ -286,7 +299,7 @@ export default {
       const options = this.options.filter(
         (opt) => this.value.indexOf(opt) === -1
       );
-      
+
       if (criteria) {
         // console.log(options.name)
         return options.filter(
@@ -353,6 +366,16 @@ export default {
 
       this.emitEventToSearchByTags();
     },
+    emitEventToSearchByTags() {
+      if (this.value.length == 0) {
+        this.$root.$emit("tag-search-navbar", []);
+      } else {
+        let tagIds = this.tags
+          .filter((t) => this.value.includes(t.name))
+          .map((t) => t.id);
+        this.$root.$emit("tag-search-navbar", tagIds);
+      }
+    },
     removeNotification(index) {
       this.notifications.splice(index, 1);
     },
@@ -363,7 +386,7 @@ export default {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data.message,
+            title: err.response.data,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
