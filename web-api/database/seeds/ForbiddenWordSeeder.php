@@ -74,5 +74,17 @@ class ForbiddenWordSeeder extends Seeder
         App\ForbiddenWord::create([
             'name' => 'foda-se',
         ]);
+
+        App\ForbiddenWord::create([
+            'name' => 'gay',
+        ]);
+
+        App\ForbiddenWord::create([
+            'name' => 'paneleiro',
+        ]);
+
+        App\ForbiddenWord::create([
+            'name' => 'rabeta',
+        ]);
     }
 }
