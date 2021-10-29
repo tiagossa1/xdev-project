@@ -22,7 +22,7 @@ class VerificationController extends Controller
             return response()->json(['message' => 'O email já foi verificado.'], 400);
         } else {
             $user->markEmailAsVerified();
-            event(new UserEmailVerified($user));
+            event(new UserEmailVerified($user->email));
         }
 
         return response()->json(['message' => 'User verificado com sucesso!'], 200);

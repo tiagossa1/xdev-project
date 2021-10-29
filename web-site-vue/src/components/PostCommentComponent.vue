@@ -1,15 +1,9 @@
 <template>
   <div>
-    <b-card :style="{borderRadius: '10px',border: '1px solid gray'}">
+    <b-card :style="{ borderRadius: '10px', border: '1px solid gray' }">
       <b-media>
         <template #aside>
-          <b-img
-            blank
-            blank-color="#ccc"
-            width="64"
-            alt="placeholder"
-            class="rounded"
-          ></b-img>
+          <b-avatar size="4rem" :src="comment.user.profile_picture"></b-avatar>
         </template>
 
         <div id="commentOptionsDropdown">

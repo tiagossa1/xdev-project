@@ -30,20 +30,20 @@ class AuthController extends Controller
 
             if ($userCount == 0) {
                 if ($request["user_type_id"] == 1) {
-                    \App\User::create([
-                        'name' => $request['name'],
-                        'email' => $request['email'],
-                        'birth_date' => $request['birth_date'],
-                        'password' => bcrypt($request['password']),
-                        'district_id' => $request['district_id'],
-                        'user_type_id' => $request['user_type_id'],
-                        'school_class_id' => $request['school_class_id'],
-                        'profile_picture' => $request['profile_picture']
-                    ])->sendEmailVerificationNotification();
+                    $user = new User();
+                    $user->name = $request->name;
+                    $user->email = $request->email;
+                    $user->birth_date = $request->birth_date;
+                    $user->password = bcrypt($request->password);
+                    $user->district_id = $request->district_id;
+                    $user->user_type_id = $request->user_type_id;
+                    $user->school_class_id = $request->school_class_id;
+                    $user->profile_picture = $request->profile_picture;
+                    $user->save();
 
-                    $user = User::where('email', $request['email'])->first();
+                    $user->sendEmailVerificationNotification();
 
-                    return response()->json(['message' => 'Utilizador criado, foi enviado um email de confirmação.', 'user_id' => $user->id], 201);
+                    return response()->json(['message' => 'Utilizador criado, foi enviado um email de confirmação.'], 201);
                 } else {
                     return response(['message' => 'A user cannot be created with higher privileges.'], 400);
                 }

@@ -58,18 +58,20 @@ class ReportController extends Controller
             // isModerator, isSheriff and isFromTheSameClass are called scopes. They are declared on User.php (User model file).
             $moderators = User::isModerator()->where('id', '<>', Auth::user()->id)->get();
 
-            $ownerSchoolClass = Post::find($request->post_id)->user->school_class->id;
-            $sheriffs = User::isSheriff()->isFromTheSameClass($ownerSchoolClass)->get();
+            // FIXME: Notification não funciona por causa da tabela Notification, campo data é pequeno demais para o Base64.
 
-            if(!is_null($moderators)) {
-                Notification::send($moderators, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
-            }
+            // $ownerSchoolClass = Post::find($request->post_id)->user->school_class->id;
+            // $sheriffs = User::isSheriff()->isFromTheSameClass($ownerSchoolClass)->get();
 
-            if(!is_null($sheriffs)) {
-                Notification::send($sheriffs, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
-            }
+            // if(!is_null($moderators)) {
+            //     Notification::send($moderators, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+            // }
 
-            event(new ReportCreated($report));
+            // if(!is_null($sheriffs)) {
+            //     Notification::send($sheriffs, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
+            // }
+
+            // event(new ReportCreated($report));
             // broadcast(new ReportCreated($report));
 
             // $mods = User::whereIn('user_type_id', [2,4])->get();

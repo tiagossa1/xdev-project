@@ -49,17 +49,17 @@ export default {
   async mounted() {
     var channel = this.$pusher.subscribe("xdev");
 
-    channel.bind("user-email-verified", ({ user }) => {
+    channel.bind("user-email-verified", ({ email }) => {
       let registerRequest = this.getRegisterRequest;
       let loginRequest = this.getLoginRequest;
 
       if (loginRequest) {
-        if (user.email === loginRequest.email) {
+        if (email === loginRequest.email) {
           window.localStorage.removeItem("loginRequest");
           this.signIn(loginRequest);
         }
       } else {
-        if (user.email === registerRequest.email) {
+        if (email === registerRequest.email) {
           window.localStorage.removeItem("registerRequest");
           this.signIn({
             email: registerRequest.email,

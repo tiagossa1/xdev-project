@@ -4,7 +4,7 @@
       :img-alt="userInfo.name + ` photo`"
       img-top
       rounded="circle"
-      img-src="https://picsum.photos/600/300/?image=25"
+      :img-src="userInfo.profile_picture"
       tag="article"
       style="max-width: 20rem; border-radius: 10px"
     >

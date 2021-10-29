@@ -262,7 +262,6 @@ export default {
     ...mapActions({
       signIn: "auth/signIn",
     }),
-
     async onSubmit() {
       let res = null;
       let email = this.form.email;
@@ -274,60 +273,33 @@ export default {
 
         this.form.email = email;
 
-        const reader = new FileReader();
+        let image = await this.readAsDataURL(this.photo);
+        this.form.profile_picture = image.data;
 
-        reader.onloadend = async () => {
-          this.form.profile_picture = reader.result;
+        res = await userService.register(this.form).catch((err) => {
+          this.showErrorAlert = true;
+          this.formStatus = Object.values(err.response.data.errors)
+            .map((x) => x[0])
+            .toString();
+          this.showAlert();
+        });
 
-          res = await userService.register(this.form).catch((err) => {
-            this.showErrorAlert = true;
-            this.formStatus = Object.values(err.response.data.errors)
-              .map((x) => x[0])
-              .toString();
-            this.showAlert();
-          });
+        console.log(res);
 
-          console.log(res);
+        if (res.status === 201) {
+          window.localStorage.setItem(
+            "registerRequest",
+            JSON.stringify(this.form)
+          );
 
-          if (res.status === 201) {
-            // const config = {
-            //   headers: { Authorization: `Bearer ${res.data.token}` },
-            // };
-
-            // let request = new ImageUploadRequest(this.form.email, this.photo);
-
-            // console.log(request);
-
-            // res = await imageUploadService
-            //   .createImageUpload(request)
-            //   .catch((err) => {
-            //     console.log(err.response);
-            //   });
-
-            //   console.log(res);
-
-            window.localStorage.setItem(
-              "registerRequest",
-              JSON.stringify(this.form)
-            );
-<<<<<<< Updated upstream
-            window.location.href = "/verification";
-          }
+          window.location.href = "/verification";
         }
-=======
-            //window.location.href = "/verification";
-          }
-        };
 
-        // this.form.profile_picture = reader.readAsDataURL(this.photo);
-
->>>>>>> Stashed changes
         // if (res.status === 201) {
         //   this.signIn({
         //     email: this.form.email,
         //     password: this.form.password,
         //   });
-
         // }
       } else {
         this.showErrorAlert = true;
@@ -335,6 +307,20 @@ export default {
           "Existem campos inválidos. Por favor, reveja o formulário.";
         this.showAlert();
       }
+    },
+    readAsDataURL(file) {
+      return new Promise((resolve) => {
+        let fileReader = new FileReader();
+        fileReader.onload = function () {
+          return resolve({
+            data: fileReader.result,
+            name: file.name,
+            size: file.size,
+            type: file.type,
+          });
+        };
+        fileReader.readAsDataURL(file);
+      });
     },
     redirectToCreateAccount() {
       window.location.href = "/register";

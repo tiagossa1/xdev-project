@@ -19,16 +19,16 @@ class SchoolSeeder extends Seeder
             'name' => 'ATEC Palmela',
         ]);
 
-        App\School::create([
-            'name' => 'ATEC Cascais',
-        ]);
+        // App\School::create([
+        //     'name' => 'ATEC Cascais',
+        // ]);
 
         App\School::create([
             'name' => 'ATEC S. João da Madeira',
         ]);
 
-        App\School::create([
-            'name' => 'ATEC Carregado',
-        ]);
+        // App\School::create([
+        //     'name' => 'ATEC Carregado',
+        // ]);
     }
 }

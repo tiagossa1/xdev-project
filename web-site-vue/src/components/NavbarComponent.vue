@@ -117,7 +117,7 @@
           <b-nav-item-dropdown right>
             <template #button-content>
               <b-avatar
-                :src="'data:image/jpeg;base64,' + user.profile_picture"
+                :src="user.profile_picture"
                 :style="{ border: '3px solid ' + user.user_type.hexColorCode }"
               >
               </b-avatar>

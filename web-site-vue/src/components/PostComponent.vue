@@ -50,7 +50,7 @@
         <b-container>
           <b-row class="justify-content-center">
             <b-avatar
-              :src="'data:image/jpeg;base64,' + post.user.profile_picture"
+              :src="post.user.profile_picture"
               size="5rem"
               :style="{
                 border: '3px solid ' + post.user.userType.hexColorCode,
