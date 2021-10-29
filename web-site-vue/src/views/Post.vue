@@ -324,7 +324,7 @@ export default {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response,
+            title: err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,

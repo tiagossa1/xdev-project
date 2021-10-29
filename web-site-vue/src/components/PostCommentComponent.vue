@@ -88,6 +88,7 @@ export default {
   name: "post-comment-component",
   components: { PostOptionsComponent },
   props: {
+    postId: Number,
     comment: Comment,
     viewOnly: {
       default: false,
@@ -138,7 +139,7 @@ export default {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data,
+            title: err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
@@ -164,7 +165,7 @@ export default {
         this.comment.id,
         this.comment.description,
         this.comment.user.id,
-        this.comment.postId
+        this.postId
       );
 
       let res = await commentService.edit(request).catch((err) => {
@@ -172,7 +173,7 @@ export default {
         this.$swal({
           icon: "error",
           position: "bottom-right",
-          title: err.response.data,
+          title: err.response.data.message,
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,

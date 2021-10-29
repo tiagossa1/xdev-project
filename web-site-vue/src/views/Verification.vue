@@ -75,7 +75,7 @@ export default {
     }),
     async onClickResendEmail() {
       let res = await userService.resend(this.getEmail).catch((err) => {
-        this.alertText = err.response.data;
+        this.alertText = err.response.data.message;
         this.variant = "danger";
         this.showAlert = true;
       });

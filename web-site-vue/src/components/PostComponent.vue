@@ -185,6 +185,7 @@
                 class="mb-3"
                 :viewOnly="viewOnly"
                 :comment="comment"
+                :post-id="post.id"
                 :ref="comment.id"
               ></post-comment-component>
             </div>
@@ -334,7 +335,7 @@ export default {
         this.$swal({
           icon: "error",
           position: "bottom-right",
-          title: err.response.data,
+          title: err.response.data.message,
           toast: true,
           showCloseButton: true,
           showConfirmButton: false,
@@ -361,7 +362,7 @@ export default {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data.message,
+            title: err.response.data.message.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
@@ -418,7 +419,7 @@ export default {
           this.$swal({
             icon: "error",
             position: "bottom-right",
-            title: err.response.data,
+            title: err.response.data.message,
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
