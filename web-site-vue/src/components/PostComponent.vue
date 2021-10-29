@@ -431,7 +431,7 @@ export default {
           this.$swal({
             icon: "success",
             position: "bottom-right",
-            title: "Post criado.",
+            title: "Post editado.",
             toast: true,
             showCloseButton: true,
             showConfirmButton: false,
