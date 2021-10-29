@@ -71,7 +71,7 @@
           </b-col>
         </b-row>
 
-        <b-row>
+        <!-- <b-row>
           <b-col sm="12">
             <div style="margin-top: 1rem">
               <div>Esqueceu-se da palavra-passe?</div>
@@ -84,7 +84,7 @@
               <router-link to="/recover">Recuperar password</router-link>
             </div>
           </b-col>
-        </b-row>
+        </b-row> -->
 
         <b-button
           style="margin-top: 1rem"
