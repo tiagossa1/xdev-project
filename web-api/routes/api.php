@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('feedbacks', 'FeedbackController@index')->middleware('ismoderator');
     Route::get('feedbacks/{id}', 'FeedbackController@show')->middleware('ismoderator');
-    Route::post('feedbacks', 'FeedbackController@store')->middleware('throttle:1,1');
+    Route::post('feedbacks', 'FeedbackController@store')->middleware('throttle:15,1');
     Route::put('feedbacks/{id}', 'FeedbackController@update')->middleware('ismoderator');
     Route::delete('feedbacks/{id}', 'FeedbackController@destroy')->middleware('ismoderator');
 
@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('reports', 'ReportController@index')->middleware('ismoderator');
     Route::get('reports/{id}', 'ReportController@show')->middleware('ismoderator');
-    Route::post('reports', 'ReportController@store');//->middleware('throttle:1,1');
+    Route::post('reports', 'ReportController@store')->middleware('throttle:15,1');
     Route::put('reports/{id}', 'ReportController@update')->middleware('ismoderator');
     Route::delete('reports/{id}', 'ReportController@destroy')->middleware('ismoderator');
 
@@ -91,15 +91,14 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('comments', 'CommentController@index');
     Route::get('comments/{id}', 'CommentController@show');
-    Route::post('comments', 'CommentController@store')->middleware('throttle:2,1');
+    Route::post('comments', 'CommentController@store')->middleware('throttle:30,1');
     Route::put('comments/{id}', 'CommentController@update')->middleware('ismoderator');
     Route::delete('comments/{id}', 'CommentController@destroy')->middleware('ismoderator');
 
     // posts
     Route::get('posts', 'PostController@index');
     Route::get('posts/{id}', 'PostController@show');
-    // Route::post('posts', 'PostController@store')->middleware('throttle:1,1');
-    Route::post('posts', 'PostController@store');
+    Route::post('posts', 'PostController@store')->middleware('throttle:15,1');
     Route::put('posts/{id}', 'PostController@update');
     Route::delete('posts/{id}', 'PostController@destroy');
     Route::post('posts/get-by-tags', 'PostController@getPostsByTags');
