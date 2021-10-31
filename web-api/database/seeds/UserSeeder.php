@@ -48,6 +48,21 @@ class UserSeeder extends Seeder
             'suspended' => 0
         ]);
 
+        // JORGE
+        App\User::create([
+            'name' => 'Jorge Faria',
+            'email' => 'jorge.faria.t0119174@edu.atec.pt',
+            'email_verified_at' => now(),
+            'password' => bcrypt('password'),
+            'profile_picture' => '',
+            'birth_date' => '1991-08-08',
+            'district_id' => 13,
+            'school_class_id' => 7,
+            'github_url' => "https://github.com/pintarolas",
+            'linkedin_url' => "https://www.linkedin.com/in/jorgefaria91",
+            'suspended' => 0
+        ]);
+
         // Edgar
         App\User::create([
             'name' => 'Edgar Fernandes',

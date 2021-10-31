@@ -223,6 +223,14 @@ export default {
     return {
       dismissSecs: 5,
       dismissCountDown: 0,
+      AlertMessage: false,
+
+      updateSucces: false,
+      messageSucces: "Redes sociais atualizadas.",
+      messageFail: "Dados inválidos, por favor verifique os links",
+
+      alertPasswordMessage: false,
+
       tagsFields: [
         { key: "allTags.name", label: "Tags" },
         { key: "actions", label: "Ações" },
@@ -312,12 +320,11 @@ export default {
     },
     async updateSocial() {
       // var facebookRegex = /(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w]*\/)*([\w]*)/;
-      let facebookRegex =
-        /(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w]*\/)?(?:profile.php\?id=(?=\d.*))?([\w]*)?/;
-      var githubRegex = /(?:https\/\/)?(?:www\.)?github\.com\//gi;
-      var instagramRegex = /(?:https\/\/)?(?:www\.)(?:instagram.com\/)/gi;
-      var linkedinRegex = /(?:https\/\/)?(?:www\.)(?:linkedin.com\/)/gi;
-
+      let facebookRegex = /(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w]*\/)?(?:profile.php\?id=(?=\d.*))?([\w]*)?/;
+      var githubRegex = /(?:https\/\/)?(?:www\.)?github\.com\//ig;
+      var instagramRegex = /(?:https\/\/)?(?:www\.)(?:instagram.com\/)/ig;
+      var linkedinRegex = /(?:https\/\/)?(?:www\.)(?:linkedin.com\/)/ig;
+      
       if (
         facebookRegex.test(this.userInfo.facebook_url) &&
         githubRegex.test(this.userInfo.github_url) &&
@@ -410,6 +417,18 @@ export default {
           });
         }
       }
+    },
+    showSocialMediaAlert() {
+      this.AlertMessage = true;
+      setTimeout(() => {
+        this.AlertMessage = false;
+      }, 3500);
+    },
+    showPasswordAlert() {
+      this.alertPasswordMessage = true;
+      setTimeout(() => {
+        this.alertPasswordMessage = false;
+      }, 3000);
     },
     rowClass(item, type) {
       if (!item || type !== "row") {
