@@ -19,31 +19,89 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+      if (!isAuthenticated) {
+        next({ name: "Login" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/register",
     name: "Register",
     component: Register,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+
+      if (isAuthenticated) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/login",
     name: "Login",
     component: Login,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+
+      if (isAuthenticated) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/profile/:id?",
     name: "Profile",
     component: Profile,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+      if (!isAuthenticated) {
+        next({ name: "Login" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "/moderation",
     name: "Moderation",
     component: Moderation,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+
+      if (!isAuthenticated) {
+        next({ name: "Home" });
+      } else {
+        userService.isModerator().then((isModerator) => {
+          if (!isModerator) {
+            next({ name: "Home" });
+          } else {
+            next();
+          }
+        });
+      }
+    },
   },
   {
     path: "/verification",
     name: "Verification",
     component: Verification,
+    beforeEnter(to, from, next) {
+      const isAuthenticated = store.getters["auth/authenticated"];
+
+      if (isAuthenticated) {
+        next({ name: "Home" });
+      } else {
+        next();
+      }
+    },
   },
   {
     path: "*",
@@ -57,28 +115,28 @@ const router = new VueRouter({
   routes,
 });
 
-router.beforeEach(async (to, __, next) => {
-  const isAuthenticated = store.getters["auth/authenticated"];
+// router.beforeEach(async (to, __, next) => {
+//   const isAuthenticated = store.getters["auth/authenticated"];
 
-  if (to.name === "Moderation") {
-    const isModerator = await userService.isModerator();
+//   if (to.name === "Moderation") {
+//     const isModerator = await userService.isModerator();
 
-    if (!isModerator) {
-      next({ name: "Home" });
-    }
-  }
+//     if (!isModerator) {
+//       next({ name: "Home" });
+//     }
+//   }
 
-  if (isAuthenticated) {
-    if (to.name === "Login" || to.name === "Register") {
-      next({ name: "Home" });
-    }
-  } else {
-    if (to.name === "Home") {
-      next({ name: "Login" });
-    }
-  }
+//   if (isAuthenticated) {
+//     if (to.name === "Login" || to.name === "Register") {
+//       next({ name: "Home" });
+//     }
+//   } else {
+//     if (to.name === "Home") {
+//       next({ name: "Login" });
+//     }
+//   }
 
-  next();
-});
+//   next();
+// });
 
 export default router;

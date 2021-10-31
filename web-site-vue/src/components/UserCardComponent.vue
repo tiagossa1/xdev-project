@@ -1,7 +1,7 @@
 <template>
   <div class="w-75">
     <b-card
-      :img-alt="propUserInfo.name + ` photo`"
+      img-alt=""
       img-top
       rounded="circle"
       :img-src="propUserInfo.profile_picture"
