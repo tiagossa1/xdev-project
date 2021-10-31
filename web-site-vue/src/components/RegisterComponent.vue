@@ -368,7 +368,7 @@ export default {
 
       this.schoolClasses = res.map((x) => ({
         value: x.id,
-        text: x.name,
+        text: `${x.name} - ${x.school.name}`,
       }));
     },
     inputState(input) {
