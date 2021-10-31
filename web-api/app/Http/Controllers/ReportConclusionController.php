@@ -17,17 +17,21 @@ class ReportConclusionController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
+            $query = ReportConclusion::query();
+
+            if (!is_null($request->name)) {
+                $query = $query->where('name', 'like', '%' . $request->name . '%');
+            }
+
             return response()->json([
-                'data' => Cache::remember('report-conclusions',60*60*24, function (){
-                    return ReportConclusion::all();
-                }),
+                'data' => $query->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -46,9 +50,8 @@ class ReportConclusionController extends Controller
                 'data' => $reportConclusion,
                 'message' => 'Success'
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -62,7 +65,7 @@ class ReportConclusionController extends Controller
         try {
             $reportConclusion = ReportConclusion::find($id);
 
-            if(is_null($reportConclusion)){
+            if (is_null($reportConclusion)) {
                 return response()->json(['message' => "ReportConclusion not found!"], 404);
             }
 
@@ -70,9 +73,8 @@ class ReportConclusionController extends Controller
                 'data' => $reportConclusion,
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -92,9 +94,8 @@ class ReportConclusionController extends Controller
                 'data' => $reportConclusion,
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -109,14 +110,14 @@ class ReportConclusionController extends Controller
         try {
             $reportConclusion = ReportConclusion::find($id);
 
-            if(is_null($reportConclusion)){
+            if (is_null($reportConclusion)) {
                 return response()->json(['message' => "ReportConclusion not found!"], 404);
             }
 
             $reportConclusion->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

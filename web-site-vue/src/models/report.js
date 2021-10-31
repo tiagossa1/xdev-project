@@ -3,6 +3,8 @@ import Post from "./post";
 import ReportConclusion from "./reportConclusion";
 import Comment from "./comment";
 
+import dayjs from "dayjs";
+
 export default class Report {
   constructor(report) {
     this.id = report?.id;
@@ -13,6 +15,7 @@ export default class Report {
     this.postComment = report?.comment ? new Comment(report?.comment) : null;
     this.closed = Boolean(report?.closed);
     this.reason = report?.reason;
-    this.createdAt = report?.created_at;
+
+    this.createdAt = dayjs(report?.created_at).format('YYYY-MM-DD HH:mm:ss');
   }
 }

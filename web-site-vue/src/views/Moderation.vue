@@ -6,12 +6,12 @@
       leave-active-class="fadeOutRight"
     >
       <div v-if="show">
-        <h5 class="mb-3 mt-4 font-weight-bold">
+        <h5 class="mb-3 mt-4 text-center font-weight-bold">
           {{ getGrettingsByTime }}, {{ this.user.name }}!
         </h5>
-        <notifications-component
-          :notifications="notifications"
-        ></notifications-component>
+        <report-management-component
+          v-if="!isSheriff && show"
+        ></report-management-component>
         <hr />
       </div>
     </transition>
@@ -52,7 +52,8 @@
 import { mapGetters } from "vuex";
 
 import UserManagementComponent from "../components/moderation/UserManagementComponent.vue";
-import NotificationsComponent from "../components/moderation/NotificationsComponent.vue";
+import ReportManagementComponent from "../components/moderation/ReportManagementComponent.vue";
+// import NotificationsComponent from "../components/moderation/NotificationsComponent.vue";
 import FeedbackManagementComponent from "../components/moderation/FeedbackManagementComponent.vue";
 import TagsManagementComponent from "../components/moderation/TagsManagementComponent.vue";
 
@@ -62,7 +63,7 @@ import userService from "../services/userService";
 export default {
   name: "Moderation",
   components: {
-    NotificationsComponent,
+    ReportManagementComponent,
     UserManagementComponent,
     FeedbackManagementComponent,
     TagsManagementComponent,

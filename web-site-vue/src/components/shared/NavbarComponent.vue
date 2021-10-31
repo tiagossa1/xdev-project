@@ -175,35 +175,53 @@
                 v-for="(notification, index) in notifications"
                 :key="notification.id"
               >
-                <b-card no-body class="text-center p-4">
-                  <b-card-text>
-                    <span
-                      :style="{
-                        color: notification.user.userType.hexColorCode,
-                      }"
-                      >{{ notification.user.name }}</span
-                    >
-                    criou um novo post sobre
-                    {{ notification.tags.map((t) => t.name).join(", ") }}!
-                    <br />
-                    <b-link v-b-modal.modal-post-notification href=""
-                      >Ver</b-link
-                    >
-                    <b-modal
-                      id="modal-post-notification"
-                      ok-only
-                      @ok="removeNotification(index)"
-                      @close="removeNotification(index)"
-                      size="xl"
-                      title="Novo Post"
-                    >
-                      <post-component
-                        class="w-75 m-auto"
-                        :post="notification"
-                      ></post-component>
-                    </b-modal>
-                  </b-card-text>
-                </b-card>
+                <template v-if="notification.constructor.name === 'Post'">
+                  <b-card no-body class="text-center p-4">
+                    <b-card-text>
+                      <span
+                        :style="{
+                          color: notification.user.userType.hexColorCode,
+                        }"
+                        >{{ notification.user.name }}</span
+                      >
+                      criou um novo post sobre
+                      {{ notification.tags.map((t) => t.name).join(", ") }}!
+                      <br />
+                      <b-link v-b-modal.modal-post-notification href=""
+                        >Ver</b-link
+                      >
+                      <b-modal
+                        id="modal-post-notification"
+                        ok-only
+                        @ok="removeNotification(index)"
+                        @close="removeNotification(index)"
+                        size="xl"
+                        title="Novo Post"
+                      >
+                        <post-component
+                          class="w-75 m-auto"
+                          :post="notification"
+                        ></post-component>
+                      </b-modal>
+                    </b-card-text>
+                  </b-card>
+                </template>
+                <template
+                  v-else-if="notification.constructor.name === 'Report'"
+                >
+                  <b-card no-body class="text-center p-4">
+                    <b-card-text>
+                      <span
+                        :style="{
+                          color: notification.user.userType.hexColorCode,
+                        }"
+                        >{{ notification.user.name }}</span
+                      >
+                      criou um novo report. Para o ver, entre na
+                      <b-link to="/moderation">página de moderação</b-link>.
+                    </b-card-text>
+                  </b-card>
+                </template>
               </div>
             </template>
             <template v-else>
@@ -236,16 +254,18 @@
 </template>
 
 <script>
-import tagService from "../services/tagService.js";
-import notificationService from "../services/notificationService";
+import tagService from "../../services/tagService.js";
+import notificationService from "../../services/notificationService";
 
-import Post from "../models/post";
+import Post from "../../models/post";
 
-import PostComponent from "./PostComponent.vue";
+import PostComponent from "../PostComponent.vue";
 
-import Feedback from "./FeedbackComponent.vue";
+import Feedback from "../FeedbackComponent.vue";
 
 import { mapGetters, mapActions } from "vuex";
+import userService from "../../services/userService.js";
+import reportService from "../../services/reportService.js";
 
 export default {
   name: "navbar-component",
@@ -269,7 +289,9 @@ export default {
       this.tags = tags;
       this.options = tags;
 
-      var channel = this.$pusher.subscribe("xdev");
+      var channel = this.$pusher.subscribe(
+        process.env.VUE_APP_PUSHER_CHANNEL_NAME
+      );
 
       channel.bind("post-created", ({ post }) => {
         const userTagIds = this.$store.getters["auth/user"].tags.map(
@@ -287,6 +309,19 @@ export default {
           this.notificationCounter++;
         }
       });
+
+      channel.bind("report-created", async ({ id }) => {
+        const isModerator = await userService.isModerator();
+
+        if (isModerator) {
+          const reportCreated = await reportService.getById(id);
+
+          if (reportCreated.user.id !== this.user.id) {
+            this.notifications.push(reportCreated);
+            this.notificationCounter++;
+          }
+        }
+      });
     }
   },
   computed: {
@@ -301,7 +336,6 @@ export default {
       );
 
       if (criteria) {
-        // console.log(options.name)
         return options.filter(
           (opt) => opt.name.toLowerCase().indexOf(criteria) > -1
         );

@@ -22,8 +22,8 @@
 </template>
 
 <script>
-import FooterComponent from "./components/FooterComponent.vue";
-import NavbarComponent from "./components/NavbarComponent.vue";
+import FooterComponent from "./components/shared/FooterComponent.vue";
+import NavbarComponent from "./components/shared/NavbarComponent.vue";
 
 export default {
   name: "Register",

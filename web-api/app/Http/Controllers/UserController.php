@@ -24,7 +24,7 @@ class UserController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -39,7 +39,7 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            if(is_null($user)){
+            if (is_null($user)) {
                 return response()->json(['message' => "User not found!"], 404);
             }
 
@@ -48,7 +48,7 @@ class UserController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return  response()->json(['error' => $exception->getMessage()], 500);
+            return  response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -88,7 +88,7 @@ class UserController extends Controller
                 'message' => 'Sucess'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -103,14 +103,14 @@ class UserController extends Controller
         try {
             $user = User::find($id);
 
-            if(is_null($user)){
+            if (is_null($user)) {
                 return response()->json(['message' => "User not found!"], 404);
             }
 
             $user->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -122,16 +122,17 @@ class UserController extends Controller
 
             return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
-    public function getFavoritePosts($id) {
+    public function getFavoritePosts($id)
+    {
         try {
             $posts = User::with('favorite_posts')->find($id)->favorite_posts;
             return response()->json(['posts' => $posts]);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

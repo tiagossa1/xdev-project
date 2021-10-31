@@ -20,13 +20,13 @@ class UserTypeController extends Controller
     {
         try {
             return response()->json([
-                'data' => Cache::remember('user-types',60*60*24, function (){
+                'data' => Cache::remember('user-types', 60 * 60 * 24, function () {
                     return UserType::all();
                 }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -46,7 +46,7 @@ class UserTypeController extends Controller
                 'message' => 'Success'
             ], 201);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -60,7 +60,7 @@ class UserTypeController extends Controller
         try {
             $userType = UserType::find($id);
 
-            if(is_null($userType)){
+            if (is_null($userType)) {
                 return response()->json(['message' => "UserType not found!"], 404);
             }
 
@@ -68,9 +68,8 @@ class UserTypeController extends Controller
                 'data' => $userType,
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -91,7 +90,7 @@ class UserTypeController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -106,14 +105,14 @@ class UserTypeController extends Controller
         try {
             $userType = UserType::find($id);
 
-            if(is_null($userType)){
+            if (is_null($userType)) {
                 return response()->json(['message' => "UserType not found!"], 404);
             }
 
             $userType->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

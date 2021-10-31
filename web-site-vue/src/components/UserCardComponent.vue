@@ -175,7 +175,6 @@ export default {
       this.$refs.modalComponent.show();
     },
     onSocialMediaUpdate(user) {
-      console.log(user);
       this.propUserInfo = user;
     },
   },

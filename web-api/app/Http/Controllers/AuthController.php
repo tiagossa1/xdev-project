@@ -50,9 +50,9 @@ class AuthController extends Controller
             } else {
                 return response(['message' => 'User already exists.'], 400);
             }
-        } catch (Exception $e) {
+        } catch (Exception $exception) {
             return response([
-                'message' => $e->getMessage(),
+                'message' => $exception->getMessage(),
             ], 500);
         }
     }
@@ -164,9 +164,9 @@ class AuthController extends Controller
                         'message' => "Password updated successfully.",
                     ], 200);
                 }
-            } catch (Exception $ex) {
+            } catch (Exception $exception) {
                 return response([
-                    'message' => $ex->getMessage(),
+                    'message' => $exception->getMessage(),
                 ], 500);
             }
         }

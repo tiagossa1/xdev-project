@@ -38,7 +38,7 @@ class TagController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
     /**
@@ -73,7 +73,7 @@ class TagController extends Controller
                 'message' => 'Tag com palavra proibida'
             ], 400);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -87,7 +87,7 @@ class TagController extends Controller
         try {
             $tag = Tag::find($id);
 
-            if(is_null($tag)){
+            if (is_null($tag)) {
                 return response()->json(['message' => "Tag not found!"], 404);
             }
 
@@ -96,7 +96,7 @@ class TagController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -117,7 +117,7 @@ class TagController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -132,14 +132,14 @@ class TagController extends Controller
         try {
             $tag = Tag::find($id);
 
-            if(is_null($tag)){
+            if (is_null($tag)) {
                 return response()->json(['message' => "Tag not found!"], 404);
             }
 
             $tag->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 

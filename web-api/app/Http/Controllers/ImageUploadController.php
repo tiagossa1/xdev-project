@@ -23,7 +23,7 @@ class ImageUploadController extends Controller
             $user = User::where('email', $request->email)->first();
             // $user->refresh();
 
-            if(!$request->hasFile('profile_picture')) {
+            if (!$request->hasFile('profile_picture')) {
                 return response()->json(['Profile picture is mandatory.'], 400);
             }
 
@@ -46,7 +46,7 @@ class ImageUploadController extends Controller
                 ], 404);
             }
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 

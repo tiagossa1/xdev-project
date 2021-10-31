@@ -11,11 +11,11 @@ class ReportCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $report;
+    public $id;
 
-    public function __construct($report)
+    public function __construct($id)
     {
-        $this->report = $report;
+        $this->id = $id;
     }
 
     public function broadcastOn()

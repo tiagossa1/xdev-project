@@ -26,7 +26,7 @@ class CommentController extends Controller
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -65,7 +65,7 @@ class CommentController extends Controller
             ], 400);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -88,7 +88,7 @@ class CommentController extends Controller
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -128,7 +128,7 @@ class CommentController extends Controller
             ], 400);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -150,7 +150,7 @@ class CommentController extends Controller
             $comment->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

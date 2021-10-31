@@ -2,15 +2,6 @@
 
 namespace App\Http\Controllers;
 
-<<<<<<< Updated upstream
-=======
-use App\Events\ReportCreated;
-use App\Http\Requests\CreateReportRequest;
-use App\Http\Requests\ReportRequest;
-use App\Http\Requests\UpdateReportRequest;
-use App\Notifications\NewReport;
-use App\Report;
->>>>>>> Stashed changes
 use App\Post;
 use App\User;
 use Exception;
@@ -40,7 +31,19 @@ class ReportController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
+        }
+    }
+
+    public function getOpenReports()
+    {
+        try {
+            return response()->json([
+                'data' => Report::open()->notOwn()->orderByDesc('created_at')->get(),
+                'message' => 'Success'
+            ], 200);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -65,7 +68,7 @@ class ReportController extends Controller
                 $report->comments()->sync($request->input('comments'));
 
             // isModerator, isSheriff and isFromTheSameClass are called scopes. They are declared on User.php (User model file).
-            $moderators = User::isModerator()->where('id', '<>', Auth::user()->id)->get();
+            // $moderators = User::isModerator()->where('id', '<>', Auth::user()->id)->get();
 
             // FIXME: Notification não funciona por causa da tabela Notification, campo data é pequeno demais para o Base64.
 
@@ -88,12 +91,14 @@ class ReportController extends Controller
             // if(!is_null($mods))
             //     Notification::send($mods, new NewReport(Report::with('user', 'post', 'comment', 'moderator', 'report_conclusion')->find($report->id)));
 
+            event(new ReportCreated($report->id));
+
             return response()->json([
                 'data' => $report,
                 'message' => 'Success',
             ], 201);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -107,7 +112,7 @@ class ReportController extends Controller
         try {
             $report = Report::find($id);
 
-            if(is_null($report)){
+            if (is_null($report)) {
                 return response()->json(['message' => "Report not found!"], 404);
             }
 
@@ -116,7 +121,7 @@ class ReportController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -148,9 +153,8 @@ class ReportController extends Controller
                 'data' => $report->fresh(),
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -165,14 +169,14 @@ class ReportController extends Controller
         try {
             $report = Report::find($id);
 
-            if(is_null($report)){
+            if (is_null($report)) {
                 return response()->json(['message' => "Report not found!"], 404);
             }
 
             $report->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

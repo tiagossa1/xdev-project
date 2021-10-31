@@ -24,7 +24,7 @@ class FeedbackTypeController extends Controller
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -47,7 +47,7 @@ class FeedbackTypeController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -71,7 +71,7 @@ class FeedbackTypeController extends Controller
             ], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -93,7 +93,7 @@ class FeedbackTypeController extends Controller
             ], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -112,10 +112,10 @@ class FeedbackTypeController extends Controller
                 return response()->json(['message' => "FeedbackType not found!"], 404);
             }
             $feedbackType->delete();
-            return response()->json(['message' => 'Deleted'], 205);
+            return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

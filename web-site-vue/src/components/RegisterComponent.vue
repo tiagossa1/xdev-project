@@ -273,15 +273,27 @@ export default {
 
         this.form.email = email;
 
-        let image = await this.readAsDataURL(this.photo);
-        this.form.profile_picture = image.data;
+        if (this.photo) {
+          let image = await this.readAsDataURL(this.photo);
+          this.form.profile_picture = image.data;
+        }
 
         res = await userService.register(this.form).catch((err) => {
-          this.showErrorAlert = true;
-          this.formStatus = Object.values(err.response.data.errors)
-            .map((x) => x[0])
-            .toString();
-          this.showAlert();
+          let error;
+
+          if (err.response.data.errors) {
+            error = Object.values(err.response.data.errors);
+          }
+
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: error ?? err.response.data.message,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
         });
 
         if (res.status === 201) {
@@ -309,7 +321,7 @@ export default {
     readAsDataURL(file) {
       return new Promise((resolve) => {
         let fileReader = new FileReader();
-        fileReader.onload = function () {
+        fileReader.onload = function() {
           return resolve({
             data: fileReader.result,
             name: file.name,

@@ -47,7 +47,9 @@ export default {
     },
   },
   async mounted() {
-    var channel = this.$pusher.subscribe("xdev");
+    var channel = this.$pusher.subscribe(
+      process.env.VUE_APP_PUSHER_CHANNEL_NAME
+    );
 
     channel.bind("user-email-verified", ({ email }) => {
       let registerRequest = this.getRegisterRequest;

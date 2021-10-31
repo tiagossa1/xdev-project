@@ -17,6 +17,10 @@ class ReportConclusionSeeder extends Seeder
         ]);
 
         ReportConclusion::create([
+            'name' => 'Eliminado'
+        ]);
+
+        ReportConclusion::create([
             'name' => 'Sem medidas tomadas'
         ]);
 

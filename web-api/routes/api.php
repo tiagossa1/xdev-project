@@ -40,6 +40,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('reports', 'ReportController@index')->middleware('ismoderator');
     Route::get('reports/{id}', 'ReportController@show')->middleware('ismoderator');
+    Route::get('open-reports', 'ReportController@getOpenReports')->middleware('ismoderator');
     Route::post('reports', 'ReportController@store')->middleware('throttle:15,1');
     Route::put('reports/{id}', 'ReportController@update')->middleware('ismoderator');
     Route::delete('reports/{id}', 'ReportController@destroy')->middleware('ismoderator');

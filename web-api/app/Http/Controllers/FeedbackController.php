@@ -23,7 +23,7 @@ class FeedbackController extends Controller
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -44,7 +44,7 @@ class FeedbackController extends Controller
             ], 201);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -69,7 +69,7 @@ class FeedbackController extends Controller
             ], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -91,7 +91,7 @@ class FeedbackController extends Controller
             ], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -114,7 +114,7 @@ class FeedbackController extends Controller
             return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

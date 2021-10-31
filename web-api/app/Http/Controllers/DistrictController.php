@@ -20,13 +20,13 @@ class DistrictController extends Controller
     {
         try {
             return response()->json([
-                'data' => Cache::remember('districts',60*60*24, function (){
+                'data' => Cache::remember('districts', 60 * 60 * 24, function () {
                     return District::all();
                 }),
                 'message' => 'Success',
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -45,9 +45,8 @@ class DistrictController extends Controller
                 'data' => $district,
                 'message' => 'District created with success',
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -61,16 +60,16 @@ class DistrictController extends Controller
         try {
             $district = District::find($id);
 
-            if(is_null($district)){
+            if (is_null($district)) {
                 return response()->json(['message' => "District not found!"], 404);
             }
 
             return response()->json([
                 'data' => $district,
-                'message' => 'Success'], 201);
-
+                'message' => 'Success'
+            ], 201);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -90,9 +89,8 @@ class DistrictController extends Controller
                 'data' => $district,
                 'message' => 'Success',
             ], 201);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -107,16 +105,15 @@ class DistrictController extends Controller
         try {
             $district = District::find($id);
 
-            if(is_null($district)){
-                return response()->json(['message' => "District not found!"], 404);
+            if (is_null($district)) {
+                return response()->json(['message' => "District not found."], 404);
             }
 
             $district->delete();
             return response()->json(['message' => 'Deleted'], 200);
-
         } catch (Exception $exception) {
 
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

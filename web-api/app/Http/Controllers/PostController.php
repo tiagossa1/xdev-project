@@ -43,8 +43,8 @@ class PostController extends Controller
                 'message' => 'Success',
                 'data' => $posts,
             ], 200);
-        } catch (Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -74,8 +74,8 @@ class PostController extends Controller
                 'message' => 'Success',
                 'data' => $posts,
             ], 200);
-        } catch (Exception $ex) {
-            return response()->json(['error' => $ex->getMessage()], 500);
+        } catch (Exception $exception) {
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -145,11 +145,11 @@ class PostController extends Controller
                 ], 201);
             }
                 return response()->json([
-                    'message' => 'O Titulo ou a descrição contem palavras proibidas.'
+                    'message' => 'O titulo ou a descrição contem palavras proibidas.'
                 ], 400);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -173,7 +173,7 @@ class PostController extends Controller
             ], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -204,6 +204,7 @@ class PostController extends Controller
                 $post->description = $request->description;
                 $post->user_id = $request->user_id;
                 $post->post_type_id = $request->post_type_id;
+                $post->suspended = $request->suspended ?? $post->suspended;
                 $post->save();
 
 
@@ -225,11 +226,11 @@ class PostController extends Controller
             ], 200);
             }
             return response()->json([
-                'message' => 'O Titulo ou a descrição contem palavras proibidas.'
+                'message' => 'O titulo ou a descrição contem palavras proibidas.'
             ], 400);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -256,7 +257,7 @@ class PostController extends Controller
             return response()->json(['message' => 'Deleted'], 200);
 
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }

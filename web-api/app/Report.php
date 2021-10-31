@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 
 class Report extends Model
@@ -22,6 +23,15 @@ class Report extends Model
     ];
 
     protected $with = ["post", 'user', 'comment', 'report_conclusion', 'moderator'];
+
+    public function scopeOpen($query)
+    {
+        return $query->where('closed', 0);
+    }
+
+    public function scopeNotOwn($query) {
+        return $query->where('user_id', '<>', Auth::user()->id);
+    }
 
     public function post()
     {

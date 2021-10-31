@@ -21,13 +21,13 @@ class SchoolClassController extends Controller
     {
         try {
             return response()->json([
-                'data' => Cache::remember('school-classes',60*60*24, function (){
+                'data' => Cache::remember('school-classes', 60 * 60 * 24, function () {
                     return SchoolClass::all();
                 }),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -47,7 +47,7 @@ class SchoolClassController extends Controller
                 'message' => 'Success'
             ], 201);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -61,7 +61,7 @@ class SchoolClassController extends Controller
         try {
             $schoolClass = SchoolClass::find($id);
 
-            if(is_null($schoolClass)){
+            if (is_null($schoolClass)) {
                 return response()->json(['message' => "SchoolClass not found!"], 404);
             }
 
@@ -69,9 +69,8 @@ class SchoolClassController extends Controller
                 'data' => $schoolClass,
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -91,9 +90,8 @@ class SchoolClassController extends Controller
                 'data' => $schoolClass,
                 'message' => 'Success'
             ], 200);
-
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 
@@ -108,14 +106,14 @@ class SchoolClassController extends Controller
         try {
             $schoolClass = SchoolClass::find($id);
 
-            if(is_null($schoolClass)){
+            if (is_null($schoolClass)) {
                 return response()->json(['message' => "SchoolClass not found!"], 404);
             }
 
             $schoolClass->delete();
             return response()->json(['message' => 'Deleted'], 200);
         } catch (Exception $exception) {
-            return response()->json(['error' => $exception->getMessage()], 500);
+            return response()->json(['message' => $exception->getMessage()], 500);
         }
     }
 }
