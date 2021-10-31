@@ -1,152 +1,140 @@
 <template>
-  <div class="w-75">
-    <b-card
-      img-alt=""
-      img-top
-      rounded="circle"
-      :img-src="propUserInfo.profile_picture"
-      tag="article"
-      style="max-width: 20rem; border-radius: 10px"
-    >
-      <b-card-body class="text-center p-0">
+  <div>
+      <div class="text-center" >
         <b-icon
           v-if="!paramId"
-          class="ml-2 mt-2 cursor-pointer float-right"
+          class=" mt-3 mr-3 cursor-pointer float-right"
           scale="1"
           icon="pencil"
           @click="showModal()"
         ></b-icon>
-        <b-card-title
-          class="font-weight-bold h5"
-          :style="{ color: propUserInfo.userType.hexColorCode }"
-        >
-          <span>
-            {{ propUserInfo.name }}
-          </span>
-          <br />
-          <b-badge
-            :style="{ backgroundColor: propUserInfo.userType.hexColorCode }"
-            >{{ propUserInfo.userType.name }}
-          </b-badge>
-        </b-card-title>
-        <b-card-sub-title class="mt-3 mb-3 small"
-          >{{ propUserInfo.schoolClass.name }} |
-          {{ propUserInfo.schoolClass.school.name }}
-        </b-card-sub-title>
-
-        <b-card-group class="mb-3">
-          <b-card border-variant="light">
-            <template #header>
-              <span class="font-weight-bold text-primary">Posts</span>
-            </template>
-            <b-card-text class="text-body">{{ postCount }}</b-card-text>
-          </b-card>
-        </b-card-group>
-
-        <b-card-group class="mb-3">
-          <b-card border-variant="light">
-            <template #header>
-              <span class="font-weight-bold text-primary">Email</span>
-            </template>
-            <b-card-text>
-              <a class="text-body" :href="'mailto:' + propUserInfo.email">
-                <b-icon icon="envelope-open" aria-hidden="true"></b-icon>
-              </a>
-            </b-card-text>
-          </b-card>
-        </b-card-group>
-
-        <b-card-group class="mb-3">
-          <b-card border-variant="light">
-            <template #header>
-              <span class="font-weight-bold text-primary">Interesses</span>
-            </template>
-            <b-card-text v-if="propUserInfo.tags.length > 0">
+        <div class="bg-white rounded  py-5 px-4" :style="{'border-radius': '10px'}">
+          <b-img id="userImage" :src="propUserInfo.profile_picture" fluid alt="UserImg"  
+          class="rounded-circle mb-3 mt-3">
+          </b-img>
+            <h2 class="mb-0" :style="{ color: propUserInfo.userType.hexColorCode }">{{ propUserInfo.name }}</h2>
+            
+            <h5>
               <b-badge
-                class="m-2 text-white p-2"
-                v-for="tag in propUserInfo.tags"
-                :key="tag.id"
-                pill
-                variant="primary"
-              >
-                {{ tag.name }}
+                :style="{ backgroundColor: propUserInfo.userType.hexColorCode }"
+                >{{ propUserInfo.userType.name }}
               </b-badge>
-            </b-card-text>
-            <b-card-text v-else> Sem interesses </b-card-text>
-          </b-card>
-        </b-card-group>
+            </h5>
+            <span>
+              {{ propUserInfo.schoolClass.name }} |
+              {{ propUserInfo.schoolClass.school.name }}
+            </span>
+            <hr>
+            <b-row>
+              <b-col class="col-xs-4">
+                  <div>
+                      <h5 class="font-weight-bold text-primary">Email</h5>
+                      
+                        <a class="text-body" :href="'mailto:' + propUserInfo.email">
+                          <b-icon icon="envelope-open" aria-hidden="true"></b-icon>
+                        </a>
+                    </div>
+              </b-col>
+            </b-row>
 
-        <b-card-group class="mb-3">
-          <b-card border-variant="light">
-            <template #header>
-              <span class="font-weight-bold text-primary">Redes Sociais</span>
-            </template>
-            <b-card-text>
-              <b-container>
-                <b-row>
-                  <b-col>
-                    <a
-                      class="text-dark"
-                      target="_blank"
-                      :href="'http://' + propUserInfo.facebook_url"
-                    >
-                      <b-icon
-                        class="w-22"
-                        icon="facebook"
-                        aria-hidden="true"
-                      ></b-icon>
-                    </a>
-                  </b-col>
-                  <b-col>
-                    <a
-                      class="text-dark"
-                      target="_blank"
-                      :href="'http://' + propUserInfo.linkedin_url"
-                    >
-                      <b-icon
-                        class="w-22"
-                        icon="linkedin"
-                        aria-hidden="true"
-                      ></b-icon>
-                    </a>
-                  </b-col>
-                  <b-col>
-                    <a
-                      class="text-dark"
-                      target="_blank"
-                      :href="'http://' + propUserInfo.github_url"
-                    >
-                      <b-icon
-                        class="w-22"
-                        icon="github"
-                        aria-hidden="true"
-                      ></b-icon>
-                    </a>
-                  </b-col>
-                  <b-col>
-                    <a
-                      class="text-dark"
-                      target="_blank"
-                      :href="'http://' + propUserInfo.instagram_url"
-                    >
-                      <b-icon
-                        class="w-22"
-                        icon="instagram"
-                        aria-hidden="true"
-                      ></b-icon>
-                    </a>
-                  </b-col>
-                </b-row>
-              </b-container>
-            </b-card-text>
-          </b-card>
-        </b-card-group>
-      </b-card-body>
-    </b-card>
-    <user-settings
-      ref="modalComponent"
-      @on-social-media-update="onSocialMediaUpdate"
-    />
+            <hr>
+
+            <b-row>
+              <b-col class="profile-overview">
+                <h5 class="font-weight-bold text-primary">Posts</h5>
+                <span class="text-body">{{ postCount }}</span>
+              </b-col>
+            </b-row>
+
+            <hr>
+
+            <b-row>
+              <b-col>
+                <h5 class="font-weight-bold text-primary">Interesses</h5>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col v-if="propUserInfo.tags.length > 0">
+                <b-badge
+                  class="m-2 text-white p-2"
+                  v-for="tag in propUserInfo.tags"
+                  :key="tag.id"
+                  pill
+                  variant="primary"
+                >
+                  {{ tag.name }}
+                </b-badge>
+              </b-col>
+
+              <b-col v-else>
+                <span>Sem interesses</span>
+              </b-col>
+            </b-row>
+            
+            <hr>
+
+            <b-row>
+              <b-col>
+                <h5 class="font-weight-bold text-primary">Redes Sociais</h5>
+              </b-col>
+            </b-row>
+            
+            <b-row class="mt-2">
+              <b-col>
+                  <a
+                    class="text-dark"
+                    target="_blank"
+                    :href="propUserInfo.facebook_url"
+                  >
+                    <b-img
+                      height="20" width="20"
+                      src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/facebook/facebook-original.svg"
+                    ></b-img>
+                  </a>
+              </b-col>
+              <b-col>
+                <a
+                  class="text-dark"
+                  target="_blank"
+                  :href="propUserInfo.linkedin_url"
+                >
+                  <b-img
+                    height="20" width="20"
+                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
+                  ></b-img>
+                </a>
+              </b-col>
+              <b-col>
+                <a
+                  class="text-dark"
+                  target="_blank"
+                  :href="propUserInfo.github_url"
+                >
+                  <b-img
+                    height="20" width="20"
+                    src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
+                  ></b-img>
+                </a>
+              </b-col>
+              <b-col>
+                <a
+                  class="text-dark"
+                  target="_blank"
+                  :href="propUserInfo.instagram_url"
+                >
+                  <b-img
+                    height="20" width="20"
+                    src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png"
+                  ></b-img>
+                </a>
+              </b-col>
+            </b-row>
+      </div>
+      <user-settings
+        ref="modalComponent"
+        @on-social-media-update="onSocialMediaUpdate"
+      />
+    </div>
   </div>
 </template>
 
@@ -181,5 +169,9 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+#userImage{
+  height: 20vh;
+  width: 10vw;
+}
 </style>
