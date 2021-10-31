@@ -1,10 +1,66 @@
 <template>
   <b-container :style="getPostStyle" class="bv-example-row p-3 mb-4 x">
-    <b-row class="ml-2 mb-3">
-      <b-col>
-        <span v-for="tag in post.tags" :key="tag.id" class="mr-4">
-          <b-badge class="p-2" pill variant="secondary">{{ tag.name }}</b-badge>
+    <b-row class="ml-2 mr-2 mb-3">
+      <b-col v-if="!toEdit">
+        <span v-for="tag in propPost.tags" :key="tag.id" class="mr-4">
+          <b-badge class="p-2 no-select" pill variant="secondary">{{ tag.name }}</b-badge>
         </span>
+      </b-col>
+      <b-col v-else>
+        <b-form-group
+          label-for="tags-component-select"
+        >
+          <b-form-tags
+            id="tags-component-select"
+            v-model="editSelectedTags"
+            size="lg"
+            class="mb-2"
+            :limit="limitTag"
+            add-on-change
+            no-outer-focus
+          >
+            <template
+              v-slot="{
+                tags,
+                inputAttrs,
+                inputHandlers,
+                disabled,
+                removeTag,
+              }"
+            >
+              <ul
+                v-if="tags.length > 0"
+                class="list-inline d-inline-block mb-2"
+              >
+                <li v-for="tag in tags" :key="tag" class="list-inline-item">
+                  <b-form-tag
+                    @remove="removeTag(tag)"
+                    :title="tag"
+                    :disabled="disabled"
+                    variant="primary"
+                    class="text-white"
+                    >{{ tag }}</b-form-tag
+                  >
+                </li>
+              </ul>
+              <b-form-select
+                v-bind="inputAttrs"
+                v-on="inputHandlers"
+                :disabled="
+                  disabled ||
+                    availableOptions.length === 0 ||
+                    editSelectedTags.length >= 6
+                "
+                :options="availableOptions"
+              >
+                <template #first>
+                  <!-- This is required to prevent bugs with Safari -->
+                  <option disabled value="">Escolha uma tag...</option>
+                </template>
+              </b-form-select>
+            </template>
+          </b-form-tags>
+        </b-form-group>
       </b-col>
       <span
         v-b-tooltip.right="
@@ -12,7 +68,7 @@
         "
       >
         <b-icon
-          v-if="post.suspended"
+          v-if="propPost.suspended"
           icon="exclamation-triangle"
           class="mr-4 float-right"
           variant="danger"
@@ -24,16 +80,16 @@
       class="mb-4 ml-4 p-2 no-select"
       v-if="!toEdit"
       :style="{
-        backgroundColor: post.user.userType.hexColorCode,
+        backgroundColor: propPost.user.userType.hexColorCode,
       }"
     >
-      <b-icon :icon="post.postType.iconName"></b-icon> {{ post.postType.name }}
+      <b-icon :icon="propPost.postType.iconName"></b-icon> {{ propPost.postType.name }}
     </b-badge>
 
-    <b-row v-if="toEdit" class="mt-2 ml-2 mb-3">
+    <b-row v-if="toEdit" class="mt-2 ml-2 mr-2 mb-3">
       <b-col>
         <b-form-select
-          v-model="post.postType.name"
+          v-model="propPost.postType.name"
           :options="postTypesSelect"
         ></b-form-select>
       </b-col>
@@ -42,18 +98,18 @@
       v-if="!viewOnly && !toEdit"
       @on-deleted="onDeleted"
       @on-edit="onEdit"
-      :post="post"
+      :post="propPost"
     ></post-options-component>
 
-    <b-row>
+    <b-row class="ml-1">
       <b-col>
         <b-container>
           <b-row class="justify-content-center">
             <b-avatar
-              :src="post.user.profile_picture"
+              :src="propPost.user.profile_picture"
               size="5rem"
               :style="{
-                border: '3px solid ' + post.user.userType.hexColorCode,
+                border: '3px solid ' + propPost.user.userType.hexColorCode,
               }"
               :href="redirectProfile"
             ></b-avatar>
@@ -63,9 +119,9 @@
             <b-badge
               :to="redirectProfile"
               class="rounded-35 text-center"
-              :style="{ backgroundColor: post.user.userType.hexColorCode }"
+              :style="{ backgroundColor: propPost.user.userType.hexColorCode }"
             >
-              {{ post.user.userType.name }}
+              {{ propPost.user.userType.name }}
             </b-badge>
           </b-row>
         </b-container>
@@ -73,53 +129,53 @@
       <b-col cols="10">
         <b-link
           class="font-weight-bold"
-          :style="{ color: post.user.userType.hexColorCode }"
+          :style="{ color: propPost.user.userType.hexColorCode }"
           :href="redirectProfile"
-          >{{ post.user.name }}</b-link
+          >{{ propPost.user.name }}</b-link
         >
         <br />
         <small>
-          {{ post.user.schoolClass.name }} |
-          {{ post.user.schoolClass.school.name }}</small
+          {{ propPost.user.schoolClass.name }} |
+          {{ propPost.user.schoolClass.school.name }}</small
         ><br />
-        <small>Adicionado {{ post.createdAt }}</small>
+        <small>Adicionado {{ propPost.createdAt }}</small>
       </b-col>
     </b-row>
 
-    <b-row class="mt-2 ml-2">
+    <b-row class="mt-2 ml-2 mr-2">
       <b-col>
         <template v-if="toEdit">
           <b-form-input
             class="mt-2 mb-3"
-            v-model="post.title"
-            :value="post.title"
+            v-model="propPost.title"
+            :value="propPost.title"
           ></b-form-input>
         </template>
         <template v-else>
-          <h3 class="font-weight-bold">{{ post.title }}</h3>
+          <h3 class="font-weight-bold">{{ propPost.title }}</h3>
         </template>
       </b-col>
     </b-row>
 
-    <b-row class="ml-2 mb-2">
+    <b-row class="ml-2 mr-2 mb-2">
       <b-col>
         <template v-if="toEdit">
           <quill-editor
             class="mb-2"
             ref="myQuillEditor"
-            v-model="post.description"
+            v-model="propPost.description"
           >
           </quill-editor>
         </template>
         <template v-else>
-          <span class="h6 w-25 h-25" v-html="post.description"></span>
+          <span class="h6 w-25 h-25" v-html="propPost.description"></span>
         </template>
       </b-col>
     </b-row>
 
     <b-row v-if="!viewOnly" class="ml-2">
       <b-col
-        v-if="!post.suspended"
+        v-if="!propPost.suspended"
         cols="2"
         style="cursor: pointer"
         @click="onLike"
@@ -134,9 +190,9 @@
         </p>
       </b-col>
       <b-col
-        v-if="!post.suspended"
+        v-if="!propPost.suspended"
         class="cursor-pointer"
-        cols="3"
+        cols="2"
         @click="onSave"
       >
         <p class="h5">
@@ -150,14 +206,25 @@
       </b-col>
 
       <b-col
-        cols="3"
+        cols="2"
         v-if="toEdit && isUserPost"
         style="cursor: pointer"
         @click="onEdited"
       >
         <p class="h5">
           <b-icon icon="pencil" class="mr-1"></b-icon>
-          <span class="small ml-2">Terminar edição</span>
+          <span class="small ml-2">Editar</span>
+        </p>
+      </b-col>
+      <b-col
+        cols="3"
+        v-if="toEdit && isUserPost"
+        style="cursor: pointer"
+        @click="onCancel"
+      >
+        <p class="h5">
+          <b-icon icon="x" class="mr-1"></b-icon>
+          <span class="small ml-2">Cancelar</span>
         </p>
       </b-col>
     </b-row>
@@ -166,33 +233,33 @@
       <b-col>
         <a href="" onclick="return false;">
           <p
-            v-if="post.comments.length > 0"
+            v-if="propPost.comments.length > 0"
             class="mt-2 mb-2 text-dark"
             :aria-expanded="modalVisible ? 'true' : 'false'"
             :aria-controls="collapseId"
             @click="modalVisible = !modalVisible"
           >
-            Mostrar {{ post.comments.length }} comentários
+            Mostrar {{ propPost.comments.length }} comentários
             <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
           </p>
         </a>
 
         <b-collapse :id="collapseId" class="mt-2" v-model="modalVisible">
           <transition-group name="fade" tag="div">
-            <div v-for="comment in post.comments" :key="comment.id">
+            <div v-for="comment in propPost.comments" :key="comment.id">
               <post-comment-component
                 @on-deleted="onDeleted"
                 class="mb-3"
                 :viewOnly="viewOnly"
                 :comment="comment"
-                :post-id="post.id"
+                :post-id="propPost.id"
                 :ref="comment.id"
               ></post-comment-component>
             </div>
           </transition-group>
         </b-collapse>
 
-        <b-form v-if="!viewOnly && !post.suspended" @submit.prevent="onSubmit">
+        <b-form v-if="!viewOnly && !propPost.suspended" @submit.prevent="onSubmit">
           <b-form-input
             v-model="comment"
             class="commentInput"
@@ -210,6 +277,7 @@ import PostOptionsComponent from "./PostOptionsComponent.vue";
 
 import postService from "../services/postService";
 import commentService from "../services/commentService";
+import tagService from "../services/tagService";
 
 import Post from "../models/post";
 import PostRequest from "../models/requests/postRequest";
@@ -227,18 +295,18 @@ export default {
     },
   },
   async mounted() {
-    this.isUserPost = this.$store.getters["auth/user"].id === this.post.user.id;
+    this.isUserPost = this.$store.getters["auth/user"].id === this.propPost.user.id;
     if (this.isUserPost) {
       this.getPostTypes();
       this.redirectProfile = "/profile/";
     } else {
-      this.redirectProfile = `/profile/${this.post.user.id}`;
+      this.redirectProfile = `/profile/${this.propPost.user.id}`;
     }
   },
   data() {
     return {
       paramId: null,
-      backupPost: null,
+      propPost: this.post,
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
       comment: "",
@@ -247,6 +315,10 @@ export default {
       redirectProfile: "",
       postTypes: [],
       postTypesSelect: [],
+      tags: [],
+      tagsSelect: [],
+      editSelectedTags: [],
+      limitTag: 6,
       toEdit: false,
       modalVisible: false,
     };
@@ -256,8 +328,13 @@ export default {
       return {
         borderRadius: "10px",
         backgroundColor: "white",
-        border: this.post.suspended === 1 ? "1px solid red" : "1px solid gray",
+        border: this.propPost.suspended === 1 ? "1px solid red" : "1px solid gray",
       };
+    },
+    availableOptions() {
+      return this.tagsSelect.filter(
+        (opt) => this.editSelectedTags.indexOf(opt) === -1
+      );
     },
   },
   methods: {
@@ -269,27 +346,27 @@ export default {
     },
     async onLike() {
       if (this.liked) {
-        const indexToRemove = this.post.userLikes.indexOf(
+        const indexToRemove = this.propPost.userLikes.indexOf(
           this.$store.getters["auth/user"].id
         );
 
         if (indexToRemove > -1) {
-          this.post.userLikes.splice(indexToRemove, 1);
+          this.propPost.userLikes.splice(indexToRemove, 1);
         }
       } else {
-        this.post.userLikes.push(this.$store.getters["auth/user"].id);
+        this.propPost.userLikes.push(this.$store.getters["auth/user"].id);
       }
 
       let request = new PostRequest(
-        this.post.id,
-        this.post.title,
-        this.post.description,
-        this.post.suspended,
-        this.post.user.id,
-        this.post.postType.id,
-        this.post.userLikes,
+        this.propPost.id,
+        this.propPost.title,
+        this.propPost.description,
+        this.propPost.suspended,
+        this.propPost.user.id,
+        this.propPost.postType.id,
+        this.propPost.userLikes,
         null,
-        this.post.usersSaved
+        this.propPost.usersSaved
       );
 
       await postService.update(request).catch((err) => {
@@ -316,27 +393,27 @@ export default {
     },
     async onSave() {
       if (this.saved) {
-        const indexToRemove = this.post.usersSaved.indexOf(
+        const indexToRemove = this.propPost.usersSaved.indexOf(
           this.$store.getters["auth/user"].id
         );
 
         if (indexToRemove > -1) {
-          this.post.usersSaved.splice(indexToRemove, 1);
+          this.propPost.usersSaved.splice(indexToRemove, 1);
         }
       } else {
-        this.post.usersSaved.push(this.$store.getters["auth/user"].id);
+        this.propPost.usersSaved.push(this.$store.getters["auth/user"].id);
       }
 
       let request = new PostRequest(
-        this.post.id,
-        this.post.title,
-        this.post.description,
-        this.post.suspended,
-        this.post.user.id,
-        this.post.postType.id,
-        this.post.userLikes,
+        this.propPost.id,
+        this.propPost.title,
+        this.propPost.description,
+        this.propPost.suspended,
+        this.propPost.user.id,
+        this.propPost.postType.id,
+        this.propPost.userLikes,
         null,
-        this.post.usersSaved
+        this.propPost.usersSaved
       );
 
       await postService.update(request).catch((err) => {
@@ -362,7 +439,7 @@ export default {
       this.saved = !this.saved;
 
       if (!this.saved) {
-        this.$emit("on-unsaved", this.post.id);
+        this.$emit("on-unsaved", this.propPost.id);
       }
     },
     async onSubmit() {
@@ -371,7 +448,7 @@ export default {
           null,
           this.comment,
           this.$store.getters["auth/user"].id,
-          this.post.id
+          this.propPost.id
         );
 
         let res = await commentService.create(request).catch((err) => {
@@ -397,7 +474,7 @@ export default {
         if (res.data.data) {
           let comment = new Comment(res.data.data);
 
-          this.post.comments.push(comment);
+          this.propPost.comments.push(comment);
           this.comment = "";
 
           this.modalVisible = true;
@@ -411,31 +488,38 @@ export default {
         this.$emit("on-comment-deleted", deleteOptions.id);
       }
     },
-    onEdit(toEdit) {
-      this.backupPost = this.post;
+    async onEdit(toEdit) {
       this.toEdit = toEdit;
+
+      this.tags = await tagService.getTags();
+      this.tagsSelect = this.tags.map((t) => t.name);
+      this.editSelectedTags = this.propPost.tags.map((t) => t.name);
     },
     async onEdited() {
-      let originalPost = await postService.getPostById(this.post.id);
+      let originalPost = await postService.getPostById(this.propPost.id);
 
-      if (JSON.stringify(originalPost) !== JSON.stringify(this.post)) {
+      if (JSON.stringify(originalPost) !== JSON.stringify(this.propPost)) {
         let postTypeId = this.postTypes.find(
-          (pt) => pt.name === this.post.postType.name
+          (pt) => pt.name === this.propPost.postType.name
         )?.id;
 
-        if (this.post.suspended) {
-          this.post.suspended = false;
+        if (this.propPost.suspended) {
+          this.propPost.suspended = false;
         }
 
+        let tags = this.tags.filter((t) =>
+          this.editSelectedTags.includes(t.name)
+        );
+
         let request = new PostRequest(
-          this.post.id,
-          this.post.title,
-          this.post.description,
-          this.post.suspended,
-          this.post.user.id,
+          this.propPost.id,
+          this.propPost.title,
+          this.propPost.description,
+          this.propPost.suspended,
+          this.propPost.user.id,
           postTypeId,
           null,
-          null,
+          tags.map((t) => t.id),
           null
         );
 
@@ -470,14 +554,22 @@ export default {
             timer: 10000,
           });
 
-          this.post.postType = this.postTypes.find(
-            (pt) => pt.name === this.post.postType.name
+          this.propPost.tags = tags;
+
+          this.propPost.postType = this.postTypes.find(
+            (pt) => pt.name === this.propPost.postType.name
           );
         }
       }
 
       this.toEdit = false;
     },
+    async onCancel() {
+      let originalPost = await postService.getPostById(this.propPost.id);
+      this.propPost = originalPost;
+
+      this.toEdit = false;
+    }
   },
 };
 </script>

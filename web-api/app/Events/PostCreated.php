@@ -14,7 +14,7 @@ class PostCreated implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $post;
+    public $id;
     // public $notification;
 
     /**
@@ -22,10 +22,10 @@ class PostCreated implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct($post)
+    public function __construct($id)
     {
         // $this->notification = $notification;
-        $this->post = $post;
+        $this->id = $id;
     }
 
     /**

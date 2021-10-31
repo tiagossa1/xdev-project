@@ -20,23 +20,13 @@
                         :type="showPassword ? 'text' : 'password'"
                         sm="2"
                       ></b-form-input>
-
-                      <div
-                        class="
-                          text-danger
-                          font-weight-bold
-                          float-left
-                          small
-                          mt-1
-                        "
-                        v-if="v$.old_password.required.$invalid"
-                      >
-                        Introduza a password.
-                      </div>
                     </b-col>
-                    <b-col @click="showPassword = !showPassword">
+                    <b-col
+                      class="align-self-center"
+                      @click="showPassword = !showPassword"
+                    >
                       <b-icon
-                        class="text-center"
+                        class="text-center cursor-pointer"
                         :icon="showPassword ? 'eye-fill' : 'eye-slash-fill'"
                       ></b-icon>
                     </b-col>
@@ -55,12 +45,17 @@
                   <b-form-input
                     id="input-newPassword"
                     v-model="confirm_password"
+                    :state="!v$.confirm_password.$invalid"
+                    @blur="v$.confirm_password.$touch"
                     :type="showNewPassword ? 'text' : 'password'"
                   ></b-form-input>
                 </b-col>
-                <b-col @click="showNewPassword = !showNewPassword">
+                <b-col
+                  class="align-self-center"
+                  @click="showNewPassword = !showNewPassword"
+                >
                   <b-icon
-                    class="text-center"
+                    class="text-center cursor-pointer"
                     :icon="showNewPassword ? 'eye-fill' : 'eye-slash-fill'"
                   ></b-icon>
                 </b-col>
@@ -78,6 +73,8 @@
                   <b-form-input
                     id="input-confirmNewPassword"
                     v-model="confirm_new_password"
+                    :state="!v$.confirm_new_password.$invalid"
+                    @blur="v$.confirm_new_password.$touch"
                     :type="showNewPassword ? 'text' : 'password'"
                     sm="2"
                   ></b-form-input>
@@ -165,7 +162,6 @@
 
       <b-tab title="Editar Tags">
         <b-table
-          hover
           sticky-header="500px"
           :tbody-tr-class="rowClass"
           :items="allTags"
@@ -197,11 +193,6 @@
         </b-table>
       </b-tab>
     </b-tabs>
-    <b-row class="text-center mt-3">
-      <b-col>
-        <b-button variant="outline-danger" @click="closeModel">Sair</b-button>
-      </b-col>
-    </b-row>
   </b-modal>
 </template>
 
@@ -223,14 +214,6 @@ export default {
     return {
       dismissSecs: 5,
       dismissCountDown: 0,
-      AlertMessage: false,
-
-      updateSucces: false,
-      messageSucces: "Redes sociais atualizadas.",
-      messageFail: "Dados inválidos, por favor verifique os links",
-
-      alertPasswordMessage: false,
-
       tagsFields: [
         { key: "allTags.name", label: "Tags" },
         { key: "actions", label: "Ações" },
@@ -319,31 +302,39 @@ export default {
       }
     },
     async updateSocial() {
-      // var facebookRegex = /(?:www\.)?facebook\.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w]*\/)*([\w]*)/;
-      let facebookRegex = /(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w]*\/)?(?:profile.php\?id=(?=\d.*))?([\w]*)?/;
-      var githubRegex = /(?:https\/\/)?(?:www\.)?github\.com\//ig;
-      var instagramRegex = /(?:https\/\/)?(?:www\.)(?:instagram.com\/)/ig;
-      var linkedinRegex = /(?:https\/\/)?(?:www\.)(?:linkedin.com\/)/ig;
-      
-      if (
-        facebookRegex.test(this.userInfo.facebook_url) &&
-        githubRegex.test(this.userInfo.github_url) &&
-        instagramRegex.test(this.userInfo.instagram_url) &&
-        linkedinRegex.test(this.userInfo.linkedin_url)
-      ) {
-        if (this.userInfo.facebook_url.startsWith("https://")) {
-          this.userInfo.facebook_url = this.userInfo.facebook_url.slice(8);
-        }
-        if (this.userInfo.github_url.startsWith("https://")) {
-          this.userInfo.github_url = this.userInfo.github_url.slice(8);
-        }
-        if (this.userInfo.instagram_url.startsWith("https://")) {
-          this.userInfo.instagram_url = this.userInfo.instagram_url.slice(8);
-        }
-        if (this.userInfo.linkedin_url.startsWith("https://")) {
-          this.userInfo.linkedin_url = this.userInfo.linkedin_url.slice(8);
-        }
+      // eslint-disable-next-line
+      const facebookRegex = /^(?:(?:http|https):\/\/)?(?:www.)?facebook.com\/(?:(?:\w)*#!\/)?(?:pages\/)?(?:[?\w\-]*\/)?(?:profile.php\?id=(?=\d.*))?([\w\-]*)?$/;
+      // eslint-disable-next-line
+      const instagramRegex = /^\s*(https\:\/\/)?(?:www.)instagram\.com\/[a-z\d-_]{1,255}\/?\s*$/i;
+      const githubRegex = /^(http(s?):\/\/)?(www\.)?github\.([a-z])+\/([A-Za-z0-9]{1,})+\/?$/i;
 
+      // eslint-disable-next-line
+      const linkedinRegex = /(^((https?:\/\/)?((www|\w\w)\.)?)linkedin\.com\/)((([\w]{2,3})?)|([^\/]+\/(([\w|\d-&#?=])+\/?){1,}))$/i;
+
+      const isFbUrlValid = this.userInfo.facebook_url
+        ? facebookRegex.test(this.userInfo.facebook_url)
+        : true;
+      const isIgUrlValid = this.userInfo.instagram_url
+        ? instagramRegex.test(this.userInfo.instagram_url)
+        : true;
+      const isGithubUrlValid = this.userInfo.github_url
+        ? githubRegex.test(this.userInfo.github_url)
+        : true;
+      const isLinkedinUrlValid = this.userInfo.linkedin_url
+        ? linkedinRegex.test(this.userInfo.linkedin_url)
+        : true;
+
+      console.log(isGithubUrlValid);
+      console.log(isLinkedinUrlValid);
+      console.log(isFbUrlValid);
+      console.log(isIgUrlValid);
+
+      if (
+        isFbUrlValid &&
+        isIgUrlValid &&
+        isGithubUrlValid &&
+        isLinkedinUrlValid
+      ) {
         let request = new UserRequest(
           this.userInfo.id,
           this.userInfo.email,
@@ -416,19 +407,17 @@ export default {
             timer: 10000,
           });
         }
+      } else {
+        this.$swal({
+          icon: "error",
+          position: "bottom-right",
+          title: "Endereços inválidos.",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 10000,
+        });
       }
-    },
-    showSocialMediaAlert() {
-      this.AlertMessage = true;
-      setTimeout(() => {
-        this.AlertMessage = false;
-      }, 3500);
-    },
-    showPasswordAlert() {
-      this.alertPasswordMessage = true;
-      setTimeout(() => {
-        this.alertPasswordMessage = false;
-      }, 3000);
     },
     rowClass(item, type) {
       if (!item || type !== "row") {

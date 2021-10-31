@@ -38,7 +38,7 @@ export default class Post {
       this.usersSaved = [];
     }
 
-    if (post.comments?.length > 0) {
+    if (post?.comments?.length > 0) {
       this.comments = post.comments.map((c) => {
         return new Comment(c, post.id);
       });
@@ -46,6 +46,6 @@ export default class Post {
       this.comments = [];
     }
 
-    this.createdAt = dayjs(dayjs(post.created_at)).fromNow();
+    this.createdAt = dayjs(dayjs(post?.created_at)).fromNow();
   }
 }

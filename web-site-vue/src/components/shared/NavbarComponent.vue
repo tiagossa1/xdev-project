@@ -266,6 +266,7 @@ import Feedback from "../FeedbackComponent.vue";
 import { mapGetters, mapActions } from "vuex";
 import userService from "../../services/userService.js";
 import reportService from "../../services/reportService.js";
+import postService from '../../services/postService.js';
 
 export default {
   name: "navbar-component",
@@ -293,7 +294,9 @@ export default {
         process.env.VUE_APP_PUSHER_CHANNEL_NAME
       );
 
-      channel.bind("post-created", ({ post }) => {
+      channel.bind("post-created", async ({ id }) => {
+        const post = await postService.getPostById(id);
+
         const userTagIds = this.$store.getters["auth/user"].tags.map(
           (ut) => ut.id
         );

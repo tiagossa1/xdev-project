@@ -3,7 +3,11 @@
     <b-card :style="{ borderRadius: '10px', border: '1px solid gray' }">
       <b-media>
         <template #aside>
-          <b-avatar size="4rem" :src="comment.user.profile_picture"></b-avatar>
+          <b-avatar
+            size="4rem"
+            :to="'/profile/' + comment.user.id"
+            :src="comment.user.profile_picture"
+          ></b-avatar>
         </template>
 
         <div id="commentOptionsDropdown">
@@ -35,12 +39,12 @@
             <br />
           </div>
         </b-modal>
-        <h5
-          class="font-weight-bold"
+        <b-link
+          class="h5 font-weight-bold"
           :style="{ color: comment.user.userType.hexColorCode }"
+          :to="'/profile/' + comment.user.id"
+          >{{ comment.user.name }}</b-link
         >
-          {{ comment.user.name }}
-        </h5>
         <template v-if="!toEdit">
           <p>
             {{ comment.description }}
@@ -194,7 +198,7 @@ export default {
           showConfirmButton: false,
           timer: 10000,
         });
-        
+
         this.reportComment = "";
       });
 

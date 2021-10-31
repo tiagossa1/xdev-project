@@ -102,17 +102,6 @@ class PostController extends Controller
             $diffTitle = array_diff($title,$forbiddenWords);
 
             if(sizeof($diffTitle) == sizeof($title) && sizeof($diffDescription) == sizeof($description)) {
-                return response()->json(['Array Description:' => sizeof($description),
-                                         'Array Title:' => sizeof($title),
-                                         'Array Forbidden Words:' => sizeof($forbiddenWords),
-                                         'Array Description Difference:' => sizeof($diffDescription),
-                                         'Array Title Difference:' => sizeof($diffTitle),
-                                         'Array Description:' => $description,
-                                         'Array Title:' => $title,
-                                         'Array Forbidden Words:' => $forbiddenWords,
-                                         'Array Description Difference:' => $diffDescription,
-                                         'Array Title Difference:' => $diffTitle]);
-
                 $post = new Post();
                 $post->title = $request->title;
                 $post->description = $request->description;
@@ -136,7 +125,7 @@ class PostController extends Controller
                     // $notification = new NewPost($post);
                     // Notification::send($users, Post::find($post->id));
 
-                    event(new PostCreated(Post::find($post->id)));
+                    event(new PostCreated($post->id));
                 }
 
                 return response()->json([
