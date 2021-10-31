@@ -55,7 +55,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('users', 'UserController@index');
     Route::get('users/{id}', 'UserController@show');
     Route::get('recent-activity/{id}', 'UserController@getRecentActivity');
-    Route::put('users/{id}', 'UserController@update')->middleware('ismoderator');
+    Route::put('users/{id}', 'UserController@update');
     Route::delete('users/{id}', 'UserController@destroy')->middleware('ismoderator');
 
     Route::post('districts', 'DistrictController@store')->middleware('ismoderator');
