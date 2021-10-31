@@ -179,10 +179,18 @@
           <label class="float-left font-weight-bold">Foto de perfil</label>
           <b-form-file
             v-model="photo"
-            accept=".jpg, .png"
+            accept=".jpg, .jpeg, .png"
             placeholder="Escolha uma fotografia..."
             drop-placeholder="Escolha uma fotografia..."
+            :state="!v$.photo.$invalid"
+            @blur="v$.photo.$touch"
           ></b-form-file>
+          <div
+            class="text-danger font-weight-bold float-left small mt-1"
+            v-if="v$.photo.maxOneMb.$invalid && photo"
+          >
+            A imagem só pode ter menos de 1MB.
+          </div>
         </div>
       </div>
       <br />
@@ -216,6 +224,8 @@ import { required, minLength, sameAs } from "@vuelidate/validators";
 const notContainsEduAtecPt = (value) =>
   !value.toLowerCase().includes("@edu.atec.pt");
 
+const maxOneMb = (value) => value.size < 1024 * 1024;
+
 export default {
   name: "register-component",
   data() {
@@ -247,6 +257,7 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
+      photo: { maxOneMb },
       form: {
         name: { required },
         email: { required, notContainsEduAtecPt },
