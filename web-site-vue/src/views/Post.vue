@@ -234,7 +234,7 @@ export default {
           timer: 10000,
         });
       });
-
+      
       this.originalPosts = this.posts;
       let postTypes = await postService.getPostTypes();
 

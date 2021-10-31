@@ -176,32 +176,33 @@
     <b-row v-if="!viewOnly" class="ml-2">
       <b-col
         v-if="!propPost.suspended"
-        cols="2"
+        cols="1"
         style="cursor: pointer"
         @click="onLike"
       >
         <p class="h5">
           <b-icon
+            scale="1"
             :icon="liked ? 'heart-fill' : 'heart'"
             :variant="liked ? 'liked' : ''"
-            class="mr-1"
           ></b-icon>
-          <span class="small"> {{ liked ? "Gosto" : "Gostar" }} </span>
+          <!-- <span class="small"> {{ liked ? "Gosto" : "Gostar" }} </span> -->
         </p>
       </b-col>
       <b-col
         v-if="!propPost.suspended"
         class="cursor-pointer"
-        cols="2"
+        cols="1"
         @click="onSave"
       >
         <p class="h5">
           <b-icon
+            scale="1"
             :variant="saved ? 'danger' : ''"
             :icon="saved ? 'bookmark-fill' : 'bookmark'"
-            class="mr-1"
+            class=""
           ></b-icon>
-          <span class="small"> {{ saved ? "Guardado" : "Guardar" }} </span>
+          <!-- <span class="small"> {{ saved ? "Guardado" : "Guardar" }} </span> -->
         </p>
       </b-col>
 
@@ -239,7 +240,7 @@
             :aria-controls="collapseId"
             @click="modalVisible = !modalVisible"
           >
-            Mostrar {{ propPost.comments.length }} comentários
+            {{modalVisible ? 'Esconder' : 'Mostrar'}} {{ propPost.comments.length }} comentários
             <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
           </p>
         </a>
@@ -296,6 +297,7 @@ export default {
   },
   async mounted() {
     this.isUserPost = this.$store.getters["auth/user"].id === this.propPost.user.id;
+    
     if (this.isUserPost) {
       this.getPostTypes();
       this.redirectProfile = "/profile/";
@@ -473,7 +475,6 @@ export default {
 
         if (res.data.data) {
           let comment = new Comment(res.data.data);
-
           this.propPost.comments.push(comment);
           this.comment = "";
 

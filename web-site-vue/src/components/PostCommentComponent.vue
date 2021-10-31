@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-card :style="{ borderRadius: '10px', border: '1px solid gray' }">
+    <b-card  :style="{ borderRadius: '10px', border: '1px solid gray' }">
       <b-media>
         <template #aside>
           <b-avatar
@@ -45,8 +45,12 @@
           :to="'/profile/' + comment.user.id"
           >{{ comment.user.name }}</b-link
         >
+        <br>
+        <small>{{comment.user.schoolClass.name}} | {{comment.user.schoolClass.school.name}}</small>
+        <br>
+        <small>Adicionado {{comment.createdAt}}</small>
         <template v-if="!toEdit">
-          <p>
+          <p class="mt-1 h6 w-100 h-25">
             {{ comment.description }}
           </p>
         </template>
@@ -115,6 +119,8 @@ export default {
   mounted() {
     this.isUserComment =
       this.$store.getters["auth/user"].id === this.comment.user.id;
+
+    
   },
   methods: {
     async onDeleted(deleteOptions) {
@@ -138,7 +144,7 @@ export default {
           this.reportComment,
           null
         );
-
+        
         let res = await reportService.create(request).catch((err) => {
           let error;
 
