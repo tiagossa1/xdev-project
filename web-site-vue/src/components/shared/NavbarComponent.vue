@@ -439,6 +439,15 @@ export default {
       }
     },
   },
+  watch: {
+    async authenticated(newValue) {
+      if (newValue) {
+        let tags = await tagService.getTags();
+        this.tags = tags;
+        this.options = tags;
+      }
+    },
+  },
 };
 </script>
 

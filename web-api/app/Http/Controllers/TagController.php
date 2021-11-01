@@ -34,7 +34,7 @@ class TagController extends Controller
             }
 
             return response()->json([
-                'data' => $query->get(),
+                'data' => $query->orderByDesc('posts_count')->get(),
                 'message' => 'Success'
             ], 200);
         } catch (Exception $exception) {

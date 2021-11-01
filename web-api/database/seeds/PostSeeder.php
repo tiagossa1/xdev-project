@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class PostSeeder extends Seeder
 {
@@ -13,25 +14,25 @@ class PostSeeder extends Seeder
     {
         factory('App\Post', 10)->create();
 
-        for ($i=1; $i <= 10; $i++) { 
+        for ($i=1; $i <= 10; $i++) {
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => 2,
+                    'tag_id' => rand(1, 28),
                 ]
             );
 
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => 3,
+                    'tag_id' => rand(1, 28),
                 ]
             );
 
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => 1,
+                    'tag_id' => rand(1, 28),
                 ]
             );
         }
