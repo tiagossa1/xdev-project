@@ -40,9 +40,10 @@ class CommentController extends Controller
     {
         try {
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+            $specialCharacter = StringUtility::special_characters();
 
-            $rawDescription = explode(" ", mb_strtolower($request->description));
-            //return response()->json([$rawDescription,$forbiddenWords]);
+            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+            $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 
@@ -103,8 +104,10 @@ class CommentController extends Controller
             $comment = Comment::find($id);
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+            $specialCharacter = StringUtility::special_characters();
 
-            $rawDescription = explode(" ", mb_strtolower($request->description));
+            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+            $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 

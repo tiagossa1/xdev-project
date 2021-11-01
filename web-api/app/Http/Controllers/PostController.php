@@ -7,6 +7,7 @@ use App\User;
 use Exception;
 use App\ForbiddenWord;
 use App\Events\PostCreated;
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Notifications\NewPost;
 use App\Utilities\StringUtility;
@@ -92,8 +93,13 @@ class PostController extends Controller
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
-            $rawTitle = explode(" ", mb_strtolower($request->title));
-            $rawDescription = explode(" ", mb_strtolower($request->description));
+            $specialCharacter = StringUtility::special_characters();
+
+            $removedSymbolsFromTitle = str_replace($specialCharacter, "", $request->title);
+            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+
+            $rawTitle = explode(" ", mb_strtolower($removedSymbolsFromTitle));
+            $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
 
             $title = StringUtility::remove_multiple_utf8($rawTitle);
             $description = StringUtility::remove_multiple_utf8($rawDescription);
@@ -178,9 +184,13 @@ class PostController extends Controller
             $post = Post::find($id);
 
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
+            $specialCharacter = StringUtility::special_characters();
 
-            $rawTitle = explode(" ",  mb_strtolower($request->title));
-            $rawDescription = explode(" ",  mb_strtolower($request->description));
+            $removedSymbolsFromTitle = str_replace($specialCharacter, "", $request->title);
+            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+
+            $rawTitle = explode(" ", mb_strtolower($removedSymbolsFromTitle));
+            $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
 
             $title = StringUtility::remove_multiple_utf8($rawTitle);
             $description = StringUtility::remove_multiple_utf8($rawDescription);

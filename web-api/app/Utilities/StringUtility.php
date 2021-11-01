@@ -4,6 +4,12 @@ namespace App\Utilities;
 
 class StringUtility
 {
+    public static function special_characters(){
+        $special = array("!", "?", ".", ",", "%", "*", "(", ")", "[", "]", "{", "}", "+", "-", "&", "|", "^",
+            "~", ":", ";", "/", "<", ">", "º", "ª", "'", "=", "$", "#", "@", "€", "¨", "´", "`", "_");
+        return $special;
+    }
+
     public static function remove_multiple_utf8($values){
         for($i=0;$i<sizeof($values);$i++) {
             $values[$i] = self::remove_utf8($values[$i]);
