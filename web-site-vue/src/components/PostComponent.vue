@@ -80,7 +80,7 @@
         <b-icon
           v-if="propPost.suspended"
           icon="exclamation-triangle"
-          class="mr-4 float-right"
+          class="float-right"
           variant="danger"
           font-scale="2"
         ></b-icon>

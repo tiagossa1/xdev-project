@@ -120,6 +120,10 @@ class TagSeeder extends Seeder
         ]);
 
         App\Tag::create([
+            'name' => 'Java'
+        ]);
+
+        App\Tag::create([
             'name' => 'Outros',
         ]);
     }

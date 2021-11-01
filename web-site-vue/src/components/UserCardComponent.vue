@@ -8,7 +8,7 @@
         icon="pencil"
         @click="showModal()"
       ></b-icon>
-      <div class="bg-white rounded py-5 px-4" style="border-radious: 10px">
+      <div class="bg-white py-5 px-4" style="border-radius: 10px;">
         <b-avatar :src="propUserInfo.profile_picture" size="12rem"> </b-avatar>
         <h2
           class="mt-2 font-weight-bold"

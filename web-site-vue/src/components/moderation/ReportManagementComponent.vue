@@ -52,7 +52,7 @@
         </template>
         <template #cell(actions)="data">
           <template v-if="data.item.post !== null">
-            <b-button @click="onSuspendedPost(data.item)" variant="danger"
+            <b-button class="mr-2" @click="onSuspendedPost(data.item)" variant="danger"
               >Suspender</b-button
             >
           </template>

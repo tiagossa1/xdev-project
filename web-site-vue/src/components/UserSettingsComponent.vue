@@ -85,7 +85,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white" type="submit" variant="success"
+              <b-button :disabled="v$.$invalid" class="text-white" type="submit" variant="outline-success"
                 >Atualizar</b-button
               >
             </b-col>
@@ -152,7 +152,7 @@
 
           <b-row class="mt-3 text-center">
             <b-col>
-              <b-button class="text-white" type="submit" variant="success"
+              <b-button class="text-white" type="submit" variant="outline-success"
                 >Atualizar</b-button
               >
             </b-col>

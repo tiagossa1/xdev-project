@@ -25,7 +25,10 @@
         >
         <b-button
           class="m-1 text-white"
-          v-if="data.item.id !== $store.getters['auth/user'].id && data.item.userType.id < $store.getters['auth/user'].user_type.id"
+          v-if="
+            data.item.id !== $store.getters['auth/user'].id &&
+              data.item.userType.id < $store.getters['auth/user'].user_type.id
+          "
           @click="onSuspended(data.item)"
           :variant="data.item.suspended ? 'success' : 'danger'"
         >
@@ -34,12 +37,15 @@
       </template>
       <!-- eslint-disable-next-line -->
       <template #cell(userType.name)="data">
-        <span
+        <a
           class="font-weight-bold"
           :style="{ color: data.item.userType.hexColorCode }"
         >
           {{ data.item.userType.name }}
-        </span>
+        </a>
+      </template>
+      <template #cell(name)="data">
+        <b-link :to="'/profile/' + data.item.id">{{ data.item.name }}</b-link>
       </template>
     </b-table>
 

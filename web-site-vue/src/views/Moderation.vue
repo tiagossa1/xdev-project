@@ -2,7 +2,7 @@
   <div class="w-75 m-auto" style="margin-bottom: 55px">
     <transition
       name="fade"
-      enter-active-class="fadeInLeft"
+      enter-active-class="fadeIn"
       leave-active-class="fadeOut"
     >
       <div v-if="show">

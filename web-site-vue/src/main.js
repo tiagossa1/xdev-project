@@ -86,21 +86,6 @@ store
   })
   .then(() => {
     new Vue({
-      // beforeMount() {
-      //   // window.addEventListener("load", this.onLoad);
-      //   window.addEventListener("beforeunload", this.onUnload);
-      // },
-      // beforeDestroy() {
-      //   // window.addEventListener("load", this.onLoad);
-      //   window.addEventListener("beforeunload", this.onUnload);
-      // },
-      // methods: {
-      //   onUnload() {
-      //     if (window.localStorage.getItem("postTypes")) {
-      //       window.localStorage.removeItem("postTypes");
-      //     }
-      //   },
-      // },
       router,
       render: (h) => h(App),
       store: store,

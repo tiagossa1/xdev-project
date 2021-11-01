@@ -12,8 +12,6 @@ class PostSeeder extends Seeder
      */
     public function run()
     {
-        // $numbers = range(1, 28);
-        // shuffle($numbers);
         $faker = Faker\Factory::create();
 
         factory('App\Post', 10)->create();
@@ -22,21 +20,21 @@ class PostSeeder extends Seeder
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => $faker->unique(true)->numberBetween(1, 28),
+                    'tag_id' => $faker->unique(true)->numberBetween(1, 3),
                 ]
             );
 
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => $faker->unique(true)->numberBetween(1, 28),
+                    'tag_id' => $faker->unique(true)->numberBetween(4, 6),
                 ]
             );
 
             DB::table('post_tag')->insert(
                 [
                     'post_id' => $i,
-                    'tag_id' => $faker->unique(true)->numberBetween(1, 28),
+                    'tag_id' => $faker->unique(true)->numberBetween(7, 9),
                 ]
             );
         }

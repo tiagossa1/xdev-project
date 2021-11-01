@@ -21,8 +21,17 @@
           enter-active-class="fadeIn"
           leave-active-class="fadeOut"
         >
-          <b-tabs v-if="show" pills card class="bg-white">
-            <b-tab class="bg-white" title="Posts" active>
+          <b-tabs
+            v-if="show"
+            pills
+            card
+            class="bg-white card-rounded"
+          >
+            <b-tab
+              class="bg-white card-rounded"
+              title="Posts"
+              active
+            >
               <div v-if="posts.length > 0">
                 <div v-for="post in posts" :key="post.id">
                   <post-component
@@ -165,9 +174,7 @@ export default {
       );
 
       if (post) {
-        post.comments = post.comments.filter(
-          (c) => c.id != id
-        );
+        post.comments = post.comments.filter((c) => c.id != id);
         this.favoritePosts.find((x) => x.id === post.id).comments =
           post.comments;
       }
@@ -177,4 +184,7 @@ export default {
 </script>
 
 <style>
+.card-rounded {
+  border-radius: 10px;
+}
 </style>
