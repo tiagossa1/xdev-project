@@ -75,7 +75,7 @@ class UserSeeder extends Seeder
             'linkedin_url' => "https://www.linkedin.com/in/edgar-fernandes-bb89241bb/",
             'facebook_url' => "www.facebook.com",
             'instagram_url' => "www.instagram.com",
-            'user_type_id' => 4,
+            'user_type_id' => 1,
             'district_id' => 13,
             'school_class_id' => 7,
             'suspended' => 0

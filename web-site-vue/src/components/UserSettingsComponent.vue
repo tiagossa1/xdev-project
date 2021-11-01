@@ -263,6 +263,7 @@ export default {
     },
     closeModel() {
       this.clearPasswordChangeForm();
+      
       this.$refs.modal2.hide();
     },
     clearPasswordChangeForm() {
@@ -384,6 +385,9 @@ export default {
             showConfirmButton: false,
             timer: 10000,
           });
+
+          this.closeModel()
+
         } else {
           let error;
 
