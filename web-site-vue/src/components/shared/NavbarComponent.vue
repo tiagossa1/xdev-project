@@ -254,8 +254,6 @@
 import tagService from "../../services/tagService.js";
 import notificationService from "../../services/notificationService";
 
-import Post from "../../models/post";
-
 import PostComponent from "../PostComponent.vue";
 
 import Feedback from "../FeedbackComponent.vue";
@@ -297,15 +295,14 @@ export default {
         const userTagIds = this.$store.getters["auth/user"].tags.map(
           (ut) => ut.id
         );
+
         const postTagIds = post.tags.map((t) => t.id);
 
         if (
           post.user.id !== this.$store.getters["auth/user"].id &&
           postTagIds.some((pt) => userTagIds.includes(pt))
         ) {
-          const postCreated = new Post(post);
-
-          this.notifications.push(postCreated);
+          this.notifications.push(post);
           this.notificationCounter++;
         }
       });

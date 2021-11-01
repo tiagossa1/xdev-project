@@ -60,19 +60,20 @@
         </template>
         <template v-else>
           <transition
-            enter-active-class="animated fadeInRight"
-            leave-active-class="animated fadeOutRight"
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
           >
+            <quill-editor
+              class="mb-2"
+              ref="myQuillEditor"
+              v-model="comment.description"
+            >
+            </quill-editor>
           </transition>
-          <quill-editor
-            class="mb-2"
-            ref="myQuillEditor"
-            v-model="comment.description"
-          >
-          </quill-editor>
+
           <transition
-            enter-active-class="animated fadeInRight"
-            leave-active-class="animated fadeOutLeft"
+            enter-active-class="animated fadeIn"
+            leave-active-class="animated fadeOut"
           >
             <p
               class="h6 mt-2 cursor-pointer d-flex align-items-center float-right"
@@ -117,7 +118,7 @@ export default {
       isUserComment: false,
       reportComment: "",
       toEdit: false,
-      redirectProfile: null
+      redirectProfile: null,
     };
   },
   setup: () => ({ v$: useVuelidate() }),

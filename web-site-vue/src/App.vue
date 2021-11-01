@@ -12,8 +12,8 @@
     </b-alert>
 
     <transition
-      enter-active-class="animated fadeInRight"
-      leave-active-class="animated fadeOutLeft"
+      enter-active-class="animated fadeIn"
+      leave-active-class="animated fadeOut"
     >
       <router-view :key="$route.fullPath" />
     </transition>

@@ -251,6 +251,7 @@ export default {
   methods: {
     ...mapActions({
       signOutAction: "auth/signOut",
+      updateTags: "auth/updateTags",
     }),
     signOut() {
       this.signOutAction().then(() => {
@@ -452,6 +453,8 @@ export default {
         null,
         this.userInfo.suspended
       );
+
+      this.updateTags(this.userInfo.tags);
 
       await userService.update(request).catch((err) => {
         let error;

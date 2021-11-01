@@ -32,5 +32,7 @@ store.subscribe((mutation) => {
       } else {
         localStorage.removeItem("expiration_date");
       }
+
+      break;
   }
 });

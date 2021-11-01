@@ -2,11 +2,21 @@
   <b-container :style="getPostStyle" class="bv-example-row p-3 mb-4 x">
     <b-row class="ml-2 mr-2 mb-3">
       <b-col v-if="!toEdit">
-        <span v-for="tag in propPost.tags" :key="tag.id" class="mr-4">
+        <span v-for="tag in tagsToShow" :key="tag.id" class="mr-4">
           <b-badge class="p-2 no-select" pill variant="secondary">{{
             tag.name
           }}</b-badge>
         </span>
+        <b-badge
+          v-if="hiddenTags > 0"
+          v-b-tooltip.hover
+          :title="tagNames"
+          class="p-2 no-select align-middle"
+          pill
+          variant="secondary"
+        >
+          +{{ hiddenTags }}
+        </b-badge>
       </b-col>
       <b-col v-else>
         <b-form-group label-for="tags-component-select">
@@ -174,7 +184,7 @@
       </b-col>
     </b-row>
 
-    <b-row v-if="!viewOnly" class="ml-2">
+    <b-row v-if="!viewOnly" class="ml-2 mt-3">
       <b-col
         v-if="!propPost.suspended"
         cols="1"
@@ -235,7 +245,7 @@
         </p>
       </b-col>
     </b-row>
-    <hr />
+    <hr v-if="post.comments.length > 0" />
     <b-row class="ml-2 mr-2">
       <b-col>
         <a href="" onclick="return false;">
@@ -267,17 +277,23 @@
           </transition-group>
         </b-collapse>
 
-        <quill-editor
-          v-if="toComment && !viewOnly && !propPost.suspended"
-          class="mt-3"
-          ref="myQuillEditor"
-          :options="{ placeholder: 'Escreva um comentário...' }"
-          v-model="comment"
-        >
-        </quill-editor>
         <transition
-          enter-active-class="animated fadeInRight"
-          leave-active-class="animated fadeOutLeft"
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+        >
+          <quill-editor
+            v-if="toComment && !viewOnly && !propPost.suspended"
+            class="mt-3"
+            ref="myQuillEditor"
+            :options="{ placeholder: 'Escreva um comentário...' }"
+            v-model="comment"
+          >
+          </quill-editor>
+        </transition>
+
+        <transition
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
         >
           <p
             v-if="toComment && comment"
@@ -326,11 +342,19 @@ export default {
     } else {
       this.redirectProfile = `/profile/${this.propPost.user.id}`;
     }
+
+    // this.tagsToShow = this.propPost.tags.splice(0, 3);
+    // this.hiddenTags = this.propPost.tags.splice()
+
+    // console.log(this.propPost);
   },
   data() {
     return {
       paramId: null,
       propPost: this.post,
+      tagsToShow: this.post.tags.slice(0, 3),
+      hiddenTags: this.post.tags.slice(3, this.post.tags.length).length,
+      tagNames: this.post.tags.map((t) => t.name).join(", "),
       liked: this.post.userLikes.includes(this.$store.getters["auth/user"].id),
       saved: this.post.usersSaved.includes(this.$store.getters["auth/user"].id),
       comment: "",
@@ -525,7 +549,11 @@ export default {
     async onEdited() {
       let originalPost = await postService.getPostById(this.propPost.id);
 
-      if (JSON.stringify(originalPost) !== JSON.stringify(this.propPost)) {
+      const validation = this.propPost.suspended
+        ? JSON.stringify(originalPost) !== JSON.stringify(this.propPost)
+        : true;
+
+      if (validation) {
         let postTypeId = this.postTypes.find(
           (pt) => pt.name === this.propPost.postType.name
         )?.id;

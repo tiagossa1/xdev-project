@@ -4,8 +4,8 @@
       <b-col class="p-5" sm="3">
         <transition
           name="fade"
-          enter-active-class="fadeInLeft"
-          leave-active-class="fadeOutRight"
+          enter-active-class="fadeIn"
+          leave-active-class="fadeOut"
         >
           <user-card-component
             v-if="show"
@@ -18,8 +18,8 @@
       <b-col class="p-5" sm="6">
         <transition
           name="fade"
-          enter-active-class="fadeInLeft"
-          leave-active-class="fadeOutRight"
+          enter-active-class="fadeIn"
+          leave-active-class="fadeOut"
         >
           <b-tabs v-if="show" pills card class="bg-white">
             <b-tab class="bg-white" title="Posts" active>
@@ -69,8 +69,8 @@
       >
         <transition
           name="fade"
-          enter-active-class="fadeInLeft"
-          leave-active-class="fadeOutRight"
+          enter-active-class="fadeIn"
+          leave-active-class="fadeOut"
         >
           <recent-feed v-if="show" :recentFeed="recentFeed"></recent-feed>
         </transition>

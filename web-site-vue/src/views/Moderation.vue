@@ -3,7 +3,7 @@
     <transition
       name="fade"
       enter-active-class="fadeInLeft"
-      leave-active-class="fadeOutRight"
+      leave-active-class="fadeOut"
     >
       <div v-if="show">
         <h5 class="mb-3 mt-4 text-center font-weight-bold">
@@ -18,8 +18,8 @@
 
     <transition
       name="fade"
-      enter-active-class="fadeInLeft"
-      leave-active-class="fadeOutRight"
+      enter-active-class="fadeIn"
+      leave-active-class="fadeOut"
     >
       <user-management-component
         v-if="!isSheriff && show"
@@ -28,8 +28,8 @@
 
     <transition
       name="fade"
-      enter-active-class="fadeInLeft"
-      leave-active-class="fadeOutRight"
+      enter-active-class="fadeIn"
+      leave-active-class="fadeOut"
     >
       <feedback-management-component
         v-if="!isSheriff && show"
@@ -38,8 +38,8 @@
 
     <transition
       name="fade"
-      enter-active-class="fadeInLeft"
-      leave-active-class="fadeOutRight"
+      enter-active-class="fadeIn"
+      leave-active-class="fadeOut"
     >
       <tags-management-component
         v-if="!isSheriff && show"

@@ -1,6 +1,6 @@
 import router from "../router";
 import userService from "../services/userService";
-import Vue from 'vue';
+import Vue from "vue";
 
 export default {
   namespaced: true,
@@ -41,6 +41,11 @@ export default {
     SET_EXPIRATION_DATE(state, expDate) {
       state.expiration_date = expDate;
     },
+    UPDATE_TAGS(state, tags) {
+      if (tags) {
+        state.user.tags = tags;
+      }
+    },
   },
 
   actions: {
@@ -63,14 +68,14 @@ export default {
             router.push("Verification");
           } else {
             Vue.swal({
-              icon: 'error',
-              position: 'bottom-right',
+              icon: "error",
+              position: "bottom-right",
               title: err.response.data.message,
               toast: true,
               showCloseButton: true,
               showConfirmButton: false,
-              timer: 10000
-            })
+              timer: 10000,
+            });
           }
         });
     },
@@ -83,6 +88,10 @@ export default {
 
         router.push("Login");
       });
+    },
+
+    updateTags({ commit }, data) {
+      commit("UPDATE_TAGS", data);
     },
 
     async attempt({ commit, state }, data) {

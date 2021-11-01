@@ -6,8 +6,8 @@
           <div class="buttons mt-3 mb-3">
             <transition
               name="fade"
-              enter-active-class="fadeInLeft"
-              leave-active-class="fadeOutRight"
+              enter-active-class="fadeIn"
+              leave-active-class="fadeOut"
             >
               <b-button
                 v-if="show"
@@ -41,6 +41,7 @@
                   <quill-editor
                     ref="myQuillEditor"
                     v-model="form.description"
+                    :options="{ placeholder: 'Escreva uma descrição...' }"
                     size="10"
                     @blur="v$.form.description.$touch"
                   >
@@ -125,8 +126,8 @@
 
             <transition
               name="fade"
-              enter-active-class="fadeInLeft"
-              leave-active-class="fadeOutRight"
+              enter-active-class="fadeIn"
+              leave-active-class="fadeOut"
             >
               <b-dropdown
                 v-if="show"
@@ -149,8 +150,8 @@
 
             <transition
               name="fade"
-              enter-active-class="fadeInLeft"
-              leave-active-class="fadeOutRight"
+              enter-active-class="fadeIn"
+              leave-active-class="fadeOut"
             >
               <b-icon
                 v-if="filterMode"
@@ -184,8 +185,8 @@
         <b-col class="ml-4">
           <transition
             name="fade"
-            enter-active-class="fadeInLeft"
-            leave-active-class="fadeOutRight"
+            enter-active-class="fadeIn"
+            leave-active-class="fadeOut"
           >
             <popular-tags-component v-if="show"></popular-tags-component>
           </transition>
