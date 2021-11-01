@@ -8,6 +8,7 @@ import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
 import store from "./store";
 import VueQuillEditor from "vue-quill-editor";
 import VueSweetAlert2 from 'vue-sweetalert2';
+import VSanitize from 'v-sanitize';
 
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap-vue/dist/bootstrap-vue.css";
@@ -36,6 +37,7 @@ Vue.use(require('vue-pusher'), {
     cluster: 'eu'
   }
 })
+Vue.use(VSanitize);
 
 import "quill/dist/quill.core.css";
 import "quill/dist/quill.snow.css";

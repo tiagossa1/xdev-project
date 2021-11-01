@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Post;
 use App\User;
 use Exception;
 use App\Comment;
@@ -118,8 +119,8 @@ class UserController extends Controller
     {
         try {
             $comment = Comment::with('post')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
-            $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
 
+            $post_like = DB::table('post_like')->where('user_id', $id)->orderByDesc('created_at')->take(3)->get();
             return response()->json(['comments' => $comment, 'post_likes' => $post_like]);
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);

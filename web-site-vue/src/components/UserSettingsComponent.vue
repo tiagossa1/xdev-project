@@ -324,11 +324,6 @@ export default {
         ? linkedinRegex.test(this.userInfo.linkedin_url)
         : true;
 
-      console.log(isGithubUrlValid);
-      console.log(isLinkedinUrlValid);
-      console.log(isFbUrlValid);
-      console.log(isIgUrlValid);
-
       if (
         isFbUrlValid &&
         isIgUrlValid &&

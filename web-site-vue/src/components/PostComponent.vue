@@ -3,13 +3,13 @@
     <b-row class="ml-2 mr-2 mb-3">
       <b-col v-if="!toEdit">
         <span v-for="tag in propPost.tags" :key="tag.id" class="mr-4">
-          <b-badge class="p-2 no-select" pill variant="secondary">{{ tag.name }}</b-badge>
+          <b-badge class="p-2 no-select" pill variant="secondary">{{
+            tag.name
+          }}</b-badge>
         </span>
       </b-col>
       <b-col v-else>
-        <b-form-group
-          label-for="tags-component-select"
-        >
+        <b-form-group label-for="tags-component-select">
           <b-form-tags
             id="tags-component-select"
             v-model="editSelectedTags"
@@ -83,7 +83,8 @@
         backgroundColor: propPost.user.userType.hexColorCode,
       }"
     >
-      <b-icon :icon="propPost.postType.iconName"></b-icon> {{ propPost.postType.name }}
+      <b-icon :icon="propPost.postType.iconName"></b-icon>
+      {{ propPost.postType.name }}
     </b-badge>
 
     <b-row v-if="toEdit" class="mt-2 ml-2 mr-2 mb-3">
@@ -186,8 +187,10 @@
             :icon="liked ? 'heart-fill' : 'heart'"
             :variant="liked ? 'liked' : ''"
           ></b-icon>
-          <!-- <span class="small"> {{ liked ? "Gosto" : "Gostar" }} </span> -->
         </p>
+      </b-col>
+      <b-col class="cursor-pointer" cols="1" @click="toComment = !toComment">
+        <b-icon scale="1.2" icon="chat" class=""></b-icon>
       </b-col>
       <b-col
         v-if="!propPost.suspended"
@@ -200,9 +203,7 @@
             scale="1"
             :variant="saved ? 'danger' : ''"
             :icon="saved ? 'bookmark-fill' : 'bookmark'"
-            class=""
           ></b-icon>
-          <!-- <span class="small"> {{ saved ? "Guardado" : "Guardar" }} </span> -->
         </p>
       </b-col>
 
@@ -240,7 +241,8 @@
             :aria-controls="collapseId"
             @click="modalVisible = !modalVisible"
           >
-            {{modalVisible ? 'Esconder' : 'Mostrar'}} {{ propPost.comments.length }} comentários
+            {{ modalVisible ? "Esconder" : "Mostrar" }}
+            {{ propPost.comments.length }} comentários
             <b-icon :icon="modalVisible ? 'arrow-down' : 'arrow-up'"></b-icon>
           </p>
         </a>
@@ -260,13 +262,27 @@
           </transition-group>
         </b-collapse>
 
-        <b-form v-if="!viewOnly && !propPost.suspended" @submit.prevent="onSubmit">
-          <b-form-input
-            v-model="comment"
-            class="commentInput"
-            placeholder="Escreva o seu comentário aqui..."
-          ></b-form-input>
-        </b-form>
+        <quill-editor
+          v-if="toComment && !viewOnly && !propPost.suspended"
+          class="mt-3"
+          ref="myQuillEditor"
+          :options="{ placeholder: 'Escreva um comentário...' }"
+          v-model="comment"
+        >
+        </quill-editor>
+        <transition
+          enter-active-class="animated fadeInRight"
+          leave-active-class="animated fadeOutLeft"
+        >
+          <p
+            v-if="toComment && comment"
+            class="h6 mt-2 cursor-pointer d-flex align-items-center float-right"
+            @click="onSubmit"
+          >
+            <b-icon icon="check" font-scale="1.8" variant="success"></b-icon>
+            Comentar
+          </p>
+        </transition>
       </b-col>
     </b-row>
   </b-container>
@@ -296,8 +312,9 @@ export default {
     },
   },
   async mounted() {
-    this.isUserPost = this.$store.getters["auth/user"].id === this.propPost.user.id;
-    
+    this.isUserPost =
+      this.$store.getters["auth/user"].id === this.propPost.user.id;
+
     if (this.isUserPost) {
       this.getPostTypes();
       this.redirectProfile = "/profile/";
@@ -323,6 +340,7 @@ export default {
       limitTag: 6,
       toEdit: false,
       modalVisible: false,
+      toComment: false,
     };
   },
   computed: {
@@ -330,7 +348,8 @@ export default {
       return {
         borderRadius: "10px",
         backgroundColor: "white",
-        border: this.propPost.suspended === 1 ? "1px solid red" : "1px solid gray",
+        border:
+          this.propPost.suspended === 1 ? "1px solid red" : "1px solid gray",
       };
     },
     availableOptions() {
@@ -480,6 +499,8 @@ export default {
 
           this.modalVisible = true;
         }
+
+        this.toComment = false;
       }
     },
     onDeleted(deleteOptions) {
@@ -570,7 +591,7 @@ export default {
       this.propPost = originalPost;
 
       this.toEdit = false;
-    }
+    },
   },
 };
 </script>
@@ -590,5 +611,9 @@ hr {
 }
 .commentInput {
   box-shadow: 0 0 3px gray;
+}
+
+.ql-editor::before {
+  content: attr(data-placeholder);
 }
 </style>

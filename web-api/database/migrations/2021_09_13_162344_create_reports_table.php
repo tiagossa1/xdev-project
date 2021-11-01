@@ -20,7 +20,7 @@ class CreateReportsTable extends Migration
             $table->unsignedBigInteger('moderator_id')->nullable();
             $table->foreign('moderator_id')->nullable()->constrained()->references('id')->on('users');
             $table->foreignId('report_conclusion_id')->nullable()->constrained();
-            $table->foreignId('comment_id')->nullable();
+            $table->foreignId('comment_id')->nullable()->onDelete('cascade');
             $table->boolean('closed')->default(0)->nullable();
             $table->string('reason');
             $table->timestamps();

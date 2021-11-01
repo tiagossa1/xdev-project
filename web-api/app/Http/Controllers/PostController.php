@@ -239,8 +239,8 @@ class PostController extends Controller
 
             $post->post_photos()->delete();
             $post->comments()->delete();
-            $post->likes()->delete();
-            $post->users_saved()->delete();
+            $post->likes()->detach($id);
+            $post->users_saved()->detach($id);
             $post->delete();
 
             return response()->json(['message' => 'Deleted'], 200);

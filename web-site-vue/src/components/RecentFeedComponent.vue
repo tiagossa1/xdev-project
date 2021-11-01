@@ -1,9 +1,7 @@
 <template>
   <b-card-group deck class="mb-3 text-center">
     <b-card
-      :style="{
-        'border-radius': '10px',
-      }"
+      style="border-radius: 10px"
     >
       <template #header>
         <span class="font-weight-bold">Feed Recente</span>
@@ -13,8 +11,8 @@
           <b-row v-for="comment in recentFeed.comments" :key="comment.id">
             <b-col class="text-left">
               <span>
-                Comentou <b>{{ comment.description }}</b
-                ><br />
+                Comentou <span v-html="$sanitize(comment.description, { allowedTags: [] })"></span>
+                <br />
                 <b-icon class="mr-1" icon="arrow-return-right"></b-icon>
                 <small class="font-italic font-weight-bold">{{
                   comment.post.title

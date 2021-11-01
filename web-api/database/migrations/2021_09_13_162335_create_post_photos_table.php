@@ -17,7 +17,6 @@ class CreatePostPhotosTable extends Migration
             $table->id();
             $table->string('url');
             $table->foreignId('post_id')->constrained();
-
             $table->dateTime('created_at')->useCurrent();
         });
     }
