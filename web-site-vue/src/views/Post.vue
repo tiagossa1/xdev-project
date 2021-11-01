@@ -107,8 +107,8 @@
                         v-on="inputHandlers"
                         :disabled="
                           disabled ||
-                          availableOptions.length === 0 ||
-                          form.tags.length >= 6
+                            availableOptions.length === 0 ||
+                            form.tags.length >= 6
                         "
                         :options="availableOptions"
                       >
@@ -234,7 +234,7 @@ export default {
           timer: 10000,
         });
       });
-      
+
       this.originalPosts = this.posts;
       let postTypes = await postService.getPostTypes();
 
@@ -257,6 +257,8 @@ export default {
       this.tagOptions = tags.map((t) => t.name).sort();
 
       this.$root.$on("tag-search-navbar", (tagIds) => {
+        this.onClearFilter();
+
         if (tagIds.length > 0) {
           this.posts = this.originalPosts.filter((p) =>
             p.tags.some((t) => tagIds.includes(t.id))
@@ -386,6 +388,8 @@ export default {
       }
     },
     onFilterClick(postType) {
+      this.$root.$emit("navbar-clear-filter", true);
+
       this.filterMode = true;
       this.posts = this.originalPosts.filter(
         (p) => p.postType.id === postType.id

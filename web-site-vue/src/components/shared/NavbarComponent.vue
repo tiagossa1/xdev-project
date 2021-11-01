@@ -323,6 +323,12 @@ export default {
         }
       });
     }
+
+    this.$root.$on("navbar-clear-filter", (toClear) => {
+      if (toClear) {
+        this.value = [];
+      }
+    });
   },
   computed: {
     ...mapGetters({
