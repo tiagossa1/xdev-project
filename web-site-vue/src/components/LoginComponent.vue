@@ -19,19 +19,12 @@
                 :state="!v$.form.email.$invalid"
               ></b-form-input>
             </b-input-group>
-            <div
-              class="text-danger font-weight-bold float-left small mt-1"
-              v-if="v$.form.email.required.$invalid"
-            >
-              O campo email é obrigatório.
-              <br />
-            </div>
           </b-col>
         </b-row>
-        <br>
+        <br />
 
         <b-row>
-          <b-col sm="11" class="mx-auto">
+          <b-col sm="11">
             <b-form-input
               id="input-password"
               v-model="form.password"
@@ -39,17 +32,10 @@
               :type="showPassword ? 'text' : 'password'"
               :state="!v$.form.password.$invalid"
             ></b-form-input>
-            <div
-              class="text-danger font-weight-bold float-left small mt-1"
-              v-if="v$.form.password.required.$invalid"
-            >
-              O campo password é obrigatório.
-              <br />
-            </div>
           </b-col>
-          <b-col sm="1" class="mx-auto">
+          <b-col sm="1" class="pl-0 pr-0">
             <b-icon
-              class="cursor-pointer mt-2"
+              class="cursor-pointer align-seft-center mt-2"
               @click="showPassword = !showPassword"
               :icon="showPassword ? 'eye-fill' : 'eye-slash-fill'"
             ></b-icon>

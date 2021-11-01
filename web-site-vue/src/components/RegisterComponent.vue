@@ -26,16 +26,10 @@
             v-model.trim="form.name"
             name="name"
             type="text"
-            placeholder="Inserir o nome"
+            placeholder="Inserir nome"
             :state="!v$.form.name.$invalid"
             @blur="v$.form.name.$touch"
           ></b-form-input>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.name.required.$invalid"
-          >
-            O campo nome é obrigatório.
-          </div>
         </div>
         <div class="col-6">
           <label class="float-left font-weight-bold">Email *</label>
@@ -44,18 +38,11 @@
               id="input-email"
               v-model="form.email"
               type="text"
-              placeholder="Inserir o email"
+              placeholder="Inserir email"
               :state="!v$.form.email.$invalid"
               @blur="v$.form.email.$touch"
             ></b-form-input>
           </b-input-group>
-
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.email.required.$invalid"
-          >
-            O campo email é obrigatório
-          </div>
         </div>
       </div>
       <br />
@@ -72,26 +59,16 @@
             :state="!v$.form.password.$invalid"
             @blur="v$.form.password.$touch"
           ></b-form-input>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.password.required.$invalid"
-          >
-            O campo password é obrigatório.
-          </div>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.password.minLength.$invalid"
-          >
-            O campo password deve ter pelo menos 6 caracteres.
-          </div>
         </div>
         <div class="col-6">
-          <label class="float-left font-weight-bold">Confirmar Password</label>
+          <label class="float-left font-weight-bold"
+            >Confirmar Password *</label
+          >
           <b-form-input
             id="input-confirm-password"
             type="password"
             v-model="confirmPassword"
-            placeholder="Inserir o password"
+            placeholder="Confirmar password"
             :state="!v$.confirmPassword.$invalid"
             @blur="v$.confirmPassword.$touch"
           ></b-form-input>
@@ -122,12 +99,6 @@
             :state="!v$.form.district_id.$invalid"
             @blur="v$.form.district_id.$touch"
           ></b-form-select>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.district_id.required.$invalid"
-          >
-            O campo do distrito é obrigatório.
-          </div>
         </div>
         <div class="col-6">
           <label class="float-left font-weight-bold">Turma *</label>
@@ -140,19 +111,14 @@
             :state="!v$.form.school_class_id.$invalid"
             @blur="v$.form.school_class_id.$touch"
           ></b-form-select>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.school_class_id.required.$invalid"
-          >
-            O campo turma é obrigatório.
-            <br />
-          </div>
         </div>
       </div>
       <br />
       <div class="row">
         <div class="col-6">
-          <label class="float-left font-weight-bold">Data de nascimento</label>
+          <label class="float-left font-weight-bold"
+            >Data de nascimento *</label
+          >
           <b-form-datepicker
             v-model="form.birth_date"
             :date-format-options="{
@@ -168,12 +134,6 @@
             class="mb-2"
           >
           </b-form-datepicker>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.form.birth_date.required.$invalid"
-          >
-            O campo data de nascimento é obrigatório.
-          </div>
         </div>
         <div class="col-6">
           <label class="float-left font-weight-bold">Foto de perfil</label>
@@ -182,27 +142,21 @@
             accept=".jpg, .jpeg, .png"
             placeholder="Escolha uma fotografia..."
             drop-placeholder="Escolha uma fotografia..."
-            :state="!v$.photo.$invalid"
-            @blur="v$.photo.$touch"
           ></b-form-file>
-          <div
-            class="text-danger font-weight-bold float-left small mt-1"
-            v-if="v$.photo.maxOneMb.$invalid && photo"
-          >
-            A imagem só pode ter menos de 1MB.
-          </div>
         </div>
       </div>
       <br />
-
-      <div class="text-center">
-        <b-button
-          type="submit"
-          class="text-white"
-          variant="primary"
-          :disabled="this.v$.$invalid"
-          >Criar</b-button
-        >
+      <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6 text-right">
+          <b-button
+            type="submit"
+            class="text-white w-25"
+            variant="primary"
+            :disabled="this.v$.$invalid"
+            >Criar</b-button
+          >
+        </div>
       </div>
     </b-form>
   </div>
@@ -212,11 +166,10 @@
 import { mapActions } from "vuex";
 
 import userService from "../services/userService";
-// import imageUploadService from "../services/imageUploadService";
 import districtService from "../services/districtService";
 import schoolClassService from "../services/schoolClassService";
 
-// import ImageUploadRequest from "../models/requests/imageUploadRequest";
+import RegisterRequest from "../models/requests/registerRequest";
 
 import useVuelidate from "@vuelidate/core";
 import { required, minLength, sameAs } from "@vuelidate/validators";
@@ -224,7 +177,7 @@ import { required, minLength, sameAs } from "@vuelidate/validators";
 const notContainsEduAtecPt = (value) =>
   !value.toLowerCase().includes("@edu.atec.pt");
 
-const maxOneMb = (value) => value.size < 1024 * 1024;
+// const maxOneMb = (value) => value?.size < 1024 * 1024;
 
 export default {
   name: "register-component",
@@ -257,7 +210,6 @@ export default {
   setup: () => ({ v$: useVuelidate() }),
   validations() {
     return {
-      photo: { maxOneMb },
       form: {
         name: { required },
         email: { required, notContainsEduAtecPt },
@@ -275,21 +227,24 @@ export default {
     }),
     async onSubmit() {
       let res = null;
-      let email = this.form.email;
 
       if (!this.v$.$invalid) {
-        if (!email.includes("@edu.atec.pt")) {
-          email += "@edu.atec.pt";
-        }
-
-        this.form.email = email;
-
         if (this.photo) {
           let image = await this.readAsDataURL(this.photo);
           this.form.profile_picture = image.data;
         }
 
-        res = await userService.register(this.form).catch((err) => {
+        const request = new RegisterRequest(
+          this.form.name,
+          this.form.email,
+          this.form.password,
+          this.form.district_id,
+          this.form.school_class_id,
+          this.form.birth_date,
+          this.form.profile_picture
+        );
+
+        res = await userService.register(request).catch((err) => {
           let error;
 
           if (err.response.data.errors) {
@@ -310,18 +265,11 @@ export default {
         if (res.status === 201) {
           window.localStorage.setItem(
             "registerRequest",
-            JSON.stringify(this.form)
+            JSON.stringify(request)
           );
 
           window.location.href = "/verification";
         }
-
-        // if (res.status === 201) {
-        //   this.signIn({
-        //     email: this.form.email,
-        //     password: this.form.password,
-        //   });
-        // }
       } else {
         this.showErrorAlert = true;
         this.formStatus =
@@ -356,20 +304,34 @@ export default {
       this.dismissCountDown = this.dismissSecs;
     },
     async getDistrict() {
-      let res = await districtService.getDistricts();
-
-      this.districts = res.map((res) => ({
+      const res = await districtService.getDistricts();
+      const districts = res.map((res) => ({
         value: res.id,
         text: res.name,
       }));
+
+      this.districts.push({
+        value: null,
+        text: "Escolha um distrito",
+        disabled: true,
+      });
+
+      this.districts.push(...districts);
     },
     async getSchoolClasses() {
-      let res = await schoolClassService.getSchoolClasses();
-
-      this.schoolClasses = res.map((x) => ({
+      const res = await schoolClassService.getSchoolClasses();
+      const schoolClasses = res.map((x) => ({
         value: x.id,
         text: `${x.name} - ${x.school.name}`,
       }));
+
+      this.schoolClasses.push({
+        value: null,
+        text: "Escolha uma turma",
+        disabled: true,
+      });
+
+      this.schoolClasses.push(...schoolClasses);
     },
     inputState(input) {
       return !!input;

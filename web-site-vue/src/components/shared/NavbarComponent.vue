@@ -237,10 +237,7 @@
         </template>
 
         <template v-else>
-          <div
-            v-if="this.$router.currentRoute.name !== 'Login'"
-            class="align-self-center"
-          >
+          <div v-if="this.$route.name !== 'Login'" class="align-self-center">
             <router-link to="/login" class="text-white mr-2"
               >Entrar</router-link
             >
@@ -266,7 +263,7 @@ import Feedback from "../FeedbackComponent.vue";
 import { mapGetters, mapActions } from "vuex";
 import userService from "../../services/userService.js";
 import reportService from "../../services/reportService.js";
-import postService from '../../services/postService.js';
+import postService from "../../services/postService.js";
 
 export default {
   name: "navbar-component",

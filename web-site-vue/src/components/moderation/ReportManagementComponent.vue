@@ -258,7 +258,7 @@ export default {
 
           if (res.status === 200) {
             let conclusionDeleted = await reportConclusionService.getByName(
-              "apagado"
+              "eliminado"
             );
 
             if (conclusionDeleted?.length === 0) {

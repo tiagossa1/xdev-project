@@ -46,9 +46,9 @@ class CommentController extends Controller
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 
-            $diffDescription = array_diff($description,$forbiddenWords);
+            $diffDescription = array_diff($description, $forbiddenWords);
 
-            if(sizeof($diffDescription) == sizeof($description)) {
+            if (sizeof($diffDescription) == sizeof($description)) {
                 $comment = new Comment();
                 $comment->description = $request->description;
                 $comment->user_id = $request->user_id;
@@ -63,7 +63,6 @@ class CommentController extends Controller
             return response()->json([
                 'message' => 'Descrição com palavra proibida'
             ], 400);
-
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
@@ -79,7 +78,7 @@ class CommentController extends Controller
         try {
             $comment = Comment::find($id);
 
-            if(is_null($comment)){
+            if (is_null($comment)) {
                 return response()->json(['message' => "Comment not found!"], 404);
             }
 
@@ -106,13 +105,12 @@ class CommentController extends Controller
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
 
             $rawDescription = explode(" ", mb_strtolower($request->description));
-            return response()->json($rawDescription);
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);
 
-            $diffDescription = array_diff($description,$forbiddenWords);
+            $diffDescription = array_diff($description, $forbiddenWords);
 
-            if(sizeof($diffDescription) == sizeof($description)) {
+            if (sizeof($diffDescription) == sizeof($description)) {
                 $comment->description = $request->description;
                 $comment->user_id = $request->user_id;
                 $comment->post_id = $request->post_id;
@@ -126,7 +124,6 @@ class CommentController extends Controller
             return response()->json([
                 'message' => 'Descrição com palavra proibida'
             ], 400);
-
         } catch (Exception $exception) {
             return response()->json(['message' => $exception->getMessage()], 500);
         }
@@ -143,7 +140,7 @@ class CommentController extends Controller
         try {
             $comment = Comment::find($id);
 
-            if(is_null($comment)){
+            if (is_null($comment)) {
                 return response()->json(['message' => "Comment not found!"], 404);
             }
 

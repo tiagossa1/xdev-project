@@ -50,7 +50,7 @@
         <br>
         <small>Adicionado {{comment.createdAt}}</small>
         <template v-if="!toEdit">
-          <p class="mt-1 h6 w-100 h-25">
+          <p class="mt-1 h6 mt-3 w-100 h-25 font-weight-bold">
             {{ comment.description }}
           </p>
         </template>
