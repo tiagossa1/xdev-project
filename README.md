@@ -11,11 +11,29 @@ xDev is a community website created for both old and new students in ATEC to int
 
 ## Installation
 
-To run this project, you will need to change the following environment variables to your .env file:
+To run this project, you will need to create an account on Mailtrap and Pusher. You also will need to change the following environment variables to your .env file:
 
-- `VUE_APP_API_URL` (on web site; once you run the Web API, change it here)
-- `DB_USERNAME` (on web API)
-- `DB_PASSWORD` (on web API)
+To get Pusher keys, go to your pusher app > App Keys.
+
+- Web API env:
+- `MAIL_HOST`: smtp.mailtrap.io (check Mailtrap)
+- `MAIL_PORT`: 2525 (check Mailtrap)
+- `MAIL_USERNAME`: Check Mailtrap inbox settings.
+- `MAIL_PASSWORD:` Check Mailtrap inbox settings.
+- `MAIL_ENCRYPTION`: Check Mailtrap inbox settings.
+- `MAIL_FROM_ADDRESS`: verify@xdev.pt (it can be any fake email address, but we use this).
+- `PUSHER_APP_ID`: Check Pusher.
+- `PUSHER_APP_KEY`: Check Pusher.
+- `PUSHER_APP_SECRET`: Check Pusher.
+- `PUSHER_APP_CLUSTER`: Check Pusher.
+- `PUSHER_APP_NAME`: Check Pusher.
+- `DB_USERNAME`: MySQL username. If you're using Xampp, it should be "root".
+- `DB_PASSWORD` MySQL password. If you're using Xampp and you did NOT change it, leave it blank.
+
+Website env:
+- `VUE_APP_API_URL`: Once the web API is running, put the URL here. e.g. http://127.0.0.1:8000
+- `VUE_APP_PUSHER_APP_KEY`: Check Pusher.
+- `VUE_APP_PUSHER_CHANNEL_NAME`: This is the channel (app) name from Pusher that you created previously.
 
 ## Web API
 ```bash
