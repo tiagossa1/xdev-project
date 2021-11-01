@@ -383,9 +383,7 @@ export default {
       };
     },
     signOut() {
-      this.signOutAction().then(() => {
-        this.$router.push("Login").catch(() => {});
-      });
+      this.signOutAction();
     },
     async getPostNotifications() {
       // TODO: Create a filter on PostController.
