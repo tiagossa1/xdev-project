@@ -25,7 +25,7 @@
         >
         <b-button
           class="m-1 text-white"
-          v-if="data.item.id !== $store.getters['auth/user'].id"
+          v-if="data.item.id !== $store.getters['auth/user'].id && data.item.userType.id < $store.getters['auth/user'].user_type.id"
           @click="onSuspended(data.item)"
           :variant="data.item.suspended ? 'success' : 'danger'"
         >

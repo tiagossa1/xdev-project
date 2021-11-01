@@ -2,9 +2,15 @@
   <div>
     <p class="h5 font-weight-bold mb-3">
       Gestão de Tags
-      <b-icon class="text-primary cursor-pointer" icon="plus"></b-icon>
+      <b-icon
+        v-b-modal.create-tag-modal
+        class="cursor-pointer align-middle"
+        icon="plus"
+        font-scale="1.2"
+      ></b-icon>
     </p>
     <b-table
+      ref="tagsTable"
       sticky-header="500px"
       table-variant="light"
       striped
@@ -103,7 +109,39 @@ export default {
     },
     async onEditedTag() {
       let req = new TagRequest(this.tagSelected.name, null);
-      let res = await tagService.update(this.tagSelected.id, req);
+      let res = await tagService
+        .update(this.tagSelected.id, req)
+        .catch(async (err) => {
+          let originalTag = await tagService.getTagById(this.tagSelected.id);
+
+          const index = this.tags.findIndex(
+            (t) => t.id === this.tagSelected.id
+          );
+
+          if (index > -1) {
+            this.tags[index] = originalTag;
+          }
+
+          this.$refs.tagsTable.refresh();
+
+          let error;
+
+          if (err.response.data.errors) {
+            error = Object.values(err.response.data.errors)
+              .map((v) => v.join(", "))
+              .join(", ");
+          }
+
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: error ?? err.response.data.message,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        });
 
       if (res.status === 200) {
         let tagEdited = new Tag(res.data.data);
@@ -115,6 +153,18 @@ export default {
             a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
           );
         }
+
+        // this.$root.$emit("reload-tags", this.tags);
+
+        this.$swal({
+          icon: "success",
+          position: "bottom-right",
+          title: "Tag editada!",
+          toast: true,
+          showCloseButton: true,
+          showConfirmButton: false,
+          timer: 10000,
+        });
       }
     },
     async onDeleteTag(id) {
@@ -127,7 +177,25 @@ export default {
         confirmButtonColor: "#dc3545",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          const res = await tagService.delete(id);
+          const res = await tagService.delete(id).catch((err) => {
+            let error;
+
+            if (err.response.data.errors) {
+              error = Object.values(err.response.data.errors)
+                .map((v) => v.join(", "))
+                .join(", ");
+            }
+
+            this.$swal({
+              icon: "error",
+              position: "bottom-right",
+              title: error ?? err.response.data.message,
+              toast: true,
+              showCloseButton: true,
+              showConfirmButton: false,
+              timer: 10000,
+            });
+          });
 
           if (res.status === 200) {
             const index = this.tags.findIndex((t) => t.id === id);
@@ -135,21 +203,65 @@ export default {
             if (index > -1) {
               this.tags.splice(index, 1);
             }
+
+            // this.$root.$emit("reload-tags", this.tags);
           }
+
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Tag eliminada!",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
         }
       });
     },
-    async onClick() {
-      let req = new TagRequest(this.form.name, null);
-      let res = await tagService.create(req);
+    async onClick(bvModalEvt) {
+      if (!this.v$.$invalid) {
+        let req = new TagRequest(this.form.name, null);
+        let res = await tagService.create(req).catch((err) => {
+          let error;
 
-      if (res.status === 201) {
-        let tag = new Tag(res.data.data);
-        this.tags.push(tag);
+          if (err.response.data.errors) {
+            error = Object.values(err.response.data.errors)
+              .map((v) => v.join(", "))
+              .join(", ");
+          }
 
-        this.tags = this.tags.sort((a, b) =>
-          a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
-        );
+          this.$swal({
+            icon: "error",
+            position: "bottom-right",
+            title: error ?? err.response.data.message,
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        });
+
+        if (res.status === 201) {
+          let tag = new Tag(res.data.data);
+          this.tags.push(tag);
+
+          this.tags = this.tags.sort((a, b) =>
+            a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
+          );
+
+          this.$swal({
+            icon: "success",
+            position: "bottom-right",
+            title: "Tag criada!",
+            toast: true,
+            showCloseButton: true,
+            showConfirmButton: false,
+            timer: 10000,
+          });
+        }
+      } else {
+        bvModalEvt.preventDefault();
       }
     },
   },

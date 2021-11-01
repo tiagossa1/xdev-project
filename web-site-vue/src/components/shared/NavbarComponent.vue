@@ -329,6 +329,11 @@ export default {
         this.value = [];
       }
     });
+
+    // this.$root.$on("reload-tags", (tags) => {
+    //   console.log(tags);
+    //   this.tags = tags;
+    // })
   },
   computed: {
     ...mapGetters({

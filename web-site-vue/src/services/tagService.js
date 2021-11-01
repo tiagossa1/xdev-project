@@ -24,6 +24,16 @@ export default new (class TagService {
     return [];
   }
 
+  async getTagById(id) {
+    let res = await axios.get(`${this.apiUrl}/api/tags/${id}`);
+
+    if (res.data.data) {
+      return new Tag(res.data.data);
+    }
+
+    return null;
+  }
+
   async create(tag) {
     return await axios.post(`${this.apiUrl}/api/tags`, tag);
   }

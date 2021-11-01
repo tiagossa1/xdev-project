@@ -189,7 +189,12 @@
           ></b-icon>
         </p>
       </b-col>
-      <b-col class="cursor-pointer" cols="1" @click="toComment = !toComment">
+      <b-col
+        v-if="!propPost.suspended"
+        class="cursor-pointer"
+        cols="1"
+        @click="toComment = !toComment"
+      >
         <b-icon scale="1.2" icon="chat" class=""></b-icon>
       </b-col>
       <b-col
@@ -525,10 +530,6 @@ export default {
           (pt) => pt.name === this.propPost.postType.name
         )?.id;
 
-        if (this.propPost.suspended) {
-          this.propPost.suspended = false;
-        }
-
         let tags = this.tags.filter((t) =>
           this.editSelectedTags.includes(t.name)
         );
@@ -537,7 +538,7 @@ export default {
           this.propPost.id,
           this.propPost.title,
           this.propPost.description,
-          this.propPost.suspended,
+          false,
           this.propPost.user.id,
           postTypeId,
           null,
@@ -566,6 +567,8 @@ export default {
         });
 
         if (res.status === 200) {
+          this.propPost.suspended = false;
+
           this.$swal({
             icon: "success",
             position: "bottom-right",

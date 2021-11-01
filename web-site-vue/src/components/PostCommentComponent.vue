@@ -5,7 +5,7 @@
         <template #aside>
           <b-avatar
             size="4rem"
-            :to="'/profile/' + comment.user.id"
+            :to="redirectProfile"
             :src="comment.user.profile_picture"
           ></b-avatar>
         </template>
@@ -42,7 +42,7 @@
         <b-link
           class="h5 font-weight-bold"
           :style="{ color: comment.user.userType.hexColorCode }"
-          :to="'/profile/' + comment.user.id"
+          :to="redirectProfile"
           >{{ comment.user.name }}</b-link
         >
         <br />
@@ -56,14 +56,13 @@
           <div
             class="mt-1 h6 mt-2 w-100 h-25 font-weight-bold"
             v-html="comment.description"
-          >
-          </div>
+          ></div>
         </template>
         <template v-else>
           <transition
-          enter-active-class="animated fadeInRight"
-          leave-active-class="animated fadeOutRight">
-
+            enter-active-class="animated fadeInRight"
+            leave-active-class="animated fadeOutRight"
+          >
           </transition>
           <quill-editor
             class="mb-2"
@@ -118,6 +117,7 @@ export default {
       isUserComment: false,
       reportComment: "",
       toEdit: false,
+      redirectProfile: null
     };
   },
   setup: () => ({ v$: useVuelidate() }),
@@ -129,6 +129,12 @@ export default {
   mounted() {
     this.isUserComment =
       this.$store.getters["auth/user"].id === this.comment.user.id;
+
+    if (this.isUserComment) {
+      this.redirectProfile = "/profile/";
+    } else {
+      this.redirectProfile = `/profile/${this.comment.user.id}`;
+    }
   },
   methods: {
     async onDeleted(deleteOptions) {
