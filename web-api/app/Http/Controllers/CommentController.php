@@ -42,7 +42,7 @@ class CommentController extends Controller
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
             $specialCharacter = StringUtility::special_characters();
 
-            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+            $removedSymbolsFromDescription = str_replace($specialCharacter, " ", $request->description);
             $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
 
             $description = StringUtility::remove_multiple_utf8($rawDescription);

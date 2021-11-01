@@ -186,8 +186,8 @@ class PostController extends Controller
             $forbiddenWords = ForbiddenWord::all()->pluck('name')->toArray();
             $specialCharacter = StringUtility::special_characters();
 
-            $removedSymbolsFromTitle = str_replace($specialCharacter, "", $request->title);
-            $removedSymbolsFromDescription = str_replace($specialCharacter, "", $request->description);
+            $removedSymbolsFromTitle = str_replace($specialCharacter, " ", $request->title);
+            $removedSymbolsFromDescription = str_replace($specialCharacter, " ", $request->description);
 
             $rawTitle = explode(" ", mb_strtolower($removedSymbolsFromTitle));
             $rawDescription = explode(" ", mb_strtolower($removedSymbolsFromDescription));
