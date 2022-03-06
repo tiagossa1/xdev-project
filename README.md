@@ -51,12 +51,5 @@ npm install
 npm run serve
 ```
 
-## Authors
-
-- [@tiagossa1](https://github.com/tiagossa1)
-- [@pintarolas](https://github.com/pintarolas)
-- [@Scantraxzu](https://github.com/Scantraxzu)
-- [@peixecozid0](https://github.com/peixecozid0)
-
 ## License
 [![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
